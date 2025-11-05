@@ -1,6 +1,6 @@
 {
   "createdAt": "2025-10-20T08:14:31.540Z",
-  "updatedAt": "2025-11-05T09:30:54.000Z",
+  "updatedAt": "2025-11-05T09:53:54.000Z",
   "id": "MMHPPVjil7CeujDO",
   "name": "自動發文-優惠-方案三(紀錄prompt)",
   "active": false,
@@ -1118,17 +1118,6 @@
           "name": "Google Gemini(PaLM) Api account 2"
         }
       }
-    },
-    {
-      "parameters": {},
-      "type": "CUSTOM.qdrantSearch",
-      "typeVersion": 1,
-      "position": [
-        5456,
-        256
-      ],
-      "id": "6f613b39-e307-434b-9f53-3e7d03bbd784",
-      "name": "Wanin RAG Search"
     }
   ],
   "connections": {
@@ -1898,7 +1887,7 @@
       }
     ]
   },
-  "versionId": "d6d20a57-3152-42b8-9f67-e611010e8744",
+  "versionId": "f0c42ead-2473-4a68-b73b-c15a354ab499",
   "triggerCount": 2,
   "shared": [
     {
