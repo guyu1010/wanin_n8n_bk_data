@@ -1,6 +1,6 @@
 {
   "createdAt": "2025-10-27T05:57:53.778Z",
-  "updatedAt": "2025-11-04T06:38:31.000Z",
+  "updatedAt": "2025-11-05T10:18:35.000Z",
   "id": "3miwV9wdKjrx8Gmr",
   "name": "AI新聞擷取&翻譯工作流",
   "active": false,
@@ -8,25 +8,40 @@
   "nodes": [
     {
       "parameters": {
+        "content": "## I'm a note \n**川普TruthSocial** \n**CNN**✅\n**Fox News**\n**New York Times**\n**Bloomberg**\n**Wall Street Journal**\n**Washington Post**\n**Political**\n**BBC**✅",
+        "height": 240,
+        "width": 432
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -80,
+        -176
+      ],
+      "id": "651e5c1b-d5ba-4d88-87a1-2b5df8fa1313",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
         "assignments": {
           "assignments": [
             {
               "id": "8f5e3c4a-1b2d-4e9f-a3c6-7d8e9f0a1b2c",
               "name": "url",
-              "value": "https://edition.cnn.com/2025/10/26/politics/navy-aircraft-crash-south-china-sea",
+              "value": "={{ $json.sourceUrl }}",
               "type": "string"
             }
           ]
         },
         "options": {}
       },
-      "id": "349956c0-38cd-407c-9a4d-f4ae5c830fc8",
+      "id": "b81a4f13-9f6f-46d5-9768-af02dadfa87d",
       "name": "設定新聞 URL",
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.3,
       "position": [
-        -256,
-        -48
+        432,
+        368
       ]
     },
     {
@@ -50,104 +65,27 @@
           "timeout": 30000
         }
       },
-      "id": "db5b21dd-b1b2-4d0f-80b3-f91a6118f6a3",
+      "id": "01131edf-718a-4921-bc72-bfeabb1925f7",
       "name": "抓取網頁內容",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        -48,
-        -48
+        656,
+        368
       ]
     },
     {
       "parameters": {
         "jsCode": "// 清理 HTML，只保留主要內容\nconst html = $input.item.json.data || '';\n\n// 移除 script, style, nav, footer 等無關標籤\nlet cleaned = html\n  .replace(/<script[\\s\\S]*?<\\/script>/gi, '')\n  .replace(/<style[\\s\\S]*?<\\/style>/gi, '')\n  .replace(/<nav[\\s\\S]*?<\\/nav>/gi, '')\n  .replace(/<header[\\s\\S]*?<\\/header>/gi, '')\n  .replace(/<footer[\\s\\S]*?<\\/footer>/gi, '')\n  .replace(/<aside[\\s\\S]*?<\\/aside>/gi, '')\n  .replace(/<iframe[\\s\\S]*?<\\/iframe>/gi, '')\n  .replace(/<!--[\\s\\S]*?-->/g, '')\n  .replace(/<[^>]+>/g, ' ')\n  .replace(/\\s+/g, ' ')\n  .trim();\n\n// 限制長度，避免 token 過多（約 3000 tokens = 12000 字元）\ncleaned = cleaned.substring(0, 12000);\n\nreturn {\n  json: {\n    cleanedContent: cleaned,\n    url: $input.item.json.url\n  }\n};"
       },
-      "id": "7eaa8404-b7eb-4c5f-ad22-6cc554fe6c03",
+      "id": "19a2bd0d-f79a-498a-8e98-31db762e0b99",
       "name": "清理 HTML",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        160,
-        -48
+        880,
+        368
       ]
-    },
-    {
-      "parameters": {
-        "method": "POST",
-        "url": "https://api.anthropic.com/v1/messages",
-        "sendHeaders": true,
-        "headerParameters": {
-          "parameters": [
-            {
-              "name": "x-api-key",
-              "value": "=sk-ant-ap********************3wAA"
-            },
-            {
-              "name": "anthropic-version",
-              "value": "2023-06-01"
-            },
-            {
-              "name": "content-type",
-              "value": "application/json"
-            }
-          ]
-        },
-        "sendBody": true,
-        "specifyBody": "json",
-        "jsonBody": "={\n  \"model\": \"claude-sonnet-4-5-20250929\",\n  \"max_tokens\": 4096,\n  \"temperature\": 0.3,\n  \"messages\": [\n    {\n      \"role\": \"user\",\n      \"content\": \"請從以下新聞內容中提取資訊，並以嚴格的 JSON 格式回傳（不要包含其他文字）：\\n\\n{\\n  \\\"title\\\": \\\"新聞標題（原文）\\\",\\n  \\\"content\\\": \\\"完整正文內容（原文）\\\",\\n  \\\"category\\\": \\\"新聞分類（科技/財經/娛樂/體育/政治/生活/國際/其他）\\\"\\n}\\n\\n\\n\\n新聞內容：\\n{{ $json.cleanedContent }}\"\n    }\n  ]\n}",
-        "options": {
-          "timeout": 60000
-        }
-      },
-      "id": "fd37e0a2-f662-4d44-87e8-1ed0daf52850",
-      "name": "呼叫 Claude API",
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4.2,
-      "position": [
-        416,
-        -48
-      ]
-    },
-    {
-      "parameters": {
-        "jsCode": "// 解析 Claude 的回應\nconst response = $input.item.json;\n\n// 取得 Claude 的回覆內容\nconst content = response.content;\nconst textContent = content.find(item => item.type === 'text');\n\nif (!textContent) {\n  throw new Error('無法從 Claude 回應中找到文字內容');\n}\n\nlet resultText = textContent.text;\n\n// 嘗試提取 JSON（處理 Claude 可能在 JSON 前後加說明文字的情況）\nlet jsonMatch = resultText.match(/\\{[\\s\\S]*\\}/);\n\nif (jsonMatch) {\n  const extractedJson = JSON.parse(jsonMatch[0]);\n  return {\n    json: {\n      title: extractedJson.title,\n      content: extractedJson.content,\n      summary: extractedJson.summary,\n      category: extractedJson.category,\n      sourceUrl: $input.item.json.url || $('清理 HTML').item.json.url,\n      extractedAt: new Date().toISOString(),\n      tokensUsed: {\n        input: response.usage.input_tokens,\n        output: response.usage.output_tokens\n      }\n    }\n  };\n} else {\n  // 如果找不到 JSON，返回原始文字讓使用者檢查\n  return {\n    json: {\n      error: '無法解析 JSON',\n      rawResponse: resultText\n    }\n  };\n}"
-      },
-      "id": "65e9d536-d836-4747-a5b9-e7b09252c3ed",
-      "name": "解析結果",
-      "type": "n8n-nodes-base.code",
-      "typeVersion": 2,
-      "position": [
-        656,
-        -48
-      ]
-    },
-    {
-      "parameters": {},
-      "type": "n8n-nodes-base.manualTrigger",
-      "typeVersion": 1,
-      "position": [
-        -448,
-        -48
-      ],
-      "id": "be988e77-7756-4cc9-85d5-df85744ad884",
-      "name": "When clicking ‘Execute workflow’"
-    },
-    {
-      "parameters": {
-        "promptType": "define",
-        "text": "=你是一位台灣國際新聞翻譯專員，請執行以下兩個任務\n1. 使用台灣用語翻譯以下內容\n2. 從內容精選3~7個適合的新聞關鍵字(tags)\n\n標題：{{ $json.title }}\n內容：{{ $json.content }}\n\n## 翻譯對照表\n\n### 政治人物音譯\n- Vladimir Putin -> 普丁\n- Donald Trump -> 川普\n- Viktor Orbán -> 歐爾班\n- Marco Rubio -> 盧比歐\n- Benjamin Netanyahu -> 納坦雅胡\n- Volodymyr Zelenskyy -> 澤連斯基\n- Pete Hegseth -> 海格塞斯\n- John F. Kennedy -> 甘迺迪\n- Ronald Reagan -> 雷根\n- Jake Sullivan -> 蘇利文\n- Olaf Scholz -> 蕭茲\n- Justin Trudeau -> 杜魯道\n- Marcos (菲律賓) -> 馬可仕\n\n### 地名音譯\n- North Korea/朝鮮 -> 北韓\n- Gaza -> 加薩\n- Sydney -> 雪梨\n- Munich -> 慕尼黑\n- New Zealand -> 紐西蘭\n- Saudi Arabia -> 沙烏地阿拉伯\n- Dubai -> 杜拜\n- Yemen -> 葉門\n\n### 交通與運輸\n- 出租車/的士 -> 計程車\n- 集裝箱 -> 貨櫃\n- 空客 -> 空巴\n\n### 科技與網路用語\n- 視頻 -> 影片\n- 互聯網/網絡 -> 網路\n- 軟件 -> 軟體\n- 硬件 -> 硬體\n- 計算機 -> 電腦\n- 內存 -> 記憶體\n- 激光 -> 雷射\n- 光伏 -> 光電/太陽能\n- 程序 -> 程式\n- 帖子 -> 貼文\n- 樓主 -> 原發文者\n- 硅 -> 矽\n- 芯片 -> 晶片\n- 黑客 -> 駭客\n- 屏幕 -> 螢幕\n- 高清 -> 高畫質\n- 攝像頭 -> 監視器\n- 短信 -> 簡訊\n\n### 軍事與政府\n- 台防務部門 -> 國防部\n- 五角大樓 -> 五角大廈\n- 宙斯盾 -> 神盾系統\n- 空間站 -> 太空站\n- 黑匣子 -> 黑盒子\n\n### 教育與職業\n- 高校 -> 大學\n- 幼兒園 -> 幼稚園\n- 程序員 -> 工程師\n- 寫字樓 -> 辦公大樓\n- 下崗 -> 沒工作\n\n### 商業與法律用語\n- 合同 -> 合約\n- 渠道 -> 管道\n- 反饋 -> 回饋\n- 靠譜 -> 可靠\n\n### 日常用語\n- 萬億 -> 兆\n- 水平 -> 水準\n- 小區 -> 社區\n- 套路 -> 圈套\n- 給力 -> 厲害\n- 土豆 -> 馬鈴薯\n- 獼猴桃 -> 奇異果\n- 西紅柿 -> 番茄\n- 獻血 -> 捐血\n- 方便麵 -> 泡麵\n- 立馬 -> 立刻\n- 通過 -> 經由\n\n### 品牌與專有名詞\n- 奔馳 -> 賓士\n- 新聞發布會 -> 記者會\n- 宇航員 -> 太空人\n- 發動機 -> 引擎\n- 國際象棋 -> 西洋棋\n\n### 特殊用語\n- 導火索 -> 導火線\n- 河蟹 -> 掩蓋\n- 可卡因 -> 古柯鹼\n\n## 輸出要求\n- 回傳 JSON 格式\n- 照著原意翻譯\n- 可微調段落格式符合中文新聞\n- 避免使用簡體中文用詞\n- 不用分 section\n- content 段落使用 <p></p>\n\n## 翻譯原則\n- 人名第一次出現時保留英文原名，例如：「美國國務卿布林肯（Antony Blinken）」\n- 數字使用阿拉伯數字，金額加上單位（例如：100萬美元、50億元）\n- 引述內容使用「」（全形引號）\n- 日期格式：2025年10月28日\n\n## 務必確認\n- 用詞為台灣慣用字\n- 標點符號使用全形(，。！？)\n- tags 需為文中有提及的字詞\n- 避免過度口語化",
-        "hasOutputParser": true,
-        "options": {}
-      },
-      "type": "@n8n/n8n-nodes-langchain.agent",
-      "typeVersion": 2.2,
-      "position": [
-        896,
-        -48
-      ],
-      "id": "c0f08839-4950-4d58-b93c-57a337d010aa",
-      "name": "AI Agent"
     },
     {
       "parameters": {
@@ -156,10 +94,10 @@
       "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
       "typeVersion": 1,
       "position": [
-        768,
-        160
+        1584,
+        656
       ],
-      "id": "0810c32f-7858-4154-9612-c54c8c89ca6b",
+      "id": "2922b18d-2e47-40ee-816f-a706ae0b8669",
       "name": "Google Gemini Chat Model",
       "credentials": {
         "googlePalmApi": {
@@ -176,11 +114,514 @@
       "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
       "typeVersion": 1.3,
       "position": [
-        1072,
-        160
+        1728,
+        576
       ],
-      "id": "c77e5db4-5c10-4ae0-ace4-13a557d559b3",
+      "id": "b87b4952-68cb-4a31-b5ec-6fe876cfd9c7",
       "name": "Structured Output Parser"
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "minutes"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -608,
+        368
+      ],
+      "id": "f11c34d4-c044-4049-a266-eb84dbb5a3ad",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=你是一位台灣國際新聞翻譯專員，請執行以下兩個任務\n1. 使用台灣用語翻譯以下內容\n2. 從內容精選3~7個適合的新聞關鍵字(tags)\n\n標題：{{ $json.output.title }}\n內容：{{ $json.output.content }}\n\n## 翻譯對照表\n\n### 政治人物音譯\n- Vladimir Putin -> 普丁\n- Donald Trump -> 川普\n- Viktor Orbán -> 歐爾班\n- Marco Rubio -> 盧比歐\n- Benjamin Netanyahu -> 納坦雅胡\n- Volodymyr Zelenskyy -> 澤連斯基\n- Pete Hegseth -> 海格塞斯\n- John F. Kennedy -> 甘迺迪\n- Ronald Reagan -> 雷根\n- Jake Sullivan -> 蘇利文\n- Olaf Scholz -> 蕭茲\n- Justin Trudeau -> 杜魯道\n- Marcos (菲律賓) -> 馬可仕\n\n### 地名音譯\n- North Korea/朝鮮 -> 北韓\n- Gaza -> 加薩\n- Sydney -> 雪梨\n- Munich -> 慕尼黑\n- New Zealand -> 紐西蘭\n- Saudi Arabia -> 沙烏地阿拉伯\n- Dubai -> 杜拜\n- Yemen -> 葉門\n\n### 交通與運輸\n- 出租車/的士 -> 計程車\n- 集裝箱 -> 貨櫃\n- 空客 -> 空巴\n\n### 科技與網路用語\n- 視頻 -> 影片\n- 互聯網/網絡 -> 網路\n- 軟件 -> 軟體\n- 硬件 -> 硬體\n- 計算機 -> 電腦\n- 內存 -> 記憶體\n- 激光 -> 雷射\n- 光伏 -> 光電/太陽能\n- 程序 -> 程式\n- 帖子 -> 貼文\n- 樓主 -> 原發文者\n- 硅 -> 矽\n- 芯片 -> 晶片\n- 黑客 -> 駭客\n- 屏幕 -> 螢幕\n- 高清 -> 高畫質\n- 攝像頭 -> 監視器\n- 短信 -> 簡訊\n\n### 軍事與政府\n- 台防務部門 -> 國防部\n- 五角大樓 -> 五角大廈\n- 宙斯盾 -> 神盾系統\n- 空間站 -> 太空站\n- 黑匣子 -> 黑盒子\n\n### 教育與職業\n- 高校 -> 大學\n- 幼兒園 -> 幼稚園\n- 程序員 -> 工程師\n- 寫字樓 -> 辦公大樓\n- 下崗 -> 沒工作\n\n### 商業與法律用語\n- 合同 -> 合約\n- 渠道 -> 管道\n- 反饋 -> 回饋\n- 靠譜 -> 可靠\n\n### 日常用語\n- 萬億 -> 兆\n- 水平 -> 水準\n- 小區 -> 社區\n- 套路 -> 圈套\n- 給力 -> 厲害\n- 土豆 -> 馬鈴薯\n- 獼猴桃 -> 奇異果\n- 西紅柿 -> 番茄\n- 獻血 -> 捐血\n- 方便麵 -> 泡麵\n- 立馬 -> 立刻\n- 通過 -> 經由\n\n### 品牌與專有名詞\n- 奔馳 -> 賓士\n- 新聞發布會 -> 記者會\n- 宇航員 -> 太空人\n- 發動機 -> 引擎\n- 國際象棋 -> 西洋棋\n\n### 特殊用語\n- 導火索 -> 導火線\n- 河蟹 -> 掩蓋\n- 可卡因 -> 古柯鹼\n\n## 輸出要求\n- 回傳 JSON 格式\n- 照著原意翻譯\n- 可微調段落格式符合中文新聞\n- 避免使用簡體中文用詞\n- 不用分 section\n- content 段落使用 <p></p>\n\n## 翻譯原則\n- 人名第一次出現時保留英文原名，例如：「美國國務卿布林肯（Antony Blinken）」\n- 數字使用阿拉伯數字，金額加上單位（例如：100萬美元、50億元）\n- 引述內容使用「」（全形引號）\n- 日期格式：2025年10月28日\n\n## 務必確認\n- 用詞為台灣慣用字\n- 標點符號使用全形(，。！？)\n- tags 需為文中有提及的字詞\n- 避免過度口語化",
+        "hasOutputParser": true,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        1552,
+        352
+      ],
+      "id": "ad1f9914-b541-4f5a-a957-333049c2129b",
+      "name": "翻譯"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "value": "ytHc5KKgyhAvAwaX",
+          "mode": "list",
+          "cachedResultName": "world_news",
+          "cachedResultUrl": "/projects/iZydbwsMPJYYjvth/datatables/ytHc5KKgyhAvAwaX"
+        },
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "title",
+              "condition": "isEmpty"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1,
+      "position": [
+        -336,
+        368
+      ],
+      "id": "493ab36a-d17d-4f61-b9a6-b6859ff8ccb8",
+      "name": "Get row(s)"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.limit",
+      "typeVersion": 1,
+      "position": [
+        224,
+        368
+      ],
+      "id": "e8a23728-adf5-4d10-94ce-ae7841e24427",
+      "name": "Limit"
+    },
+    {
+      "parameters": {
+        "schemaType": "manual",
+        "inputSchema": "\n{\n\"title\":\"英文原標題\",\n\"content\":\"英文原內文\"\n}\n"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        1232,
+        688
+      ],
+      "id": "6c518780-b9ca-4112-add9-6d2bf953a9aa",
+      "name": "Structured Output Parser1"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=你是一位英文新聞翻譯專員，請執行以任務\n1. 解析出該篇新聞的標題和內容原文\n{{ $json.cleanedContent }}\n\n## 務必回傳以下josn格式\n\n{\n\"title\":\"英文原標題\",\n\"content\":\"英文原內文\"\n}\n",
+        "hasOutputParser": true,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        1072,
+        368
+      ],
+      "id": "92776997-9b98-42fa-ba7b-a66d01e1ad01",
+      "name": "claude解析",
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "claude-sonnet-4-5-20250929",
+          "mode": "list",
+          "cachedResultName": "Claude Sonnet 4.5"
+        },
+        "options": {
+          "maxTokensToSample": 4096,
+          "temperature": 0.3
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatAnthropic",
+      "typeVersion": 1.3,
+      "position": [
+        1024,
+        688
+      ],
+      "id": "01eaea07-d7dc-4ec2-b37c-9b1016ccd1e6",
+      "name": "Anthropic Chat Model",
+      "credentials": {
+        "anthropicApi": {
+          "id": "EWWpHFYEOSVfQr1r",
+          "name": "Anthropic account 2 _ Newtalk"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "upsert",
+        "dataTableId": {
+          "__rl": true,
+          "value": "YXirKj0P2e9KaEiM",
+          "mode": "list",
+          "cachedResultName": "RSS",
+          "cachedResultUrl": "/projects/3fNsHtHtWTyyLFlF/datatables/YXirKj0P2e9KaEiM"
+        },
+        "filters": {
+          "conditions": [
+            {
+              "keyValue": "={{ $('Limit').item.json.id }}"
+            }
+          ]
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "content": "={{ $json.output.content }}",
+            "translated_title": "={{ $json.output.title }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "title",
+              "displayName": "title",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "source_id",
+              "displayName": "source_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "description",
+              "displayName": "description",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "link",
+              "displayName": "link",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "content",
+              "displayName": "content",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "tags",
+              "displayName": "tags",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "category",
+              "displayName": "category",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "pub_date",
+              "displayName": "pub_date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "translated_title",
+              "displayName": "translated_title",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        }
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1,
+      "position": [
+        2592,
+        352
+      ],
+      "id": "f3417b72-18f1-4dec-b408-170e92ad356a",
+      "name": "Upsert row(s)1"
+    },
+    {
+      "parameters": {
+        "operation": "upsert",
+        "dataTableId": {
+          "__rl": true,
+          "value": "ytHc5KKgyhAvAwaX",
+          "mode": "list",
+          "cachedResultName": "world_news",
+          "cachedResultUrl": "/projects/iZydbwsMPJYYjvth/datatables/ytHc5KKgyhAvAwaX"
+        },
+        "filters": {
+          "conditions": [
+            {
+              "keyValue": "={{ $('Limit').item.json.id }}"
+            }
+          ]
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "originTitle",
+              "displayName": "originTitle",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "originContent",
+              "displayName": "originContent",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "source",
+              "displayName": "source",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "title",
+              "displayName": "title",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "content",
+              "displayName": "content",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "categoryId",
+              "displayName": "categoryId",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "sourceUrl",
+              "displayName": "sourceUrl",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "publishTime",
+              "displayName": "publishTime",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "category",
+              "displayName": "category",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        }
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1,
+      "position": [
+        1408,
+        528
+      ],
+      "id": "10267ad4-e0a7-41eb-b0f6-703fcffc6b23",
+      "name": "Upsert row(s)"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "960b3936-c2ea-4130-a503-5dfe96d35bd2",
+              "leftValue": "={{ $json.category }}",
+              "rightValue": "政治",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            },
+            {
+              "id": "fa370378-3771-4044-9fcf-78f034f2b09a",
+              "leftValue": "={{ $json.category }}",
+              "rightValue": "財經",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            },
+            {
+              "id": "b8f90ec0-802a-41b3-af8f-b857fd6f557d",
+              "leftValue": "={{ $json.category }}",
+              "rightValue": "科技",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "or"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.2,
+      "position": [
+        -32,
+        368
+      ],
+      "id": "1e416c28-2616-4470-bd9b-3da8cb1fa8f0",
+      "name": "Filter"
+    },
+    {
+      "parameters": {
+        "content": "## 取得RSS資料",
+        "height": 304,
+        "width": 224
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -400,
+        192
+      ],
+      "id": "b4ce83c5-426d-43d9-987a-ed9123779a1f",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "content": "## 篩選特定類別\n- 政治\n- 財經\n- 科技",
+        "height": 304,
+        "width": 224
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -96,
+        192
+      ],
+      "id": "271c5ceb-7b8e-4341-9b61-874c7470b2dd",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://dev88.newtalk.tw/newsapi/insertNews",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n    \"token\": \"61af9f535f694a56912a7ea660b01a7e8369b74cfac3199667dc82946f5d1e5c\",\n    \"datas\": [\n        {\n            \"title\": \"{{ $('翻譯').item.json.output.title }}\",\n            \"content\": \"{{ $('翻譯').item.json.output.content }}\",\n            \"categoryId\": 2,\n            \"publishTime\": \"{{ $('Limit').item.json.publishTime }}\",\n            \"tags\": \"{{ $('翻譯').item.json.output.tags }}\",\n            \"newsSourceId\": 7,\n            \"source\": \"{{ $('Limit').item.json.source }}\",\n            \"sourceUrl\": \"{{ $('Limit').item.json.sourceUrl }}\",\n            \"originTitle\": \"{{ $json.output.title }}\",\n            \"originContent\": \"{{ $json.output.content }}\"\n        }\n    ]\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2336,
+        352
+      ],
+      "id": "4fc59280-e6cf-421b-b7f4-02a0ce9cec6a",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "jsCode": "// 取得 claude解析 節點的輸出資料\nconst claudeData = $('claude解析').item.json;\n\n// 處理 output 物件,將所有雙引號替換為單引號\nconst output = claudeData.output;\n\nreturn {\n  json: {\n    output: {\n      title: output.title ? output.title.replaceAll('\"', \"'\") : output.title,\n      content: output.content ? output.content.replaceAll('\"', \"'\") : output.content,\n      // 如果有 tags 也一併處理\n      tags: output.tags ? output.tags.replaceAll('\"', \"'\") : output.tags\n    }\n  }\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2016,
+        352
+      ],
+      "id": "72aefec0-9bed-4a19-91a0-b07872f23ec7",
+      "name": "引號置換"
     }
   ],
   "connections": {
@@ -210,29 +651,7 @@
       "main": [
         [
           {
-            "node": "呼叫 Claude API",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "呼叫 Claude API": {
-      "main": [
-        [
-          {
-            "node": "解析結果",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "When clicking ‘Execute workflow’": {
-      "main": [
-        [
-          {
-            "node": "設定新聞 URL",
+            "node": "claude解析",
             "type": "main",
             "index": 0
           }
@@ -243,7 +662,7 @@
       "ai_languageModel": [
         [
           {
-            "node": "AI Agent",
+            "node": "翻譯",
             "type": "ai_languageModel",
             "index": 0
           }
@@ -254,18 +673,124 @@
       "ai_outputParser": [
         [
           {
-            "node": "AI Agent",
+            "node": "翻譯",
             "type": "ai_outputParser",
             "index": 0
           }
         ]
       ]
     },
-    "解析結果": {
+    "Schedule Trigger": {
       "main": [
         [
           {
-            "node": "AI Agent",
+            "node": "Get row(s)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "翻譯": {
+      "main": [
+        [
+          {
+            "node": "引號置換",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s)": {
+      "main": [
+        [
+          {
+            "node": "Filter",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Limit": {
+      "main": [
+        [
+          {
+            "node": "設定新聞 URL",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser1": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "claude解析",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "claude解析": {
+      "main": [
+        [
+          {
+            "node": "翻譯",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Upsert row(s)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Anthropic Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "claude解析",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter": {
+      "main": [
+        [
+          {
+            "node": "Limit",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Upsert row(s)1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "引號置換": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
             "type": "main",
             "index": 0
           }
@@ -281,7 +806,7 @@
     "templateCredsSetupCompleted": true
   },
   "pinData": {},
-  "versionId": "4a95fff5-99d0-4232-afcf-adc1224640cc",
+  "versionId": "0376199a-f65a-4a50-a719-9ed912ba41dc",
   "triggerCount": 0,
   "shared": [
     {
