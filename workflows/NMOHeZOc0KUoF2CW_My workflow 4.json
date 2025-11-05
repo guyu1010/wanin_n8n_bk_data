@@ -1,0 +1,166 @@
+{
+  "createdAt": "2025-10-14T04:04:39.890Z",
+  "updatedAt": "2025-10-15T03:38:56.000Z",
+  "id": "NMOHeZOc0KUoF2CW",
+  "name": "My workflow 4",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        48,
+        16
+      ],
+      "id": "1f865cce-086b-43c4-85fd-7cba7659cb48",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "f09039de-ac72-4653-9d9c-9ee1954ac3dc",
+              "name": "title",
+              "value": "=Silver prices hit record high as investors rush into safe havens",
+              "type": "string"
+            },
+            {
+              "id": "4c02633e-8d84-4e09-9d9d-6a11e4755c64",
+              "name": "content",
+              "value": "Gold isn’t the only precious metal on a gangbusters rally.\n\nSilver prices have surged roughly 75% this year, boosted by investors seeking out safe havens, plus strong industrial demand and lingering supply deficits.\n\nSilver futures traded in New York surged 7% on Monday and hit an all-time high of roughly $52.63 a troy ounce, surpassing a previous peak set in 1980.\n\nSpot silver prices — another real-time measure of the value of silver — also hit a record high above $52 a troy ounce. Spot silver extended its gains after breaching the $50 threshold on October 9 for the first time since 1980.\n\nTraders have turned to hard assets like gold and silver this year as safe investments and tools to hedge against geopolitical instability and economic uncertainty, from concerns about tariffs and inflation to worries about Federal Reserve independence and government debt burdens.\n\nSilver has been on a tear, supported by momentum from gold’s record-breaking rally. The metal is considered a cheaper, alternative safe haven investment to gold, which just hit $4,000 a troy ounce for the first time ever.\n\n“There’s just a lot of concern about the global economy, and when that happens, people turn to hard assets like silver,” Michael DiRienzo, CEO of the Silver Institute, previously told CNN. “Silver tends to follow gold upwards.”\n\nA standout year for precious metals\nWhile investor demand is driving up prices, silver also has widespread industrial uses, including in building data centers, solar panels and smartphones.\n\n“Its dual role as an industrial metal and safe-haven asset has amplified the rally, making 2025 a historic year for silver,” Ewa Manthey, a commodities strategist at ING, said in an email.\n\nhere are also supply concerns that could underpin higher prices.\n\nThe silver market is in its fifth year of a structural supply deficit because of “stagnant mining output” lagging behind demand, according to Peter Grant, vice president and senior metals strategist at Zaner Metals.\n\n“Strong and growing demand for silver, combined with a persistent supply deficit, is a recipe for higher prices,” Grant said in an email.\n\nGold prices have soared across the past two years, driven by investors diversifying into safe havens. Central banks decreasing reliance on the dollar and building reserves of gold also boosted prices.\n\nThe safe-haven rally has spread out to other precious metals like silver and platinum this year. Silver and platinum, which are up roughly 75% and 80% this year, respectively, are both outpacing gold, which is up roughly 51%.\n\nPrecious metals and bitcoin have also become beneficiaries of Wall Street traders and fund managers looking to protect against a weaker dollar.\n\nInvestors can get exposure to silver by buying bars or coins or investing in exchange-traded funds backed by silver. The iShares Silver Trust ETF has surged roughly 68% this year.\n\nInflows into silver ETFs this year are at their highest level since 2020, according to Maria Smirnova, chief investment officer at Sprott Asset Management.\n\n“Silver’s steady climb is turning into a breakout,” Smirnova said. “Supply is thinning, and investors are taking notice.”\n",
+              "type": "string"
+            },
+            {
+              "id": "9883e59c-f737-4c95-a97b-90d380c0a824",
+              "name": "prompt",
+              "value": "conceptual realistic photo symbolizing {article_topic}, showing global financial trend and data overlay, city skyline or financial district background, soft cinematic lighting, blue-gold palette, realistic composition, press photo tone, business silhouettes in background, abstract graphical patterns only, no text, no numbers, no currency symbols, AI-generated illustrative image for editorial use only.",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        320,
+        16
+      ],
+      "id": "07040a20-254a-43c3-83bb-6fb8b8567ecf",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "resource": "image",
+        "modelId": {
+          "__rl": true,
+          "value": "models/gemini-2.0-flash-exp-image-generation",
+          "mode": "list",
+          "cachedResultName": "models/gemini-2.0-flash-exp-image-generation"
+        },
+        "prompt": "=請根據 \ntitle:{{ $json.title }}\ncontent:{{ $json.content }}\nGenerate an image prompt using this template:\"{{ $json.prompt }}\"\n生成適合放在新聞封面且16:9的圖片\n\n## 禁止\n1.品牌商標（Bloomberg、Nasdaq）\n2.真實人物臉孔\n3.帶數字或文字資訊",
+        "options": {
+          "sampleCount": 3
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.googleGemini",
+      "typeVersion": 1,
+      "position": [
+        592,
+        16
+      ],
+      "id": "72d04315-444c-47fd-92f5-9e67f487e5fa",
+      "name": "Generate an image",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "XP4600oZOTsbmCAO",
+          "name": "test"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Generate an image",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {},
+  "versionId": "4bf5bb1b-c0c1-4f1d-be18-dc1011b6129c",
+  "triggerCount": 0,
+  "shared": [
+    {
+      "createdAt": "2025-10-14T04:04:39.894Z",
+      "updatedAt": "2025-10-14T04:04:39.894Z",
+      "role": "workflow:owner",
+      "workflowId": "NMOHeZOc0KUoF2CW",
+      "projectId": "5hzeOvYCcszWmWgd",
+      "project": {
+        "createdAt": "2025-10-13T03:49:23.205Z",
+        "updatedAt": "2025-10-13T03:54:24.885Z",
+        "id": "5hzeOvYCcszWmWgd",
+        "name": "yaping chang <yaping.chang@wanin.tw>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "projectRelations": [
+          {
+            "createdAt": "2025-10-13T03:49:23.212Z",
+            "updatedAt": "2025-10-13T03:49:23.212Z",
+            "userId": "521a85f5-deb4-4bfe-9818-3504537363e1",
+            "projectId": "5hzeOvYCcszWmWgd",
+            "user": {
+              "createdAt": "2025-10-13T03:49:23.192Z",
+              "updatedAt": "2025-10-16T00:33:36.000Z",
+              "id": "521a85f5-deb4-4bfe-9818-3504537363e1",
+              "email": "yaping.chang@wanin.tw",
+              "firstName": "yaping",
+              "lastName": "chang",
+              "personalizationAnswers": {
+                "version": "v4",
+                "personalization_survey_submitted_at": "2025-10-13T03:54:35.568Z",
+                "personalization_survey_n8n_version": "1.114.3"
+              },
+              "settings": {
+                "easyAIWorkflowOnboarded": true
+              },
+              "disabled": false,
+              "mfaEnabled": false,
+              "lastActiveAt": "2025-10-15",
+              "isPending": false
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "tags": []
+}

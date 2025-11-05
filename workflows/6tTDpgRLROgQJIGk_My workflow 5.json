@@ -1,0 +1,337 @@
+{
+  "createdAt": "2025-07-11T09:12:18.221Z",
+  "updatedAt": "2025-07-11T09:12:18.221Z",
+  "id": "6tTDpgRLROgQJIGk",
+  "name": "My workflow 5",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "99b289dd-02b9-4a40-871d-3ace12959c2f",
+      "name": "每日定時觸發",
+      "type": "n8n-nodes-base.cron",
+      "typeVersion": 1,
+      "position": [
+        -304,
+        80
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// 設定要監控的關鍵字和域名\nconst keywords = [\n  \"你的關鍵字1\",\n  \"你的關鍵字2\",\n  \"你的關鍵字3\"\n];\n\nconst targetDomain = \"yourdomain.com\"; // 替換成你的域名\n\n// 為每個關鍵字創建項目\nconst items = keywords.map(keyword => ({\n  json: {\n    keyword: keyword,\n    targetDomain: targetDomain,\n    searchDate: new Date().toISOString().split('T')[0]\n  }\n}));\n\nreturn items;"
+      },
+      "id": "81361f67-94b1-4825-b59d-528cca91467a",
+      "name": "設定關鍵字",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -80,
+        80
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://www.google.com/search",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "q",
+              "value": "={{$json.keyword}}"
+            },
+            {
+              "name": "num",
+              "value": "50"
+            },
+            {
+              "name": "hl",
+              "value": "zh-TW"
+            },
+            {
+              "name": "gl",
+              "value": "TW"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "User-Agent",
+              "value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+            }
+          ]
+        },
+        "options": {
+          "timeout": 10000
+        }
+      },
+      "id": "941cff6f-272a-4f82-b8cf-c7db0a1cb8ed",
+      "name": "Google搜尋",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        144,
+        80
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// 解析Google搜尋結果HTML\nconst cheerio = require('cheerio');\nconst html = $input.first().json.data;\nconst $ = cheerio.load(html);\n\nconst keyword = $input.first().json.keyword;\nconst targetDomain = $input.first().json.targetDomain;\nconst searchDate = $input.first().json.searchDate;\n\nconst results = [];\nlet targetRank = null;\nlet competitorsAbove = [];\n\n// 提取搜尋結果\n$('div.g').each((index, element) => {\n  const link = $(element).find('a[href]').first().attr('href');\n  const title = $(element).find('h3').text();\n  const snippet = $(element).find('.VwiC3b').text();\n  \n  if (link && title) {\n    const rank = index + 1;\n    const domain = extractDomain(link);\n    \n    results.push({\n      rank: rank,\n      title: title,\n      url: link,\n      domain: domain,\n      snippet: snippet\n    });\n    \n    // 檢查是否為目標域名\n    if (domain.includes(targetDomain)) {\n      targetRank = rank;\n    }\n    \n    // 如果還沒找到目標域名，記錄前面的競爭者\n    if (!targetRank) {\n      competitorsAbove.push({\n        rank: rank,\n        domain: domain,\n        title: title,\n        url: link\n      });\n    }\n  }\n});\n\n// 提取域名的函數\nfunction extractDomain(url) {\n  try {\n    const urlObj = new URL(url);\n    return urlObj.hostname;\n  } catch (e) {\n    return url;\n  }\n}\n\nreturn [{\n  json: {\n    keyword: keyword,\n    targetDomain: targetDomain,\n    searchDate: searchDate,\n    targetRank: targetRank,\n    competitorsAbove: competitorsAbove,\n    totalResults: results.length,\n    allResults: results,\n    foundTarget: targetRank !== null\n  }\n}];"
+      },
+      "id": "b30ead34-24fb-4347-afe6-ca18d1c968cd",
+      "name": "解析搜尋結果",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        368,
+        80
+      ]
+    },
+    {
+      "parameters": {
+        "authentication": "serviceAccount",
+        "operation": "appendOrUpdate",
+        "documentId": "YOUR_GOOGLE_SHEETS_ID",
+        "sheetName": "排名資料",
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "id": "98c618a0-e2b2-4e31-b733-8c6b518186f0",
+      "name": "儲存到Google Sheets",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4,
+      "position": [
+        816,
+        48
+      ]
+    },
+    {
+      "parameters": {
+        "authentication": "serviceAccount",
+        "documentId": "YOUR_GOOGLE_SHEETS_ID",
+        "sheetName": "排名資料",
+        "options": {}
+      },
+      "id": "115f4ecb-56d7-43b4-9d7e-eaf910c9e89c",
+      "name": "讀取Google Sheets資料",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4,
+      "position": [
+        1168,
+        80
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// 初始化Google Sheets標題行\nconst headers = [\n  \"日期\",\n  \"關鍵字\", \n  \"目標域名\",\n  \"排名\",\n  \"是否找到\",\n  \"前方競爭者\",\n  \"記錄時間\"\n];\n\nreturn [{\n  json: {\n    \"日期\": \"日期\",\n    \"關鍵字\": \"關鍵字\",\n    \"目標域名\": \"目標域名\",\n    \"排名\": \"排名\",\n    \"是否找到\": \"是否找到\",\n    \"前方競爭者\": \"前方競爭者\",\n    \"記錄時間\": \"記錄時間\"\n  }\n}];"
+      },
+      "id": "a7e1fe0b-c16c-4940-9fda-5d5db128d4a9",
+      "name": "建立標題行",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        576,
+        -32
+      ]
+    },
+    {
+      "parameters": {
+        "subject": "SERP排名監控報告 - {{$now.format('YYYY-MM-DD')}}",
+        "options": {}
+      },
+      "id": "c4d29c68-30e0-4bb6-b6d0-937223e0039e",
+      "name": "發送報告",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2,
+      "position": [
+        1408,
+        80
+      ],
+      "webhookId": "c40bf4c0-4dbc-444d-a068-7b392613efd3"
+    },
+    {
+      "parameters": {
+        "jsCode": "// 格式化要儲存到Google Sheets的資料\nconst data = $input.first().json;\nconst now = new Date();\n\n// 處理競爭者資料\nconst competitorsText = data.competitorsAbove.map(comp => \n  `${comp.rank}. ${comp.domain} - ${comp.title}`\n).join('\\n');\n\n// 格式化為Google Sheets的行格式\nreturn [{\n  json: {\n    \"日期\": data.searchDate,\n    \"關鍵字\": data.keyword,\n    \"目標域名\": data.targetDomain,\n    \"排名\": data.targetRank || \"未找到\",\n    \"是否找到\": data.foundTarget ? \"是\" : \"否\",\n    \"前方競爭者\": competitorsText,\n    \"記錄時間\": now.toLocaleString('zh-TW')\n  }\n}];"
+      },
+      "id": "0d440743-a25b-4ee7-9d68-e28bdd423cbc",
+      "name": "格式化Google Sheets資料",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        576,
+        240
+      ]
+    }
+  ],
+  "connections": {
+    "每日定時觸發": {
+      "main": [
+        [
+          {
+            "node": "設定關鍵字",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "設定關鍵字": {
+      "main": [
+        [
+          {
+            "node": "Google搜尋",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google搜尋": {
+      "main": [
+        [
+          {
+            "node": "解析搜尋結果",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "解析搜尋結果": {
+      "main": [
+        [
+          {
+            "node": "建立標題行",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "格式化Google Sheets資料",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "建立標題行": {
+      "main": [
+        [
+          {
+            "node": "儲存到Google Sheets",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "儲存到Google Sheets": {
+      "main": [
+        [
+          {
+            "node": "讀取Google Sheets資料",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "讀取Google Sheets資料": {
+      "main": [
+        [
+          {
+            "node": "發送報告",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "格式化Google Sheets資料": {
+      "main": [
+        [
+          {
+            "node": "儲存到Google Sheets",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": null,
+  "pinData": {},
+  "versionId": "ed65c4e4-e5b9-4425-a468-5a2b2c8576c0",
+  "triggerCount": 0,
+  "shared": [
+    {
+      "createdAt": "2025-07-11T09:12:18.233Z",
+      "updatedAt": "2025-07-11T09:12:18.233Z",
+      "role": "workflow:owner",
+      "workflowId": "6tTDpgRLROgQJIGk",
+      "projectId": "cSCIDan8gJxZ0cWD",
+      "project": {
+        "createdAt": "2025-07-11T06:18:02.598Z",
+        "updatedAt": "2025-07-11T06:24:23.467Z",
+        "id": "cSCIDan8gJxZ0cWD",
+        "name": "玟誼 李 <elly.li@wanin.tw>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "projectRelations": [
+          {
+            "createdAt": "2025-07-11T06:18:02.613Z",
+            "updatedAt": "2025-07-11T06:18:02.613Z",
+            "userId": "568ba390-eb32-41ab-88b9-7769cb094f4f",
+            "projectId": "cSCIDan8gJxZ0cWD",
+            "user": {
+              "createdAt": "2025-07-11T06:18:02.591Z",
+              "updatedAt": "2025-11-03T03:20:08.000Z",
+              "id": "568ba390-eb32-41ab-88b9-7769cb094f4f",
+              "email": "elly.li@wanin.tw",
+              "firstName": "玟誼",
+              "lastName": "李",
+              "personalizationAnswers": {
+                "version": "v4",
+                "personalization_survey_submitted_at": "2025-07-11T06:25:17.807Z",
+                "personalization_survey_n8n_version": "1.102.0",
+                "companySize": "20-99",
+                "companyType": "digital-agency",
+                "role": "data-science",
+                "reportedSource": "friend"
+              },
+              "settings": {
+                "easyAIWorkflowOnboarded": true,
+                "firstSuccessfulWorkflowId": "WonDjzXioRrXqYad",
+                "userActivated": true,
+                "userActivatedAt": 1754366405376,
+                "npsSurvey": {
+                  "waitingForResponse": true,
+                  "ignoredCount": 1,
+                  "lastShownAt": 1754989668491
+                }
+              },
+              "disabled": false,
+              "mfaEnabled": false,
+              "lastActiveAt": "2025-11-02",
+              "isPending": false
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "tags": []
+}

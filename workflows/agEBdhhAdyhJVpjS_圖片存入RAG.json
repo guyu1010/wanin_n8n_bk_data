@@ -1,0 +1,244 @@
+{
+  "createdAt": "2025-11-04T06:57:00.098Z",
+  "updatedAt": "2025-11-04T06:58:56.000Z",
+  "id": "agEBdhhAdyhJVpjS",
+  "name": "圖片存入RAG",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "resource": "image",
+        "operation": "analyze",
+        "modelId": {
+          "__rl": true,
+          "value": "models/gemini-2.5-flash",
+          "mode": "list",
+          "cachedResultName": "models/gemini-2.5-flash"
+        },
+        "text": "=請用繁體中文詳細描述這張圖片,包含:\n- 主要場景和主題\n- 重要人物或物體\n- 情境和氛圍\n- 可能適合搭配的新聞類型\n    \n## 執行兩個任務\n1.請用一段繁體中文描述，約100-150字\n2.替照片產生標籤，可以做精準搜尋\n\n並以json格式回覆\n{\n  \t\"id\": {{ $json.id }},\n\t\"description\": \"圖片描述\",\n\t\"tags\": [\"tag1\",\"tag2\"]\n} \n",
+        "imageUrls": "={{ $json.link }}",
+        "options": {
+          "maxOutputTokens": 2000
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.googleGemini",
+      "typeVersion": 1,
+      "position": [
+        736,
+        0
+      ],
+      "id": "6adad9ae-ae97-4b50-b6a3-40ba8b73b0d5",
+      "name": "Analyze an image"
+    },
+    {
+      "parameters": {
+        "authentication": "serviceAccount",
+        "documentId": {
+          "__rl": true,
+          "value": "1tyNhr4Hy2yW2W4kr_jFtcF8doa-Gp65Z-8d98Jvawp8",
+          "mode": "list",
+          "cachedResultName": "國際新聞分類",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1tyNhr4Hy2yW2W4kr_jFtcF8doa-Gp65Z-8d98Jvawp8/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 190402664,
+          "mode": "list",
+          "cachedResultName": "圖片",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1tyNhr4Hy2yW2W4kr_jFtcF8doa-Gp65Z-8d98Jvawp8/edit#gid=190402664"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "description"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        208,
+        0
+      ],
+      "id": "2f2977d1-e0ee-456a-877b-7d02dea2dae8",
+      "name": "Get row(s) in sheet"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.limit",
+      "typeVersion": 1,
+      "position": [
+        480,
+        0
+      ],
+      "id": "6a935910-b8a2-4bb8-b791-febf08bea6b6",
+      "name": "Limit"
+    },
+    {
+      "parameters": {
+        "jsCode": "// 取得輸入資料\nconst items = $input.all();\nconst results = [];\n\nfor (const item of items) {\n  const data = item.json;\n  \n  // 取得 Gemini 回應中的 text\n  let responseText = '';\n  \n  if (Array.isArray(data)) {\n    // 如果是陣列,取第一個元素\n    responseText = data[0]?.content?.parts?.[0]?.text || '';\n  } else if (data.content) {\n    // 如果直接是物件\n    responseText = data.content?.parts?.[0]?.text || '';\n  }\n  \n  // 清理 markdown 的 ```json 和 ``` 標記\n  responseText = responseText\n    .replace(/```json\\n?/g, '')\n    .replace(/```\\n?/g, '')\n    .trim();\n  \n  try {\n    // 解析 JSON\n    const parsed = JSON.parse(responseText);\n    \n    // 處理 tags (如果是陣列,轉成逗號分隔的字串)\n    let tagsString = '';\n    if (Array.isArray(parsed.tags)) {\n      tagsString = parsed.tags.join(', ');\n    } else if (typeof parsed.tags === 'string') {\n      tagsString = parsed.tags;\n    }\n    \n    results.push({\n      json: {\n        id: parsed.id,\n        description: parsed.description || '',\n        tags: tagsString,\n        category: parsed.category || ''\n      }\n    });\n    \n  } catch (error) {\n    // 如果解析失敗,回傳錯誤資訊\n    results.push({\n      json: {\n        error: error.message,\n        rawResponse: responseText.substring(0, 200) // 只顯示前200字元\n      }\n    });\n  }\n}\n\nreturn results;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        944,
+        0
+      ],
+      "id": "a1e24999-b2d5-48fa-8429-600b34c44e6b",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "minutes",
+              "minutesInterval": 1
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -32,
+        0
+      ],
+      "id": "38f624ec-b33e-450f-a82a-201c9a0b9749",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {},
+      "type": "CUSTOM.qdrantUpsert",
+      "typeVersion": 1,
+      "position": [
+        1216,
+        0
+      ],
+      "id": "f4d48231-98ba-440d-8b58-0c97d4cb8d0a",
+      "name": "Wanin RAG Upsert"
+    }
+  ],
+  "connections": {
+    "Get row(s) in sheet": {
+      "main": [
+        [
+          {
+            "node": "Limit",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Limit": {
+      "main": [
+        [
+          {
+            "node": "Analyze an image",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Analyze an image": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Wanin RAG Upsert",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Get row(s) in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": null,
+  "pinData": {},
+  "versionId": "eb9f3db4-2933-4848-9a14-a5e55efbb229",
+  "triggerCount": 0,
+  "shared": [
+    {
+      "createdAt": "2025-11-04T06:57:00.108Z",
+      "updatedAt": "2025-11-04T06:57:00.108Z",
+      "role": "workflow:owner",
+      "workflowId": "agEBdhhAdyhJVpjS",
+      "projectId": "iZydbwsMPJYYjvth",
+      "project": {
+        "createdAt": "2025-09-16T02:39:54.633Z",
+        "updatedAt": "2025-09-16T02:43:19.908Z",
+        "id": "iZydbwsMPJYYjvth",
+        "name": "common web <web@wanin.tw>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "projectRelations": [
+          {
+            "createdAt": "2025-09-16T02:39:54.639Z",
+            "updatedAt": "2025-09-16T02:39:54.639Z",
+            "userId": "55f25be3-69cb-4a61-849e-09b3e6328043",
+            "projectId": "iZydbwsMPJYYjvth",
+            "user": {
+              "createdAt": "2025-09-16T02:39:54.628Z",
+              "updatedAt": "2025-11-05T08:31:58.000Z",
+              "id": "55f25be3-69cb-4a61-849e-09b3e6328043",
+              "email": "web@wanin.tw",
+              "firstName": "common",
+              "lastName": "web",
+              "personalizationAnswers": {
+                "version": "v4",
+                "personalization_survey_submitted_at": "2025-09-16T02:43:24.324Z",
+                "personalization_survey_n8n_version": "1.108.1"
+              },
+              "settings": {
+                "easyAIWorkflowOnboarded": true,
+                "firstSuccessfulWorkflowId": "XN79dmNc8yPVm6XU",
+                "userActivated": true,
+                "userActivatedAt": 1758096117396,
+                "npsSurvey": {
+                  "responded": true,
+                  "lastShownAt": 1761544952978
+                }
+              },
+              "disabled": false,
+              "mfaEnabled": false,
+              "lastActiveAt": "2025-11-05",
+              "isPending": false
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "tags": []
+}

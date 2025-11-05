@@ -1,0 +1,487 @@
+{
+  "createdAt": "2025-10-31T03:58:43.404Z",
+  "updatedAt": "2025-11-05T07:25:42.000Z",
+  "id": "Q1WhRKXv3imxJzmy",
+  "name": "RSS.app",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.xml",
+      "typeVersion": 1,
+      "position": [
+        304,
+        -112
+      ],
+      "id": "a54078e2-b09f-4c97-b3b4-73e64f45378e",
+      "name": "XML"
+    },
+    {
+      "parameters": {
+        "jsCode": "// 簡化版本\nconst items = $input.first().json.rss.channel.item;\n\nconst processedItems = items.map((item, index) => ({\n  title: item.title,\n  description: item.description ? item.description.replace(/<[^>]*>/g, '').trim() : '',\n  link: item.link,\n  source_id: \"CNN\", //1:CNN,2:BBC,3:Fox,4:NYtimes\n  guid:item.guid._,\n  pub_date: item.pubDate ? new Date(item.pubDate).toISOString() : null,\n}));\n\nreturn processedItems.map(item => ({ json: item }));"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        528,
+        -112
+      ],
+      "id": "e1e1e847-95fa-4ee6-81a6-2d225f2d0183",
+      "name": "XML整理"
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "hours"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -144,
+        -112
+      ],
+      "id": "6d30a950-2936-4918-9c2d-383f71ebd950",
+      "name": "Schedule Trigger_Reuters"
+    },
+    {
+      "parameters": {
+        "url": "https://rss.app/feeds/wh5bnCiGZHmgVcrS.xml",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        80,
+        -112
+      ],
+      "id": "8d7b87d8-06cb-4bb6-b214-6bbd73c443df",
+      "name": "Reuters"
+    },
+    {
+      "parameters": {
+        "operation": "upsert",
+        "dataTableId": {
+          "__rl": true,
+          "value": "ytHc5KKgyhAvAwaX",
+          "mode": "list",
+          "cachedResultName": "world_news",
+          "cachedResultUrl": "/projects/iZydbwsMPJYYjvth/datatables/ytHc5KKgyhAvAwaX"
+        },
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "sourceUrl",
+              "keyValue": "={{ $json.output.sourceUrl }}"
+            }
+          ]
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "originTitle": "={{ $json.output.originTitle }}",
+            "source": "={{ $json.output.source }}",
+            "sourceUrl": "={{ $json.output.sourceUrl }}",
+            "publishTime": "={{ $json.output.publishTime }}",
+            "category": "={{ $json.output.category }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "originTitle",
+              "displayName": "originTitle",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "originContent",
+              "displayName": "originContent",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "source",
+              "displayName": "source",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "title",
+              "displayName": "title",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "content",
+              "displayName": "content",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "categoryId",
+              "displayName": "categoryId",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "sourceUrl",
+              "displayName": "sourceUrl",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "publishTime",
+              "displayName": "publishTime",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "category",
+              "displayName": "category",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        }
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1,
+      "position": [
+        1344,
+        -112
+      ],
+      "id": "e0cfe67c-5274-4c98-b155-69542fdbf725",
+      "name": "Upsert row(s)"
+    },
+    {
+      "parameters": {
+        "options": {
+          "maxOutputTokens": 2048,
+          "temperature": 0.4
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        960,
+        128
+      ],
+      "id": "d989f516-265a-43a6-8a3c-07cce8b0e3d5",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "TcbdbxzebK9gSKPI",
+          "name": "Google Gemini(PaLM) Api account 6"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "{\n\"originTitle\": \"After Trump trade meeting, it’s advantage Xi \",\n\"originContent\": \"As the dust begins to clear around a less-than-two hour meeting between Chinese leader Xi Jinping and President Donald Trump at an airbase in South Korea on Thursday, it’s clear that China’s leaders have stacked up another win for their hardball strategy with the United States.\",\n\"sourceUrl\": \"https://www.cnn.com/2025/10/31/china/xi-trump-us-china-deal-analysis-intl-hnk\",\n\"source\": \"CNN\",\n\"guid\": \"af9f7448fcf80ee0d5fcc95d28b6a572\",\n\"publishTime\":\"2025-11-05T05:01:01.000Z\",\n\"category\":\"國際\"\n}\n\n"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        1152,
+        128
+      ],
+      "id": "1fac3c67-c70b-4c3a-9d9f-30148d8297f6",
+      "name": "Structured Output Parser"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "9ce4416f-be9e-44e1-8efe-20669707a67e",
+              "leftValue": "={{ $json.source_id }}",
+              "rightValue": "CNN",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            },
+            {
+              "id": "4c2b5357-8e10-4bb2-8dd8-5c52916bbdb6",
+              "leftValue": "={{ $json.link }}",
+              "rightValue": "/video/",
+              "operator": {
+                "type": "string",
+                "operation": "notContains"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.2,
+      "position": [
+        752,
+        -112
+      ],
+      "id": "9814b75e-178c-488d-89d9-bce149c14b40",
+      "name": "Filter"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "6K9tc2QRSvm5zR9W",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/6K9tc2QRSvm5zR9W",
+          "cachedResultName": "AI新聞擷取工作流"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {}
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.3,
+      "position": [
+        1600,
+        -112
+      ],
+      "id": "aa35bd36-14c8-414e-8a29-238bc6f4b571",
+      "name": "Call 'AI新聞擷取工作流'"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=你是位專業的新聞記者，請針對以下的標題和描述給該篇新聞一個分類(category)\ntitle:{{ $json.title }}\ndescription:{{ $json.description }}\ncategory：政治/財經/生活/娛樂/體育/科技/環保/其他 //僅選擇一個\n\n** 結果請以json回覆 **\n** 需準確帶原本item的資料 **\n\n{\n\"originTitle\": {{ $json.title }},\n\"originContent\": {{ $json.description }},\n\"sourceUrl\": {{ $json.link }},\n\"source\": {{ $json.source_id }},\n\"guid\": {{ $json.guid }},\n\"publishTime\": {{ $json.pub_date }},\n\"category\":\"國際\"\n}",
+        "hasOutputParser": true,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        976,
+        -112
+      ],
+      "id": "42806853-5648-417e-b26f-f929cc94811f",
+      "name": "AI Agen",
+      "retryOnFail": true,
+      "maxTries": 2,
+      "onError": "continueRegularOutput"
+    }
+  ],
+  "connections": {
+    "XML": {
+      "main": [
+        [
+          {
+            "node": "XML整理",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "XML整理": {
+      "main": [
+        [
+          {
+            "node": "Filter",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule Trigger_Reuters": {
+      "main": [
+        [
+          {
+            "node": "Reuters",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Reuters": {
+      "main": [
+        [
+          {
+            "node": "XML",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upsert row(s)": {
+      "main": [
+        [
+          {
+            "node": "Call 'AI新聞擷取工作流'",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agen",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "AI Agen",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter": {
+      "main": [
+        [
+          {
+            "node": "AI Agen",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agen": {
+      "main": [
+        [
+          {
+            "node": "Upsert row(s)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {},
+  "versionId": "854bc963-a44e-46a4-ad2a-f09f39207c28",
+  "triggerCount": 0,
+  "shared": [
+    {
+      "createdAt": "2025-10-31T03:58:43.409Z",
+      "updatedAt": "2025-10-31T03:58:43.409Z",
+      "role": "workflow:owner",
+      "workflowId": "Q1WhRKXv3imxJzmy",
+      "projectId": "iZydbwsMPJYYjvth",
+      "project": {
+        "createdAt": "2025-09-16T02:39:54.633Z",
+        "updatedAt": "2025-09-16T02:43:19.908Z",
+        "id": "iZydbwsMPJYYjvth",
+        "name": "common web <web@wanin.tw>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "projectRelations": [
+          {
+            "createdAt": "2025-09-16T02:39:54.639Z",
+            "updatedAt": "2025-09-16T02:39:54.639Z",
+            "userId": "55f25be3-69cb-4a61-849e-09b3e6328043",
+            "projectId": "iZydbwsMPJYYjvth",
+            "user": {
+              "createdAt": "2025-09-16T02:39:54.628Z",
+              "updatedAt": "2025-11-05T08:31:58.000Z",
+              "id": "55f25be3-69cb-4a61-849e-09b3e6328043",
+              "email": "web@wanin.tw",
+              "firstName": "common",
+              "lastName": "web",
+              "personalizationAnswers": {
+                "version": "v4",
+                "personalization_survey_submitted_at": "2025-09-16T02:43:24.324Z",
+                "personalization_survey_n8n_version": "1.108.1"
+              },
+              "settings": {
+                "easyAIWorkflowOnboarded": true,
+                "firstSuccessfulWorkflowId": "XN79dmNc8yPVm6XU",
+                "userActivated": true,
+                "userActivatedAt": 1758096117396,
+                "npsSurvey": {
+                  "responded": true,
+                  "lastShownAt": 1761544952978
+                }
+              },
+              "disabled": false,
+              "mfaEnabled": false,
+              "lastActiveAt": "2025-11-05",
+              "isPending": false
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "tags": []
+}

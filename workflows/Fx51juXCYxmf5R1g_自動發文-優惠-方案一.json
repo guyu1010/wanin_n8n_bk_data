@@ -1,0 +1,704 @@
+{
+  "createdAt": "2025-09-10T10:34:16.883Z",
+  "updatedAt": "2025-10-16T07:29:24.000Z",
+  "id": "Fx51juXCYxmf5R1g",
+  "name": "自動發文-優惠-方案一",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.prompt }}",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        672,
+        1184
+      ],
+      "id": "e0cee8e9-a943-4600-bfa6-a41505774cb7",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.5-pro",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        608,
+        1408
+      ],
+      "id": "db24e0d4-a775-42e5-b77f-f133497020fe",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "rzGYcHVXRNXHjFPp",
+          "name": "Google Gemini(PaLM) Api account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "tableId": "threads_test_discount",
+        "returnAll": true
+      },
+      "type": "n8n-nodes-base.supabaseTool",
+      "typeVersion": 1,
+      "position": [
+        832,
+        1424
+      ],
+      "id": "291d070d-8701-484b-a2b5-8150f97194fe",
+      "name": "Supabase DB_threads",
+      "credentials": {
+        "supabaseApi": {
+          "id": "fPPNqZ5ZGXEc0sc1",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const titleGatekeeperPrompt = `\n階段一：單一最佳品牌選題與深度生成\n\n【AI 系統角色與任務】\n角色：您是一位專門撰寫高流量、高 SEO 權重優惠文章的**內容總監**。您的核心任務是：從提供的所有原始優惠資料中，**嚴格篩選**並**僅選擇出單一最適合發布的「頭條品牌」**，然後將該品牌當天所有合格的優惠資訊，整合為一篇**專屬且完整的深度文章**。\n\n目標：在一次執行中，**僅產出一篇**針對單一品牌的最高價值文章 JSON 物件。\n\n**【輸入資料格式說明】**\n請**嚴格**參考以下欄位名稱進行篩選與寫作：\n1. 「內容/優惠詳情」：欄位名稱為 **'contentSnippet'**。\n2. 「發布日期」：欄位名稱為 **'isoDate'** (用於判斷發文時間)。\n3. 「發文者/品牌帳號」：欄位名稱為 **'creator'** (例如: '@familymart_tw')。\n\n【第一階段：資料篩選與判斷 — 絕對排除！】\n在開始寫作前，您必須嚴格遵循以下規則。任何違反規則的資料，必須立即排除，不予寫作。\n\n1. 品牌範圍：\n* **僅處理**以下 **10 大品牌**的資料：麥當勞, Foodpanda, 好市多, 高鐵, 星巴克, 全家, 全聯, Uber, 必勝客, 7-ELEVEN。請從 **'creator'** 欄位判斷品牌。資料若來自這 10 個品牌以外，請立即排除。\n2. 內容類型排除（吸引力篩選）：\n* 流量關鍵字：**必須**從 **'contentSnippet'** 中提取，包含以下任一實質優惠關鍵字：「優惠碼」、「折扣碼」、「買一送一」、「半價」、「降價」、「免費」、「最低 X 折」。\n* 強制排除：若優惠內容屬於「聯名商品」、「周邊商品加購」、「集點活動」、「抽獎」，且無任何實質折扣或優惠碼，則立即排除。\n3. 時效性判斷：\n* **時效性判定標準：** 只要 **'isoDate'** 在**今日起算 7 天內**，且內容符合「流量關鍵字」，即通過篩選。\n\n---\n\n## 【第二階段：單一最佳品牌選擇與深度寫作】\n\n**重要指令：**\n1.  **頭條品牌選擇：** 請比較所有通過第一階段篩選的優惠項目，您必須且只能選擇**單一**品牌作為本輪文章的主題。\n2.  **優先級：** 優先選擇**擁有最多**「買一送一」或「優惠碼」活動的品牌。如果多個品牌數量相同，選擇**最近發布日期 ('isoDate')** 的品牌。\n3.  **內容整合（關鍵！）：** 請將所有**通過篩選的，且與您選中品牌相關的所有優惠細節**，全部寫入同一篇文章中。\n\n---\n\n## 【嚴格格式規範與排除】\n\n**輸出格式強制要求：**\n* 內文 **'content'** 欄位**絕對禁止**輸出任何 HTML 標籤。這包括但不限於：<p>、<b>、<br>、<code>或任何其他 HTML 標籤。\n* **僅使用 Markdown 語法** (**粗體**、- 列點、\\n 換行) 來控制格式。\n* **嚴禁**輸出任何形式的 <br> 標籤。\n\n### 文章結構寫作規範 (使用 \\n 控制換行)\n\n1. 標題與導言（決定點擊率）\n標題規範：標題長度應在 18-25 個中文字之間。標題強制包含「品牌名稱」、「關鍵優惠字」和「精確時效性」。\n**導言結束後：** 必須以 **兩個換行符號 (\\n\\n)** 區隔下方的懶人包。\n\n2. **核心懶人包（快速解決痛點 - 內容與日期強化！）**\n**強制置頂：** 將**所有**與選定品牌相關的有效優惠資訊，以 **Markdown 粗體列點清單**的方式置於導言之後。\n**日期提取強化：** 在「活動日期」欄位，**必須盡全力從原始資料中提取出精確的日期**。如果原始資料中沒有任何日期線索，才允許寫「**詳見官方貼文**」。\n**清單結構範例：**\n請務必使用粗體字來強調關鍵資訊。在每一個項目（例如：優惠品項/代碼、內容、**活動日期**）之間使用 **一個換行符號 (\\n)** 來保持緊湊，項目結束後再使用 **兩個換行符號 (\\n\\n)** 區隔下一個區塊：\n**【本週 [品牌名稱] 必看優惠整理】**\\n\n- **優惠品項/代碼：** [精確的品項名稱或代碼]\\n\n  **內容：** [優惠內容/折扣額度]\\n\n  **活動日期：** [**必須**是精確日期或**詳見官方貼文**]\\n\\n\n\n3. 優惠詳細分類與說明（強化 SEO）\n結構化：將所有優惠資訊按類別分段落介紹。**嚴禁使用 H2 和 H3 標籤。**\n**標籤模擬與換行強制規定：**\n* 所有分類的大標題（例如：週末消暑首選），請使用**粗體字**，並在標題**上方與下方**各加上 **兩個換行符號 (\\n\\n)** 來模擬清晰的段落間隔。\n* **強制細節分段：** 針對每個優惠活動，必須使用以下**獨立標註與分段**，確保細節清晰可讀：\n    * 在段落內使用 **優惠條件：** [內容]\\n\\n\n    * 在段落內使用 **適用門市/對象：** [內容]\\n\\n\n    * 在段落內使用 **使用限制：** [內容]\\n\\n\n* 每個**詳細內容段落**之間（例如：從「週末消暑首選」到「手搖飲愛好者必看」），必須使用 **兩個換行符號 (\\n\\n)** 來區隔。\n詳細內容：必須針對該優惠，詳細說明「優惠條件」、「適用門市/對象」及「使用限制」。\n\n**請嚴格依照以下 JSON 結構回傳：**\n{\n  \"prompt\": \"<請直接塞入上面這段字串，不要改寫>\",\n  \"title\": 標題,\n  \"content\": 內文\n}\n`;\n\nreturn [\n  {\n    json: {\n      prompt: titleGatekeeperPrompt, // 固定塞入\n      // title 和 content 要交給 AI 生成，這裡先留空\n      title: \"\",\n      content: \"\",\n    },\n  },\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        384,
+        1184
+      ],
+      "id": "acca566a-d845-486b-8240-7d17b9cca1ba",
+      "name": "撰寫prompt"
+    },
+    {
+      "parameters": {
+        "jsCode": "const inputText =$input.first().json.output ;\n\n// 找出 ```json ... ``` 區塊\nconst regex = /```json\\s*([\\s\\S]*?)```/;\nconst match = inputText.match(regex);\nif (!match) throw new Error(\"找不到 JSON 格式區塊\");\n\n// 取出內容\nconst jsonBlock = match[1];\n\n// 手動抓 title 與 content\n// 假設 title 以 \"title\": \" 開頭，content 以 \"content\": \" 開頭\nconst titleStart = jsonBlock.indexOf('\"title\": \"') + 10;\nconst titleEnd = jsonBlock.indexOf('\",', titleStart);\nconst contentStart = jsonBlock.indexOf('\"content\": \"') + 12;\nconst contentEnd = jsonBlock.lastIndexOf('\"'); // 最後一個雙引號\n\nconst title = jsonBlock.substring(titleStart, titleEnd);\nconst content = jsonBlock.substring(contentStart, contentEnd);\n\n// 輸出\nreturn [{\n  json: {\n    prompt: jsonBlock, // 原始 JSON 區塊，保留\n    title: title,\n    content: content\n  }\n}];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1008,
+        1184
+      ],
+      "id": "330767e0-bab2-42d5-ada8-3ae180143798",
+      "name": "AI回傳轉json1",
+      "retryOnFail": true,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "content": "## AI取資料來源寫文章",
+        "height": 656,
+        "width": 2000,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        128,
+        992
+      ],
+      "typeVersion": 1,
+      "id": "6cda484a-cdb8-48bb-85c8-dc04197acc3e",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "content": "## 透過RSS取得threads文章\nhttps://rss.app/",
+        "height": 1760,
+        "width": 1024
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        400,
+        -976
+      ],
+      "typeVersion": 1,
+      "id": "8f61bcc1-aa51-48ef-bd65-c7aae6a0dfb6",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "url": "https://rss.app/feeds/7baN3gQFYmgj8sgF.xml",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.rssFeedRead",
+      "typeVersion": 1.2,
+      "position": [
+        608,
+        240
+      ],
+      "id": "9ce80e2d-7c99-493b-a526-d89b30705850",
+      "name": "RSS Read(省錢主婦｜蝦皮、超商、好市多、優惠)"
+    },
+    {
+      "parameters": {
+        "chatId": "7802109813",
+        "text": "=標題：{{ $json.title }}\n內文：{{ $json.content_html }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1760,
+        1056
+      ],
+      "id": "b87d9056-8f61-4f2a-9a2e-c2cee22969c4",
+      "name": "telegram通知",
+      "webhookId": "3d8abdd9-f4b2-49fe-a771-c610ba9a4adb",
+      "credentials": {
+        "telegramApi": {
+          "id": "ADiZMdkyDmUbDLRw",
+          "name": "Telegram account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "useCustomSchema": true,
+        "operation": "getAll",
+        "tableId": "discount_test_new"
+      },
+      "type": "n8n-nodes-base.supabaseTool",
+      "typeVersion": 1,
+      "position": [
+        992,
+        1520
+      ],
+      "id": "73fc2ae6-582f-470b-9efe-43e77a253b06",
+      "name": "Get  in Supabase",
+      "credentials": {
+        "supabaseApi": {
+          "id": "fPPNqZ5ZGXEc0sc1",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "https://rss.app/feeds/Zt6uKporNenBG7Pt.xml",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.rssFeedRead",
+      "typeVersion": 1.2,
+      "position": [
+        608,
+        -912
+      ],
+      "id": "f01e0768-7808-474c-9ba6-c309c05a4b07",
+      "name": "必勝客 台灣官方"
+    },
+    {
+      "parameters": {
+        "url": "https://rss.app/feeds/nEstR90TEte7AhBc.xml",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.rssFeedRead",
+      "typeVersion": 1.2,
+      "position": [
+        608,
+        -720
+      ],
+      "id": "4fd4d343-c45c-4d2b-8bfb-956e815f014d",
+      "name": "7-ELEVEn Taiwan"
+    },
+    {
+      "parameters": {
+        "url": "https://rss.app/feeds/kNUsjSw3bJqXT0wh.xml",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.rssFeedRead",
+      "typeVersion": 1.2,
+      "position": [
+        608,
+        -528
+      ],
+      "id": "79226cdf-87bf-402d-beba-71f2898a6ea3",
+      "name": "全家便利商店"
+    },
+    {
+      "parameters": {
+        "url": "https://rss.app/feeds/qZXf4BgkzWRNLSng.xml",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.rssFeedRead",
+      "typeVersion": 1.2,
+      "position": [
+        608,
+        48
+      ],
+      "id": "b0ecb9aa-318c-42cc-88f8-4721ec00983e",
+      "name": "麥當勞"
+    },
+    {
+      "parameters": {
+        "url": "https://rss.app/feeds/RWEIT3klsc7T9QFp.xml",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.rssFeedRead",
+      "typeVersion": 1.2,
+      "position": [
+        608,
+        -144
+      ],
+      "id": "399c03ed-02e9-42b5-a55d-ce00209b23aa",
+      "name": "省錢加雞腿"
+    },
+    {
+      "parameters": {
+        "url": "https://rss.app/feeds/Pr0ZRrID8qmdIM77.xml",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.rssFeedRead",
+      "typeVersion": 1.2,
+      "position": [
+        608,
+        624
+      ],
+      "id": "f6b0015e-0c23-44b7-bc51-d8e35f5b7f81",
+      "name": "foodpanda Taiwan"
+    },
+    {
+      "parameters": {
+        "url": "https://rss.app/feeds/HC35A4meBZtOETot.xml",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.rssFeedRead",
+      "typeVersion": 1.2,
+      "position": [
+        608,
+        432
+      ],
+      "id": "e568a2a1-caf6-4695-99dc-eff2fea92497",
+      "name": "好康情報誌"
+    },
+    {
+      "parameters": {
+        "url": "https://rss.app/feeds/7baN3gQFYmgj8sgF.xml",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.rssFeedRead",
+      "typeVersion": 1.2,
+      "position": [
+        608,
+        -336
+      ],
+      "id": "df29526e-8b08-4263-b441-3437ab81aeea",
+      "name": "省錢主婦"
+    },
+    {
+      "parameters": {
+        "tableId": "threads_test_discount",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "creator",
+              "fieldValue": "={{ $json.creator }}"
+            },
+            {
+              "fieldId": "link",
+              "fieldValue": "={{ $json.link }}"
+            },
+            {
+              "fieldId": "content",
+              "fieldValue": "={{ $json.content }}"
+            },
+            {
+              "fieldId": "contentSnippet",
+              "fieldValue": "={{ $json.contentSnippet }}"
+            },
+            {
+              "fieldId": "isoDate",
+              "fieldValue": "={{ $json.isoDate }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        1136,
+        -224
+      ],
+      "id": "6d9b3ba3-62a8-47c1-9fa0-3e213e319a21",
+      "name": "寫入supabase DB",
+      "credentials": {
+        "supabaseApi": {
+          "id": "fPPNqZ5ZGXEc0sc1",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "tableId": "discount_test_ALL",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "content",
+              "fieldValue": "={{ $json.content }}"
+            },
+            {
+              "fieldId": "prompt",
+              "fieldValue": "={{ $json.prompt }}"
+            },
+            {
+              "fieldId": "title",
+              "fieldValue": "={{ $json.title }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        1760,
+        1504
+      ],
+      "id": "13020fe6-d56d-41cb-a4bf-cdc05f06c033",
+      "name": "寫入supabase DB_ALL",
+      "credentials": {
+        "supabaseApi": {
+          "id": "fPPNqZ5ZGXEc0sc1",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "tableId": "discount_test_new",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "content",
+              "fieldValue": "={{ $json.content }}"
+            },
+            {
+              "fieldId": "prompt",
+              "fieldValue": "={{ $json.prompt }}"
+            },
+            {
+              "fieldId": "title",
+              "fieldValue": "={{ $json.title }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        1776,
+        1312
+      ],
+      "id": "e19bc844-781c-448a-a0a1-f6d66c0bdc61",
+      "name": "寫入supabase DB_new",
+      "credentials": {
+        "supabaseApi": {
+          "id": "fPPNqZ5ZGXEc0sc1",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        192,
+        1184
+      ],
+      "id": "a4bfb74e-464d-40a8-989b-516b5adc6b0a",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "jsCode": "return $items().map(item => {\n  // 先取 content 欄位\n  const content = item.json[\"content\"] || \"\";\n\n  // 將 Markdown 粗體與換行符號轉 HTML\n  const html = content\n    .replace(/\\\\n/g, \"<br>\")                       // 換行符號\n    .replace(/\\*\\*(.*?)\\*\\*/g, \"<strong>$1</strong>\"); // 粗體\n\n  return {\n    json: {\n      ...item.json, // 保留原本欄位\n      content_html: html, // 新增 HTML 欄位\n    }\n  };\n});\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1248,
+        1168
+      ],
+      "id": "519a6332-eaff-464c-8a26-e06402ccf73a",
+      "name": "內文_Markdown/換行符號轉成 HTML"
+    }
+  ],
+  "connections": {
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "AI回傳轉json1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Supabase DB_threads": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "撰寫prompt": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI回傳轉json1": {
+      "main": [
+        [
+          {
+            "node": "內文_Markdown/換行符號轉成 HTML",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "RSS Read(省錢主婦｜蝦皮、超商、好市多、優惠)": {
+      "main": [
+        [
+          {
+            "node": "寫入supabase DB",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get  in Supabase": {
+      "ai_tool": [
+        []
+      ]
+    },
+    "必勝客 台灣官方": {
+      "main": [
+        [
+          {
+            "node": "寫入supabase DB",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "7-ELEVEn Taiwan": {
+      "main": [
+        [
+          {
+            "node": "寫入supabase DB",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "全家便利商店": {
+      "main": [
+        [
+          {
+            "node": "寫入supabase DB",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "省錢主婦": {
+      "main": [
+        [
+          {
+            "node": "寫入supabase DB",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "省錢加雞腿": {
+      "main": [
+        [
+          {
+            "node": "寫入supabase DB",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "麥當勞": {
+      "main": [
+        [
+          {
+            "node": "寫入supabase DB",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "好康情報誌": {
+      "main": [
+        [
+          {
+            "node": "寫入supabase DB",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "foodpanda Taiwan": {
+      "main": [
+        [
+          {
+            "node": "寫入supabase DB",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "撰寫prompt",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "telegram通知": {
+      "main": [
+        []
+      ]
+    },
+    "內文_Markdown/換行符號轉成 HTML": {
+      "main": [
+        [
+          {
+            "node": "telegram通知",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "寫入supabase DB_new",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "寫入supabase DB_ALL",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": {
+    "node:Schedule Trigger": {
+      "recurrenceRules": []
+    },
+    "node:Schedule Trigger1": {
+      "recurrenceRules": []
+    }
+  },
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {},
+  "versionId": "fce01814-4af3-4b75-a97f-12e9e357ce71",
+  "triggerCount": 2,
+  "shared": [
+    {
+      "createdAt": "2025-09-10T10:34:16.895Z",
+      "updatedAt": "2025-09-10T10:34:16.895Z",
+      "role": "workflow:owner",
+      "workflowId": "Fx51juXCYxmf5R1g",
+      "projectId": "7goAssCGKgwfIAES",
+      "project": {
+        "createdAt": "2025-08-06T02:37:42.802Z",
+        "updatedAt": "2025-08-06T02:39:07.720Z",
+        "id": "7goAssCGKgwfIAES",
+        "name": "peggy lin <peggy.lin@wanin.tw>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "projectRelations": [
+          {
+            "createdAt": "2025-08-06T02:37:42.807Z",
+            "updatedAt": "2025-08-06T02:37:42.807Z",
+            "userId": "67944008-c997-4154-bbd0-26d022398054",
+            "projectId": "7goAssCGKgwfIAES",
+            "user": {
+              "createdAt": "2025-08-06T02:37:42.798Z",
+              "updatedAt": "2025-11-05T00:21:52.000Z",
+              "id": "67944008-c997-4154-bbd0-26d022398054",
+              "email": "peggy.lin@wanin.tw",
+              "firstName": "peggy",
+              "lastName": "lin",
+              "personalizationAnswers": {
+                "version": "v4",
+                "personalization_survey_submitted_at": "2025-08-06T02:41:04.705Z",
+                "personalization_survey_n8n_version": "1.102.0",
+                "companySize": "100-499",
+                "companyType": "saas",
+                "role": "data-science",
+                "reportedSource": "friend"
+              },
+              "settings": {
+                "firstSuccessfulWorkflowId": "qxXV0YFTbqnC75xr",
+                "userActivated": true,
+                "userActivatedAt": 1754532013419,
+                "easyAIWorkflowOnboarded": true,
+                "npsSurvey": {
+                  "responded": true,
+                  "lastShownAt": 1756796314100
+                }
+              },
+              "disabled": false,
+              "mfaEnabled": false,
+              "lastActiveAt": "2025-11-04",
+              "isPending": false
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "tags": []
+}

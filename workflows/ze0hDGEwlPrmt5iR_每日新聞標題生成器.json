@@ -1,0 +1,264 @@
+{
+  "createdAt": "2025-07-31T10:39:01.268Z",
+  "updatedAt": "2025-07-31T10:40:35.000Z",
+  "id": "ze0hDGEwlPrmt5iR",
+  "name": "每日新聞標題生成器",
+  "active": false,
+  "isArchived": true,
+  "nodes": [
+    {
+      "id": "cron-trigger",
+      "name": "每日觸發器",
+      "type": "n8n-nodes-base.cron",
+      "position": [
+        20,
+        300
+      ],
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 9 * * *"
+            }
+          ]
+        }
+      },
+      "typeVersion": 1
+    },
+    {
+      "id": "http-fetch",
+      "name": "抓取新聞頁面",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        240,
+        300
+      ],
+      "parameters": {
+        "url": "https://newtalk.tw/epaper/{{ $now.format('YYYY-MM-DD') }}",
+        "requestMethod": "GET",
+        "options": {}
+      },
+      "typeVersion": 4.1
+    },
+    {
+      "id": "extract-news",
+      "name": "提取新聞內容",
+      "type": "n8n-nodes-base.code",
+      "position": [
+        460,
+        300
+      ],
+      "parameters": {
+        "language": "javaScript",
+        "jsCode": "// 解析HTML並提取前5則新聞\nconst html = $input.all()[0].json.data;\n\n// 使用正則表達式或簡單的字串處理來提取新聞標題和內容\n// 這裡需要根據實際的HTML結構來調整\ntry {\n  // 假設新聞在特定的HTML標籤中\n  const newsPattern = /<article[^>]*>([\\s\\S]*?)<\\/article>/gi;\n  const titlePattern = /<h[1-6][^>]*>([^<]+)<\\/h[1-6]>/i;\n  const contentPattern = /<p[^>]*>([^<]+)<\\/p>/i;\n  \n  let match;\n  const news = [];\n  let count = 0;\n  \n  while ((match = newsPattern.exec(html)) !== null && count < 5) {\n    const articleHtml = match[1];\n    const titleMatch = titlePattern.exec(articleHtml);\n    const contentMatch = contentPattern.exec(articleHtml);\n    \n    if (titleMatch) {\n      news.push({\n        title: titleMatch[1].trim(),\n        content: contentMatch ? contentMatch[1].trim() : '',\n        index: count + 1\n      });\n      count++;\n    }\n  }\n  \n  // 如果上述方法無效，使用備用方案\n  if (news.length === 0) {\n    // 簡單的標題提取\n    const simpleTitlePattern = /<title>([^<]+)<\\/title>/i;\n    const titleMatch = simpleTitlePattern.exec(html);\n    \n    news.push({\n      title: titleMatch ? titleMatch[1] : '今日新聞',\n      content: '無法提取具體新聞內容，請檢查網站結構',\n      index: 1\n    });\n  }\n  \n  return {\n    date: new Date().toISOString().split('T')[0],\n    news: news,\n    total_count: news.length\n  };\n  \n} catch (error) {\n  return {\n    error: error.message,\n    date: new Date().toISOString().split('T')[0],\n    news: [],\n    total_count: 0\n  };\n}"
+      },
+      "typeVersion": 2
+    },
+    {
+      "id": "prepare-content",
+      "name": "準備AI內容",
+      "type": "n8n-nodes-base.set",
+      "position": [
+        680,
+        300
+      ],
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "news_summary",
+              "name": "news_summary",
+              "type": "string",
+              "value": "{{ $json.date }} 新頭殼熱門新聞前{{ $json.total_count }}則：\\n\\n{{ $json.news.map((item, index) => `${index + 1}. ${item.title}${item.content ? '\\n內容：' + item.content : ''}`).join('\\n\\n') }}"
+            },
+            {
+              "id": "prompt",
+              "name": "prompt",
+              "type": "string",
+              "value": "請為以下新聞內容生成吸引人的標題建議：\\n\\n{{ $json.news_summary }}\\n\\n要求：\\n- 為每則新聞生成2個不同風格的標題\\n- 標題要簡潔有力，不超過30字\\n- 符合社群媒體傳播特性\\n- 使用繁體中文\\n- 標題要吸引點擊但不誇大\\n\\n請按以下格式輸出：\\n原標題1：[原標題]\\n建議標題1A：[新標題]\\n建議標題1B：[新標題]\\n\\n原標題2：[原標題]\\n建議標題2A：[新標題]\\n建議標題2B：[新標題]"
+            }
+          ]
+        }
+      },
+      "typeVersion": 3.2
+    },
+    {
+      "id": "gemini-api",
+      "name": "呼叫 Gemini API",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        900,
+        300
+      ],
+      "parameters": {
+        "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent",
+        "requestMethod": "POST",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyContentType": "json",
+        "jsonBody": "{\\n  \"contents\": [\\n    {\\n      \"parts\": [\\n        {\\n          \"text\": \"{{ $json.prompt }}\"\\n        }\\n      ]\\n    }\\n  ]\\n}",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "***REMOVED***"
+      },
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "9TlCSEkFfpxQKUXt",
+          "name": "Gemini API Key"
+        }
+      },
+      "typeVersion": 4.1
+    },
+    {
+      "id": "process-result",
+      "name": "處理結果",
+      "type": "n8n-nodes-base.code",
+      "position": [
+        1120,
+        300
+      ],
+      "parameters": {
+        "language": "javaScript",
+        "jsCode": "// 處理Gemini回應和格式化最終結果\\nconst geminiResponse = $input.all()[0].json;\\nconst newsData = $input.all()[1].json;\\n\\ntry {\\n  const generatedText = geminiResponse.candidates[0].content.parts[0].text;\\n  \\n  return {\\n    success: true,\\n    date: newsData.date,\\n    original_news: newsData.news,\\n    ai_suggestions: generatedText,\\n    timestamp: new Date().toISOString()\\n  };\\n  \\n} catch (error) {\\n  return {\\n    success: false,\\n    error: error.message,\\n    date: newsData.date,\\n    original_news: newsData.news,\\n    timestamp: new Date().toISOString()\\n  };\\n}"
+      },
+      "typeVersion": 2
+    }
+  ],
+  "connections": {
+    "每日觸發器": {
+      "main": [
+        [
+          {
+            "node": "抓取新聞頁面",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "抓取新聞頁面": {
+      "main": [
+        [
+          {
+            "node": "提取新聞內容",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "提取新聞內容": {
+      "main": [
+        [
+          {
+            "node": "準備AI內容",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "準備AI內容": {
+      "main": [
+        [
+          {
+            "node": "呼叫 Gemini API",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "呼叫 Gemini API": {
+      "main": [
+        [
+          {
+            "node": "處理結果",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "Asia/Taipei",
+    "saveDataErrorExecution": "all",
+    "saveDataSuccessExecution": "all",
+    "saveManualExecutions": true,
+    "saveExecutionProgress": true
+  },
+  "staticData": null,
+  "meta": null,
+  "pinData": null,
+  "versionId": "8610149f-db68-4621-9273-b7c4b4f3443d",
+  "triggerCount": 0,
+  "shared": [
+    {
+      "createdAt": "2025-07-31T10:39:01.274Z",
+      "updatedAt": "2025-07-31T10:39:01.274Z",
+      "role": "workflow:owner",
+      "workflowId": "ze0hDGEwlPrmt5iR",
+      "projectId": "cSCIDan8gJxZ0cWD",
+      "project": {
+        "createdAt": "2025-07-11T06:18:02.598Z",
+        "updatedAt": "2025-07-11T06:24:23.467Z",
+        "id": "cSCIDan8gJxZ0cWD",
+        "name": "玟誼 李 <elly.li@wanin.tw>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "projectRelations": [
+          {
+            "createdAt": "2025-07-11T06:18:02.613Z",
+            "updatedAt": "2025-07-11T06:18:02.613Z",
+            "userId": "568ba390-eb32-41ab-88b9-7769cb094f4f",
+            "projectId": "cSCIDan8gJxZ0cWD",
+            "user": {
+              "createdAt": "2025-07-11T06:18:02.591Z",
+              "updatedAt": "2025-11-03T03:20:08.000Z",
+              "id": "568ba390-eb32-41ab-88b9-7769cb094f4f",
+              "email": "elly.li@wanin.tw",
+              "firstName": "玟誼",
+              "lastName": "李",
+              "personalizationAnswers": {
+                "version": "v4",
+                "personalization_survey_submitted_at": "2025-07-11T06:25:17.807Z",
+                "personalization_survey_n8n_version": "1.102.0",
+                "companySize": "20-99",
+                "companyType": "digital-agency",
+                "role": "data-science",
+                "reportedSource": "friend"
+              },
+              "settings": {
+                "easyAIWorkflowOnboarded": true,
+                "firstSuccessfulWorkflowId": "WonDjzXioRrXqYad",
+                "userActivated": true,
+                "userActivatedAt": 1754366405376,
+                "npsSurvey": {
+                  "waitingForResponse": true,
+                  "ignoredCount": 1,
+                  "lastShownAt": 1754989668491
+                }
+              },
+              "disabled": false,
+              "mfaEnabled": false,
+              "lastActiveAt": "2025-11-02",
+              "isPending": false
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "tags": []
+}

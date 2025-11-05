@@ -1,0 +1,340 @@
+{
+  "createdAt": "2025-10-27T05:57:53.778Z",
+  "updatedAt": "2025-11-04T06:38:31.000Z",
+  "id": "3miwV9wdKjrx8Gmr",
+  "name": "AI新聞擷取&翻譯工作流",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "8f5e3c4a-1b2d-4e9f-a3c6-7d8e9f0a1b2c",
+              "name": "url",
+              "value": "https://edition.cnn.com/2025/10/26/politics/navy-aircraft-crash-south-china-sea",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "349956c0-38cd-407c-9a4d-f4ae5c830fc8",
+      "name": "設定新聞 URL",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.3,
+      "position": [
+        -256,
+        -48
+      ]
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.url }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "User-Agent",
+              "value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
+            }
+          ]
+        },
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "text"
+            }
+          },
+          "timeout": 30000
+        }
+      },
+      "id": "db5b21dd-b1b2-4d0f-80b3-f91a6118f6a3",
+      "name": "抓取網頁內容",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -48,
+        -48
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// 清理 HTML，只保留主要內容\nconst html = $input.item.json.data || '';\n\n// 移除 script, style, nav, footer 等無關標籤\nlet cleaned = html\n  .replace(/<script[\\s\\S]*?<\\/script>/gi, '')\n  .replace(/<style[\\s\\S]*?<\\/style>/gi, '')\n  .replace(/<nav[\\s\\S]*?<\\/nav>/gi, '')\n  .replace(/<header[\\s\\S]*?<\\/header>/gi, '')\n  .replace(/<footer[\\s\\S]*?<\\/footer>/gi, '')\n  .replace(/<aside[\\s\\S]*?<\\/aside>/gi, '')\n  .replace(/<iframe[\\s\\S]*?<\\/iframe>/gi, '')\n  .replace(/<!--[\\s\\S]*?-->/g, '')\n  .replace(/<[^>]+>/g, ' ')\n  .replace(/\\s+/g, ' ')\n  .trim();\n\n// 限制長度，避免 token 過多（約 3000 tokens = 12000 字元）\ncleaned = cleaned.substring(0, 12000);\n\nreturn {\n  json: {\n    cleanedContent: cleaned,\n    url: $input.item.json.url\n  }\n};"
+      },
+      "id": "7eaa8404-b7eb-4c5f-ad22-6cc554fe6c03",
+      "name": "清理 HTML",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        160,
+        -48
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.anthropic.com/v1/messages",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "x-api-key",
+              "value": "=sk-ant-ap********************3wAA"
+            },
+            {
+              "name": "anthropic-version",
+              "value": "2023-06-01"
+            },
+            {
+              "name": "content-type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"model\": \"claude-sonnet-4-5-20250929\",\n  \"max_tokens\": 4096,\n  \"temperature\": 0.3,\n  \"messages\": [\n    {\n      \"role\": \"user\",\n      \"content\": \"請從以下新聞內容中提取資訊，並以嚴格的 JSON 格式回傳（不要包含其他文字）：\\n\\n{\\n  \\\"title\\\": \\\"新聞標題（原文）\\\",\\n  \\\"content\\\": \\\"完整正文內容（原文）\\\",\\n  \\\"category\\\": \\\"新聞分類（科技/財經/娛樂/體育/政治/生活/國際/其他）\\\"\\n}\\n\\n\\n\\n新聞內容：\\n{{ $json.cleanedContent }}\"\n    }\n  ]\n}",
+        "options": {
+          "timeout": 60000
+        }
+      },
+      "id": "fd37e0a2-f662-4d44-87e8-1ed0daf52850",
+      "name": "呼叫 Claude API",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        416,
+        -48
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// 解析 Claude 的回應\nconst response = $input.item.json;\n\n// 取得 Claude 的回覆內容\nconst content = response.content;\nconst textContent = content.find(item => item.type === 'text');\n\nif (!textContent) {\n  throw new Error('無法從 Claude 回應中找到文字內容');\n}\n\nlet resultText = textContent.text;\n\n// 嘗試提取 JSON（處理 Claude 可能在 JSON 前後加說明文字的情況）\nlet jsonMatch = resultText.match(/\\{[\\s\\S]*\\}/);\n\nif (jsonMatch) {\n  const extractedJson = JSON.parse(jsonMatch[0]);\n  return {\n    json: {\n      title: extractedJson.title,\n      content: extractedJson.content,\n      summary: extractedJson.summary,\n      category: extractedJson.category,\n      sourceUrl: $input.item.json.url || $('清理 HTML').item.json.url,\n      extractedAt: new Date().toISOString(),\n      tokensUsed: {\n        input: response.usage.input_tokens,\n        output: response.usage.output_tokens\n      }\n    }\n  };\n} else {\n  // 如果找不到 JSON，返回原始文字讓使用者檢查\n  return {\n    json: {\n      error: '無法解析 JSON',\n      rawResponse: resultText\n    }\n  };\n}"
+      },
+      "id": "65e9d536-d836-4747-a5b9-e7b09252c3ed",
+      "name": "解析結果",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        656,
+        -48
+      ]
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -448,
+        -48
+      ],
+      "id": "be988e77-7756-4cc9-85d5-df85744ad884",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=你是一位台灣國際新聞翻譯專員，請執行以下兩個任務\n1. 使用台灣用語翻譯以下內容\n2. 從內容精選3~7個適合的新聞關鍵字(tags)\n\n標題：{{ $json.title }}\n內容：{{ $json.content }}\n\n## 翻譯對照表\n\n### 政治人物音譯\n- Vladimir Putin -> 普丁\n- Donald Trump -> 川普\n- Viktor Orbán -> 歐爾班\n- Marco Rubio -> 盧比歐\n- Benjamin Netanyahu -> 納坦雅胡\n- Volodymyr Zelenskyy -> 澤連斯基\n- Pete Hegseth -> 海格塞斯\n- John F. Kennedy -> 甘迺迪\n- Ronald Reagan -> 雷根\n- Jake Sullivan -> 蘇利文\n- Olaf Scholz -> 蕭茲\n- Justin Trudeau -> 杜魯道\n- Marcos (菲律賓) -> 馬可仕\n\n### 地名音譯\n- North Korea/朝鮮 -> 北韓\n- Gaza -> 加薩\n- Sydney -> 雪梨\n- Munich -> 慕尼黑\n- New Zealand -> 紐西蘭\n- Saudi Arabia -> 沙烏地阿拉伯\n- Dubai -> 杜拜\n- Yemen -> 葉門\n\n### 交通與運輸\n- 出租車/的士 -> 計程車\n- 集裝箱 -> 貨櫃\n- 空客 -> 空巴\n\n### 科技與網路用語\n- 視頻 -> 影片\n- 互聯網/網絡 -> 網路\n- 軟件 -> 軟體\n- 硬件 -> 硬體\n- 計算機 -> 電腦\n- 內存 -> 記憶體\n- 激光 -> 雷射\n- 光伏 -> 光電/太陽能\n- 程序 -> 程式\n- 帖子 -> 貼文\n- 樓主 -> 原發文者\n- 硅 -> 矽\n- 芯片 -> 晶片\n- 黑客 -> 駭客\n- 屏幕 -> 螢幕\n- 高清 -> 高畫質\n- 攝像頭 -> 監視器\n- 短信 -> 簡訊\n\n### 軍事與政府\n- 台防務部門 -> 國防部\n- 五角大樓 -> 五角大廈\n- 宙斯盾 -> 神盾系統\n- 空間站 -> 太空站\n- 黑匣子 -> 黑盒子\n\n### 教育與職業\n- 高校 -> 大學\n- 幼兒園 -> 幼稚園\n- 程序員 -> 工程師\n- 寫字樓 -> 辦公大樓\n- 下崗 -> 沒工作\n\n### 商業與法律用語\n- 合同 -> 合約\n- 渠道 -> 管道\n- 反饋 -> 回饋\n- 靠譜 -> 可靠\n\n### 日常用語\n- 萬億 -> 兆\n- 水平 -> 水準\n- 小區 -> 社區\n- 套路 -> 圈套\n- 給力 -> 厲害\n- 土豆 -> 馬鈴薯\n- 獼猴桃 -> 奇異果\n- 西紅柿 -> 番茄\n- 獻血 -> 捐血\n- 方便麵 -> 泡麵\n- 立馬 -> 立刻\n- 通過 -> 經由\n\n### 品牌與專有名詞\n- 奔馳 -> 賓士\n- 新聞發布會 -> 記者會\n- 宇航員 -> 太空人\n- 發動機 -> 引擎\n- 國際象棋 -> 西洋棋\n\n### 特殊用語\n- 導火索 -> 導火線\n- 河蟹 -> 掩蓋\n- 可卡因 -> 古柯鹼\n\n## 輸出要求\n- 回傳 JSON 格式\n- 照著原意翻譯\n- 可微調段落格式符合中文新聞\n- 避免使用簡體中文用詞\n- 不用分 section\n- content 段落使用 <p></p>\n\n## 翻譯原則\n- 人名第一次出現時保留英文原名，例如：「美國國務卿布林肯（Antony Blinken）」\n- 數字使用阿拉伯數字，金額加上單位（例如：100萬美元、50億元）\n- 引述內容使用「」（全形引號）\n- 日期格式：2025年10月28日\n\n## 務必確認\n- 用詞為台灣慣用字\n- 標點符號使用全形(，。！？)\n- tags 需為文中有提及的字詞\n- 避免過度口語化",
+        "hasOutputParser": true,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        896,
+        -48
+      ],
+      "id": "c0f08839-4950-4d58-b93c-57a337d010aa",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        768,
+        160
+      ],
+      "id": "0810c32f-7858-4154-9612-c54c8c89ca6b",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "TcbdbxzebK9gSKPI",
+          "name": "Google Gemini(PaLM) Api account 6"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "schemaType": "manual",
+        "inputSchema": "{\n  \"title\": \"翻譯後的繁體中文標題\",\n  \"content\": \"<p>第一段內容</p><p>第二段內容</p><p>第三段內容</p>\",\n  \"tags\": [\"關鍵字1\", \"關鍵字2\", \"關鍵字3\"]\n}\n"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        1072,
+        160
+      ],
+      "id": "c77e5db4-5c10-4ae0-ace4-13a557d559b3",
+      "name": "Structured Output Parser"
+    }
+  ],
+  "connections": {
+    "設定新聞 URL": {
+      "main": [
+        [
+          {
+            "node": "抓取網頁內容",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "抓取網頁內容": {
+      "main": [
+        [
+          {
+            "node": "清理 HTML",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "清理 HTML": {
+      "main": [
+        [
+          {
+            "node": "呼叫 Claude API",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "呼叫 Claude API": {
+      "main": [
+        [
+          {
+            "node": "解析結果",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "設定新聞 URL",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "解析結果": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {},
+  "versionId": "4a95fff5-99d0-4232-afcf-adc1224640cc",
+  "triggerCount": 0,
+  "shared": [
+    {
+      "createdAt": "2025-10-27T05:57:53.781Z",
+      "updatedAt": "2025-10-27T05:57:53.781Z",
+      "role": "workflow:owner",
+      "workflowId": "3miwV9wdKjrx8Gmr",
+      "projectId": "iZydbwsMPJYYjvth",
+      "project": {
+        "createdAt": "2025-09-16T02:39:54.633Z",
+        "updatedAt": "2025-09-16T02:43:19.908Z",
+        "id": "iZydbwsMPJYYjvth",
+        "name": "common web <web@wanin.tw>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "projectRelations": [
+          {
+            "createdAt": "2025-09-16T02:39:54.639Z",
+            "updatedAt": "2025-09-16T02:39:54.639Z",
+            "userId": "55f25be3-69cb-4a61-849e-09b3e6328043",
+            "projectId": "iZydbwsMPJYYjvth",
+            "user": {
+              "createdAt": "2025-09-16T02:39:54.628Z",
+              "updatedAt": "2025-11-05T08:31:58.000Z",
+              "id": "55f25be3-69cb-4a61-849e-09b3e6328043",
+              "email": "web@wanin.tw",
+              "firstName": "common",
+              "lastName": "web",
+              "personalizationAnswers": {
+                "version": "v4",
+                "personalization_survey_submitted_at": "2025-09-16T02:43:24.324Z",
+                "personalization_survey_n8n_version": "1.108.1"
+              },
+              "settings": {
+                "easyAIWorkflowOnboarded": true,
+                "firstSuccessfulWorkflowId": "XN79dmNc8yPVm6XU",
+                "userActivated": true,
+                "userActivatedAt": 1758096117396,
+                "npsSurvey": {
+                  "responded": true,
+                  "lastShownAt": 1761544952978
+                }
+              },
+              "disabled": false,
+              "mfaEnabled": false,
+              "lastActiveAt": "2025-11-05",
+              "isPending": false
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "tags": []
+}

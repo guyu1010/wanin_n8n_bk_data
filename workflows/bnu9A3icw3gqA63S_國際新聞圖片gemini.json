@@ -1,0 +1,536 @@
+{
+  "createdAt": "2025-10-11T01:35:43.970Z",
+  "updatedAt": "2025-10-16T06:18:21.000Z",
+  "id": "bnu9A3icw3gqA63S",
+  "name": "國際新聞圖片(gemini)",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://jowavcwbtrjlolfuetqa.supabase.co/storage/v1/object/images/{{ $('圖片名稱唯一值').item.json.filename }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Impvd2F2Y3didHJqbG9sZnVldHFhIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1NDU2OTU3OCwiZXhwIjoyMDcwMTQ1NTc4fQ.k72EwZkGF7lwivsokWu9joGvBvBGA2cbUDEN_t-n8hk"
+            },
+            {
+              "name": "Content-Type",
+              "value": "image/png"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "binaryData",
+        "inputDataFieldName": "data",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1936,
+        208
+      ],
+      "id": "2c4871d5-9197-4249-998f-75ca57dd75d4",
+      "name": "存到supabase",
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "operation": "toBinary",
+        "sourceProperty": "imageBase64",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.convertToFile",
+      "typeVersion": 1.1,
+      "position": [
+        1728,
+        208
+      ],
+      "id": "65994488-e011-4590-a839-a48e335ece87",
+      "name": "Convert to File",
+      "retryOnFail": true,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.5-flash-image-preview",
+        "options": {
+          "maxOutputTokens": 2048
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        1168,
+        352
+      ],
+      "id": "e11a7a9b-a9af-48de-b06e-e3caa6e95b54",
+      "name": "Google Gemini Chat Model2",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "rzGYcHVXRNXHjFPp",
+          "name": "Google Gemini(PaLM) Api account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {
+          "maxOutputTokens": 2048
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        704,
+        400
+      ],
+      "id": "c7eb74b2-799c-47e9-9a3a-96969efc16e4",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "rzGYcHVXRNXHjFPp",
+          "name": "Google Gemini(PaLM) Api account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const input = $input.first().json;\nlet rawText = input.output || '';\n\n// 清洗掉換行符號、引號、星號等你不想要的符號\nconst cleanedText = rawText\n  .replace(/[\\n\\r*\"“”']/g, ' ')  // 去除換行與不必要符號\n  .replace(/\\s+/g, ' ')          // 合併多個空白為一個\n  .trim();                       // 去除前後空白\n\nreturn [\n  {\n    json: {\n      cleaned_output: cleanedText\n    }\n  }\n];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1008,
+        208
+      ],
+      "id": "40bd8039-0089-4dd0-a57e-387ee47c68d2",
+      "name": "清洗prompt格式"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=任務：\n請根據以下提供的「新聞內容」和「風格限制」，生成一個完整的繁體中文繪圖 Prompt，該 Prompt 是專門為 Gemini-2.5-Flash-Image 模型設計的。\n\n新聞內容變數：\n{{$json.newsContent}}\n\n限制條件：\n\n風格： 必須是**寫實（Photorealistic）且具有編輯類新聞照片（Editorial Photograph）**的專業感。\n\n自動填入： 最終 Prompt 必須使用 {{$json.newsContent}} 變數的實際內容，取代框架中的描述性文字。\n\n排除內容（Negative Constraint）： 畫面中嚴格禁止出現白宮、任何旗幟，以及與主要主題無關的可識別政治地標。\n\n輸出框架（請嚴格遵循此結構）：\n一張寫實且細節豐富的編輯類新聞照片，描繪的事件是：「**[新聞內容變數的實際內容]**」。圖片應具備戲劇性與專業的氛圍，運用電影級光線和強而有力的構圖。AI 將自行決定最佳的攝影角度、鏡頭和色彩處理，以突顯場景的情感份量和重要性。",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        704,
+        208
+      ],
+      "id": "3dd2edfc-cfb5-4acf-9454-224cee10094d",
+      "name": "AI生成圖片提示詞"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.cleaned_output }}",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        1168,
+        208
+      ],
+      "id": "ec8105a2-eb13-4d9c-8533-4ac3db2c6fd2",
+      "name": "AI生成圖片"
+    },
+    {
+      "parameters": {
+        "jsCode": "const timestamp = Date.now();\nconst randomSuffix = Math.floor(Math.random() * 10000); // 0~9999隨機數\n\nconst filename = `geminiaitest_${timestamp}_${randomSuffix}.jpg`;\n\n// 回傳檔名\nreturn [\n  {\n    json: {\n      filename,\n      // 其他你要傳的資料...\n      imageBase64: $input.first().json.output[0].inlineData.data,\n    },\n  },\n];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1520,
+        208
+      ],
+      "id": "9baea2c7-299a-463f-a048-49f0e012054f",
+      "name": "圖片名稱唯一值"
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.5-flash-image",
+        "options": {
+          "maxOutputTokens": 2048
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        704,
+        48
+      ],
+      "id": "3e543075-c155-40a0-9c3b-1b9fd8f007f3",
+      "name": "Google Gemini Chat Model3",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "rzGYcHVXRNXHjFPp",
+          "name": "Google Gemini(PaLM) Api account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.prompts }}",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        704,
+        -160
+      ],
+      "id": "6eef1bb7-1afd-4681-8216-84efc676647c",
+      "name": "AI生成圖片(人工提示詞)"
+    },
+    {
+      "parameters": {
+        "tableId": "gemini_image",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "prompt",
+              "fieldValue": "={{ $('標題prompt').item.json.prompts }}"
+            },
+            {
+              "fieldId": "filename",
+              "fieldValue": "={{ $('圖片名稱唯一值(人工提示詞)').item.json.filename }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        1936,
+        -160
+      ],
+      "id": "5ff874c0-7791-47c0-bf74-ce6574375f57",
+      "name": "寫入supabase DB_含prompt",
+      "credentials": {
+        "supabaseApi": {
+          "id": "fPPNqZ5ZGXEc0sc1",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const newsContent = $input.first().json.newsContent;\n\nconst Prompt = `\n請生成一張寫實且細節豐富的編輯類新聞照片，描繪的事件是：「${newsContent}」。圖片應具備戲劇性與專業的氛圍，運用電影級光線和強而有力的構圖。AI 將自行決定最佳的攝影角度、鏡頭和色彩處理，以突顯場景的情感份量和重要性。\n`;\n\nreturn [\n  {\n    prompts: Prompt,\n  },\n];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        464,
+        -160
+      ],
+      "id": "7fee4af0-d7d3-4469-926a-3acebe308c22",
+      "name": "標題prompt"
+    },
+    {
+      "parameters": {
+        "jsCode": "const timestamp = Date.now();\nconst randomSuffix = Math.floor(Math.random() * 10000); // 0~9999隨機數\n\nconst filename = `geminiaitest_${timestamp}_${randomSuffix}.jpg`;\n\n// 回傳檔名\nreturn [\n  {\n    json: {\n      filename,\n      // 其他你要傳的資料...\n      imageBase64:$input.first().json.output[1].inlineData.data ,\n    },\n  },\n];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1504,
+        -160
+      ],
+      "id": "cb99aa57-b6d7-498e-928a-ed105ec83d63",
+      "name": "圖片名稱唯一值(人工提示詞)",
+      "retryOnFail": true,
+      "executeOnce": false,
+      "alwaysOutputData": true,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "tableId": "gemini_image",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "AIprompt",
+              "fieldValue": "={{ $('清洗prompt格式').item.json.cleaned_output }}"
+            },
+            {
+              "fieldId": "AIfilename",
+              "fieldValue": "={{ $('圖片名稱唯一值').item.json.filename }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        1744,
+        416
+      ],
+      "id": "b3f615ba-d7e6-49b4-914b-61d2e49001dd",
+      "name": "寫入supabase DB_含prompt1",
+      "credentials": {
+        "supabaseApi": {
+          "id": "fPPNqZ5ZGXEc0sc1",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "hours"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        272,
+        208
+      ],
+      "id": "ab3debdd-27c4-4e4a-a58e-1f98310bd13b",
+      "name": "Schedule Trigger"
+    }
+  ],
+  "connections": {
+    "Convert to File": {
+      "main": [
+        [
+          {
+            "node": "存到supabase",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model2": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI生成圖片",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI生成圖片提示詞",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "清洗prompt格式": {
+      "main": [
+        [
+          {
+            "node": "AI生成圖片",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI生成圖片提示詞": {
+      "main": [
+        [
+          {
+            "node": "清洗prompt格式",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI生成圖片": {
+      "main": [
+        [
+          {
+            "node": "圖片名稱唯一值",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "圖片名稱唯一值": {
+      "main": [
+        [
+          {
+            "node": "Convert to File",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "寫入supabase DB_含prompt1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model3": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI生成圖片(人工提示詞)",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI生成圖片(人工提示詞)": {
+      "main": [
+        [
+          {
+            "node": "圖片名稱唯一值(人工提示詞)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "標題prompt": {
+      "main": [
+        [
+          {
+            "node": "AI生成圖片(人工提示詞)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "圖片名稱唯一值(人工提示詞)": {
+      "main": [
+        [
+          {
+            "node": "Convert to File",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "寫入supabase DB_含prompt",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "AI生成圖片提示詞",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "標題prompt",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": {
+    "node:Schedule Trigger": {
+      "recurrenceRules": []
+    }
+  },
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {
+    "Schedule Trigger": [
+      {
+        "json": {
+          "title": "川普宣布加徵中國100％關稅 痛批中國擴大限制稀土出口｢道德恥辱｣",
+          "newsContent": "中國突然擴大限制稀土出口，受到國際社會關注。美國總統川普10日（Donald Trump）透過自家社交平台「Truth Social」宣布，從今年11月1日起，美國將對自中國進口的商品加徵100%的新關稅，這是現行關稅之外的額外稅率，屆時美國也將對所有關鍵軟體實施出口限制，以報復他所謂的北京當局「極其激進」作為。川普發文寫道：「很難相信中國竟會做出這樣的舉動，但他們就是這麼做了，後來的結果已不言而喻。」他並指出，中國在國際貿易上採取了極具挑釁性的策略。中方已致函全球多國，表明自2025年11月1日起，將對幾乎所有由中國生產的商品以及部分並非中國製造的產品實施出口管控。這項政策規模巨大，此類手段在全球貿易史上前所未見。針對中國對稀土出口管制計畫，川普直指這是早已策劃的行動，怒轟「道德上的恥辱」，接著又預告美國將於2025年11月1日甚至更早開始對中方商品加徵額外100%的關稅。川普強調，此舉是美國對中國不公平貿易行為的回應，這一政策僅代表美國，不涉及其他受影響的國家。此外，川普提到，美國將在今年11月1日同步推出針對所有關鍵軟體的出口限制，這對保護國家安全至關重要，也為防範技術落入不友善國家之手。目前，中國商品面臨美國30%的關稅。川普以北京當局未能遏止類鴉片藥物芬太尼（fentanyl）非法交易，以及從事不公平貿易作為為由祭出這項關稅措施。作為反制，中國目前對美國商品徵收10%的報復性關稅。"
+        }
+      }
+    ]
+  },
+  "versionId": "0b8bc4b3-d77e-4b14-97a2-9d3207f83b3e",
+  "triggerCount": 1,
+  "shared": [
+    {
+      "createdAt": "2025-10-11T01:35:43.980Z",
+      "updatedAt": "2025-10-11T01:35:43.980Z",
+      "role": "workflow:owner",
+      "workflowId": "bnu9A3icw3gqA63S",
+      "projectId": "7goAssCGKgwfIAES",
+      "project": {
+        "createdAt": "2025-08-06T02:37:42.802Z",
+        "updatedAt": "2025-08-06T02:39:07.720Z",
+        "id": "7goAssCGKgwfIAES",
+        "name": "peggy lin <peggy.lin@wanin.tw>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "projectRelations": [
+          {
+            "createdAt": "2025-08-06T02:37:42.807Z",
+            "updatedAt": "2025-08-06T02:37:42.807Z",
+            "userId": "67944008-c997-4154-bbd0-26d022398054",
+            "projectId": "7goAssCGKgwfIAES",
+            "user": {
+              "createdAt": "2025-08-06T02:37:42.798Z",
+              "updatedAt": "2025-11-05T00:21:52.000Z",
+              "id": "67944008-c997-4154-bbd0-26d022398054",
+              "email": "peggy.lin@wanin.tw",
+              "firstName": "peggy",
+              "lastName": "lin",
+              "personalizationAnswers": {
+                "version": "v4",
+                "personalization_survey_submitted_at": "2025-08-06T02:41:04.705Z",
+                "personalization_survey_n8n_version": "1.102.0",
+                "companySize": "100-499",
+                "companyType": "saas",
+                "role": "data-science",
+                "reportedSource": "friend"
+              },
+              "settings": {
+                "firstSuccessfulWorkflowId": "qxXV0YFTbqnC75xr",
+                "userActivated": true,
+                "userActivatedAt": 1754532013419,
+                "easyAIWorkflowOnboarded": true,
+                "npsSurvey": {
+                  "responded": true,
+                  "lastShownAt": 1756796314100
+                }
+              },
+              "disabled": false,
+              "mfaEnabled": false,
+              "lastActiveAt": "2025-11-04",
+              "isPending": false
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "tags": []
+}

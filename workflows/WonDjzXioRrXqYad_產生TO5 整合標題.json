@@ -1,0 +1,283 @@
+{
+  "createdAt": "2025-08-05T02:15:50.940Z",
+  "updatedAt": "2025-08-12T09:07:46.000Z",
+  "id": "WonDjzXioRrXqYad",
+  "name": "產生TO5 整合標題",
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        32
+      ],
+      "id": "9f519edf-f45f-41c7-b165-bf6aa1ec113c",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.newtalk.tw/newsapi/routeByCommand",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "[\n    {\n        \"cmd\": \"top5\",\n        \"parameters\": {}\n    }\n]",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        240,
+        32
+      ],
+      "id": "578264ce-fb48-4449-a404-5f8f4aa479c4",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "jsCode": "// 從原始資料提取並直接格式化\nconst top5News = $input.first().json.data.top5.data.slice(0, 5);\n\nconst formattedNews = top5News.map((item, index) => \n  `新聞${index + 1}：\\n標題：${item.title}\\n分類：${item.ncat_name}\\n內容：${item.content}`\n).join('\\n\\n');\n\nreturn [{\n  allNews: formattedNews,\n  newsCount: top5News.length\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        448,
+        32
+      ],
+      "id": "b0adf03b-9181-48e9-bc99-8b61e02ff6f7",
+      "name": "Code"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=根據以{{ $json.allNews }} 新聞生成電子報標題：\n要求：\n- 25~35個繁體字\n- 不會因為標點符號而斷章取義\n- 挑選方式依序為天氣、生活、選舉、國內政治、國際政治、財經\n- 挑選一則國內加一則國外新聞作為本次電子報標題，不同新聞使用空格隔開不使用逗號\n- 吸睛但不標題殺人\n- 將數字、人名、地方加入標題增加印象\n- 一個標題內呈現兩則新聞\n- 利用問號夾帶懸疑氛圍\n- 請一律使用input提供的內容，不能自己生成\n- output僅需提供一則最吸引人的標題即可，不需要其他說明\n",
+        "messages": {
+          "messageValues": [
+            {
+              "message": "你是位撰寫信件標題的專家，讓讀者每天一早從手機看到電子報標題時會點進續"
+            }
+          ]
+        },
+        "batching": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.7,
+      "position": [
+        656,
+        32
+      ],
+      "id": "5d8c4453-4a32-4f0b-86d5-b3c5984bdd68",
+      "name": "Basic LLM Chain"
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.5-flash-lite",
+        "options": {
+          "temperature": 0.4
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        592,
+        240
+      ],
+      "id": "62d6835b-f5da-4edc-9ed4-db731a4888c2",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "QQzK9489LzIzRO6Y",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "-1002729544083",
+        "text": "={{ $json.text }}\n-----\n# {{ $('HTTP Request').item.json.data.top5.data[0].title }}\n# {{ $('HTTP Request').item.json.data.top5.data[1].title }}\n# {{ $('HTTP Request').item.json.data.top5.data[2].title }}\n# {{ $('HTTP Request').item.json.data.top5.data[3].title }}\n# {{ $('HTTP Request').item.json.data.top5.data[4].title }}\n\nfrom wanin",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1008,
+        32
+      ],
+      "id": "a4890f34-b4dd-4609-ba65-225ddd62cee9",
+      "name": "Send a text message",
+      "webhookId": "3ce4b4a0-0989-4b39-bbcb-9f674b123724",
+      "credentials": {
+        "telegramApi": {
+          "id": "L8at4mU6CoBG4I4j",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 8
+            },
+            {
+              "triggerAtHour": 12
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        240
+      ],
+      "id": "577a9d4d-bd12-47f6-9aae-7bf7c120da1d",
+      "name": "Schedule Trigger"
+    }
+  ],
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code": {
+      "main": [
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Basic LLM Chain": {
+      "main": [
+        [
+          {
+            "node": "Send a text message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "Asia/Taipei",
+    "callerPolicy": "workflowsFromSameOwner"
+  },
+  "staticData": {
+    "node:Schedule Trigger": {
+      "recurrenceRules": []
+    }
+  },
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {},
+  "versionId": "df56996f-d720-4dcf-9d7d-206668ace1e2",
+  "triggerCount": 1,
+  "shared": [
+    {
+      "createdAt": "2025-08-05T02:15:50.956Z",
+      "updatedAt": "2025-08-05T02:15:50.956Z",
+      "role": "workflow:owner",
+      "workflowId": "WonDjzXioRrXqYad",
+      "projectId": "cSCIDan8gJxZ0cWD",
+      "project": {
+        "createdAt": "2025-07-11T06:18:02.598Z",
+        "updatedAt": "2025-07-11T06:24:23.467Z",
+        "id": "cSCIDan8gJxZ0cWD",
+        "name": "玟誼 李 <elly.li@wanin.tw>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "projectRelations": [
+          {
+            "createdAt": "2025-07-11T06:18:02.613Z",
+            "updatedAt": "2025-07-11T06:18:02.613Z",
+            "userId": "568ba390-eb32-41ab-88b9-7769cb094f4f",
+            "projectId": "cSCIDan8gJxZ0cWD",
+            "user": {
+              "createdAt": "2025-07-11T06:18:02.591Z",
+              "updatedAt": "2025-11-03T03:20:08.000Z",
+              "id": "568ba390-eb32-41ab-88b9-7769cb094f4f",
+              "email": "elly.li@wanin.tw",
+              "firstName": "玟誼",
+              "lastName": "李",
+              "personalizationAnswers": {
+                "version": "v4",
+                "personalization_survey_submitted_at": "2025-07-11T06:25:17.807Z",
+                "personalization_survey_n8n_version": "1.102.0",
+                "companySize": "20-99",
+                "companyType": "digital-agency",
+                "role": "data-science",
+                "reportedSource": "friend"
+              },
+              "settings": {
+                "easyAIWorkflowOnboarded": true,
+                "firstSuccessfulWorkflowId": "WonDjzXioRrXqYad",
+                "userActivated": true,
+                "userActivatedAt": 1754366405376,
+                "npsSurvey": {
+                  "waitingForResponse": true,
+                  "ignoredCount": 1,
+                  "lastShownAt": 1754989668491
+                }
+              },
+              "disabled": false,
+              "mfaEnabled": false,
+              "lastActiveAt": "2025-11-02",
+              "isPending": false
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "tags": []
+}

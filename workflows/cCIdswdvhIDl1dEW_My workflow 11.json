@@ -1,0 +1,135 @@
+{
+  "createdAt": "2025-10-29T10:15:30.924Z",
+  "updatedAt": "2025-11-04T07:58:15.000Z",
+  "id": "cCIdswdvhIDl1dEW",
+  "name": "My workflow 11",
+  "active": false,
+  "isArchived": true,
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "8ac2000c-e889-4e5b-9f5c-5d1d62ab02f4",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "imageId": "000",
+        "description": "00000",
+        "qdrantUrl": "junqdrant.zeabur.app",
+        "qdrantApiKey": "rU6geVAj98WqOYi0ho3yPfu1Fa527Mx4",
+        "googleApiKey": "AIzaSyBJh4u1bY2BbWzvd40SV4dAIthdX-As9Lc"
+      },
+      "type": "CUSTOM.qdrantUpsert",
+      "typeVersion": 1,
+      "position": [
+        208,
+        0
+      ],
+      "id": "4b509834-64c6-4868-8b45-81baa6089845",
+      "name": "Wanin Img RAG Upsert"
+    },
+    {
+      "parameters": {},
+      "type": "CUSTOM.qdrantSearch",
+      "typeVersion": 1,
+      "position": [
+        416,
+        0
+      ],
+      "id": "929a6a4c-7a02-47e3-af87-a036b11aa348",
+      "name": "Wanin Img RAG Search"
+    }
+  ],
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Wanin Img RAG Upsert",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wanin Img RAG Upsert": {
+      "main": [
+        [
+          {
+            "node": "Wanin Img RAG Search",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": null,
+  "pinData": {},
+  "versionId": "b127ce0c-35e0-4638-aa0e-1f0405ae84c8",
+  "triggerCount": 0,
+  "shared": [
+    {
+      "createdAt": "2025-10-29T10:15:30.933Z",
+      "updatedAt": "2025-10-29T10:15:30.933Z",
+      "role": "workflow:owner",
+      "workflowId": "cCIdswdvhIDl1dEW",
+      "projectId": "zSWUD5rme1j6NTeu",
+      "project": {
+        "createdAt": "2025-07-09T03:28:13.022Z",
+        "updatedAt": "2025-07-09T03:30:34.927Z",
+        "id": "zSWUD5rme1j6NTeu",
+        "name": "bot web <webdepbot@wanin.tw>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "projectRelations": [
+          {
+            "createdAt": "2025-07-09T03:28:13.022Z",
+            "updatedAt": "2025-07-09T03:28:13.022Z",
+            "userId": "d3e7955a-fd2d-4887-80d8-fa053a00f83f",
+            "projectId": "zSWUD5rme1j6NTeu",
+            "user": {
+              "createdAt": "2025-07-09T03:28:07.595Z",
+              "updatedAt": "2025-11-05T08:30:09.000Z",
+              "id": "d3e7955a-fd2d-4887-80d8-fa053a00f83f",
+              "email": "webdepbot@wanin.tw",
+              "firstName": "bot",
+              "lastName": "web",
+              "personalizationAnswers": {
+                "version": "v4",
+                "personalization_survey_submitted_at": "2025-07-09T03:30:40.464Z",
+                "personalization_survey_n8n_version": "1.102.0"
+              },
+              "settings": {
+                "userActivated": true,
+                "easyAIWorkflowOnboarded": true,
+                "firstSuccessfulWorkflowId": "ySPX7YsHgnJyEB7T",
+                "userActivatedAt": 1752039483754,
+                "npsSurvey": {
+                  "responded": true,
+                  "lastShownAt": 1761900557870
+                }
+              },
+              "disabled": false,
+              "mfaEnabled": false,
+              "lastActiveAt": "2025-11-05",
+              "isPending": false
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "tags": []
+}

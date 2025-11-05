@@ -1,0 +1,102 @@
+{
+  "createdAt": "2025-08-22T00:48:27.690Z",
+  "updatedAt": "2025-08-22T00:49:30.000Z",
+  "id": "0720SjtAHbsCop2j",
+  "name": "My Sub-Workflow 1",
+  "active": false,
+  "isArchived": true,
+  "nodes": [
+    {
+      "id": "c055762a-8fe7-4141-a639-df2372f30060",
+      "typeVersion": 1.1,
+      "name": "When Executed by Another Workflow",
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "position": [
+        260,
+        340
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "b5942df6-0160-4ef7-965d-57583acdc8aa",
+      "name": "Replace me with your logic",
+      "type": "n8n-nodes-base.noOp",
+      "position": [
+        520,
+        340
+      ],
+      "parameters": {}
+    }
+  ],
+  "connections": {
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "Replace me with your logic",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": null,
+  "pinData": {},
+  "versionId": "a9781ec0-de9f-411b-b9fc-d7e031fe5701",
+  "triggerCount": 0,
+  "shared": [
+    {
+      "createdAt": "2025-08-22T00:48:27.699Z",
+      "updatedAt": "2025-08-22T00:48:27.699Z",
+      "role": "workflow:owner",
+      "workflowId": "0720SjtAHbsCop2j",
+      "projectId": "7zEhqNTzyMiFsXF6",
+      "project": {
+        "createdAt": "2025-07-09T03:38:25.411Z",
+        "updatedAt": "2025-07-09T03:39:14.390Z",
+        "id": "7zEhqNTzyMiFsXF6",
+        "name": "jun yeh <jungu.ye@wanin.tw>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "projectRelations": [
+          {
+            "createdAt": "2025-07-09T03:38:25.416Z",
+            "updatedAt": "2025-07-09T03:38:25.416Z",
+            "userId": "d1b2f434-11f0-4091-b631-2379b0470044",
+            "projectId": "7zEhqNTzyMiFsXF6",
+            "user": {
+              "createdAt": "2025-07-09T03:38:25.408Z",
+              "updatedAt": "2025-10-31T09:17:04.851Z",
+              "id": "d1b2f434-11f0-4091-b631-2379b0470044",
+              "email": "jungu.ye@wanin.tw",
+              "firstName": "jun",
+              "lastName": "yeh",
+              "personalizationAnswers": {
+                "version": "v4",
+                "personalization_survey_submitted_at": "2025-07-09T03:39:17.136Z",
+                "personalization_survey_n8n_version": "1.102.0"
+              },
+              "settings": {
+                "easyAIWorkflowOnboarded": true,
+                "firstSuccessfulWorkflowId": "YAUQSrZhZ8qeZ9DB",
+                "userActivated": true,
+                "userActivatedAt": 1761902117305
+              },
+              "disabled": false,
+              "mfaEnabled": false,
+              "lastActiveAt": "2025-10-31",
+              "isPending": false
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "tags": []
+}

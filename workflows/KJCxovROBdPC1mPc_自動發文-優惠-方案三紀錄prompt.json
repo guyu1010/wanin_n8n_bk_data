@@ -1,0 +1,1173 @@
+{
+  "createdAt": "2025-10-29T03:10:57.082Z",
+  "updatedAt": "2025-11-05T07:32:31.000Z",
+  "id": "KJCxovROBdPC1mPc",
+  "name": "自動發文-優惠-方案三(紀錄prompt)",
+  "active": false,
+  "isArchived": true,
+  "nodes": [
+    {
+      "parameters": {
+        "content": "## 透過RSS取得threads文章\nhttps://rss.app/",
+        "height": 1760,
+        "width": 1024
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        0,
+        0
+      ],
+      "typeVersion": 1,
+      "id": "91d12720-7712-4090-8cc1-14e0da39c7ad",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "url": "https://rss.app/feeds/7baN3gQFYmgj8sgF.xml",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.rssFeedRead",
+      "typeVersion": 1.2,
+      "position": [
+        208,
+        1216
+      ],
+      "id": "cad06fcf-2c24-4d2a-a189-5bcc28000e06",
+      "name": "RSS Read(省錢主婦｜蝦皮、超商、好市多、優惠)"
+    },
+    {
+      "parameters": {
+        "url": "https://rss.app/feeds/Zt6uKporNenBG7Pt.xml",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.rssFeedRead",
+      "typeVersion": 1.2,
+      "position": [
+        208,
+        64
+      ],
+      "id": "295cbc98-fcf2-45c0-9213-44e5b3973df4",
+      "name": "必勝客 台灣官方"
+    },
+    {
+      "parameters": {
+        "url": "https://rss.app/feeds/nEstR90TEte7AhBc.xml",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.rssFeedRead",
+      "typeVersion": 1.2,
+      "position": [
+        208,
+        256
+      ],
+      "id": "612f282f-cdb1-4acd-82d3-736b29f5568f",
+      "name": "7-ELEVEn Taiwan"
+    },
+    {
+      "parameters": {
+        "url": "https://rss.app/feeds/kNUsjSw3bJqXT0wh.xml",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.rssFeedRead",
+      "typeVersion": 1.2,
+      "position": [
+        208,
+        448
+      ],
+      "id": "5400be88-cbbb-46d7-bd32-311eb0d5fc75",
+      "name": "全家便利商店"
+    },
+    {
+      "parameters": {
+        "url": "https://rss.app/feeds/qZXf4BgkzWRNLSng.xml",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.rssFeedRead",
+      "typeVersion": 1.2,
+      "position": [
+        208,
+        1024
+      ],
+      "id": "b796a92d-89b1-4f09-bfa1-e5a66a0cdd7b",
+      "name": "麥當勞"
+    },
+    {
+      "parameters": {
+        "url": "https://rss.app/feeds/RWEIT3klsc7T9QFp.xml",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.rssFeedRead",
+      "typeVersion": 1.2,
+      "position": [
+        208,
+        832
+      ],
+      "id": "5d8a57bf-6fcc-49c0-927a-2be22cd1f48b",
+      "name": "省錢加雞腿"
+    },
+    {
+      "parameters": {
+        "url": "https://rss.app/feeds/Pr0ZRrID8qmdIM77.xml",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.rssFeedRead",
+      "typeVersion": 1.2,
+      "position": [
+        208,
+        1600
+      ],
+      "id": "8251d527-c6ac-4deb-8d07-f8dca03ada09",
+      "name": "foodpanda Taiwan"
+    },
+    {
+      "parameters": {
+        "url": "https://rss.app/feeds/HC35A4meBZtOETot.xml",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.rssFeedRead",
+      "typeVersion": 1.2,
+      "position": [
+        208,
+        1408
+      ],
+      "id": "23b2bac3-e4cc-49c3-968b-23bccc63eaa0",
+      "name": "好康情報誌"
+    },
+    {
+      "parameters": {
+        "url": "https://rss.app/feeds/7baN3gQFYmgj8sgF.xml",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.rssFeedRead",
+      "typeVersion": 1.2,
+      "position": [
+        208,
+        640
+      ],
+      "id": "760fa991-1db4-4774-b8ce-878aa98f2c66",
+      "name": "省錢主婦"
+    },
+    {
+      "parameters": {
+        "tableId": "threads_test_discount",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "creator",
+              "fieldValue": "={{ $json.creator }}"
+            },
+            {
+              "fieldId": "link",
+              "fieldValue": "={{ $json.link }}"
+            },
+            {
+              "fieldId": "content",
+              "fieldValue": "={{ $json.content }}"
+            },
+            {
+              "fieldId": "contentSnippet",
+              "fieldValue": "={{ $json.contentSnippet }}"
+            },
+            {
+              "fieldId": "isoDate",
+              "fieldValue": "={{ $json.isoDate }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        736,
+        752
+      ],
+      "id": "09754901-78e8-4ad8-9c22-586fa4e44f4d",
+      "name": "寫入supabase DB"
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.5-pro",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        1312,
+        2432
+      ],
+      "id": "407915cb-5400-4808-a37d-0276f026f297",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "EQaOvDML3qAkESKf",
+          "name": "Google Gemini(PaLM) Api account 10"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "tableId": "threads_test_discount",
+        "returnAll": true
+      },
+      "type": "n8n-nodes-base.supabaseTool",
+      "typeVersion": 1,
+      "position": [
+        1456,
+        2432
+      ],
+      "id": "988e56d4-e76f-4e0e-9f2e-46c226bff807",
+      "name": "Supabase DB_threads",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "content": "## AI取資料來源寫文章",
+        "height": 608,
+        "width": 2000,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -112,
+        2016
+      ],
+      "typeVersion": 1,
+      "id": "0f6772f2-ed6e-4cf9-b87d-ffbc8f90758c",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "chatId": "7802109813",
+        "text": "=標題：{{ $json.title }}\n內文：{{ $json.content_html }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        2192,
+        2064
+      ],
+      "id": "843470c8-c003-40a8-848f-d258630ae4e0",
+      "name": "telegram通知",
+      "webhookId": "b442bedf-0229-47e0-9ca3-8353bc6cd405",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "tableId": "discount_test_ALL",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "content",
+              "fieldValue": "={{ $json.content }}"
+            },
+            {
+              "fieldId": "prompt",
+              "fieldValue": "={{ $json.prompt }}"
+            },
+            {
+              "fieldId": "title",
+              "fieldValue": "={{ $json.title }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        2192,
+        2416
+      ],
+      "id": "565aa9dd-238d-462b-8fa2-be009716dcc0",
+      "name": "寫入supabase DB_ALL",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "tableId": "discount_test_new",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "content",
+              "fieldValue": "={{ $json.content }}"
+            },
+            {
+              "fieldId": "prompt",
+              "fieldValue": "={{ $json.prompt }}"
+            },
+            {
+              "fieldId": "title",
+              "fieldValue": "={{ $json.title }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        2192,
+        2240
+      ],
+      "id": "1d02c229-2680-4572-be02-9544dbfa6855",
+      "name": "寫入supabase DB_new",
+      "disabled": true
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -288,
+        2128
+      ],
+      "id": "9b78dad9-a799-4972-80bc-0704255676cb",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "jsCode": "return $items().map(item => {\n  // 先取 content 欄位\n  const content = item.json[\"content\"] || \"\";\n\n  // 將 Markdown 粗體與換行符號轉 HTML\n  const html = content\n    .replace(/\\\\n/g, \"<br>\")                       // 換行符號\n    .replace(/\\*\\*(.*?)\\*\\*/g, \"<strong>$1</strong>\"); // 粗體\n\n  return {\n    json: {\n      ...item.json, // 保留原本欄位\n      content_html: html, // 新增 HTML 欄位\n    }\n  };\n});\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1936,
+        2240
+      ],
+      "id": "07a208ee-6248-43cd-bcab-843c430f078a",
+      "name": "內文_Markdown/換行符號轉成 HTML",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.5-pro",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        1328,
+        2944
+      ],
+      "id": "103380a8-5460-4642-a394-56b0d630b046",
+      "name": "Google Gemini Chat Model1",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "EQaOvDML3qAkESKf",
+          "name": "Google Gemini(PaLM) Api account 10"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// n8n Code node\n// 功能：將 AI 節點回傳的 JSON 字串（含 ```json ... ```）解析成乾淨物件\n// Input: 例如 [{\"output\": \"```json\\n{...}\\n```\"}]\n// Output: 乾淨的 JSON 結構可供後續節點使用\n\nreturn $input.all().map(item => {\n  let raw = item.json.output || '';\n  let clean = raw;\n\n  // 去除 ```json 和 ``` 標記\n  clean = clean.replace(/```json\\s*/i, '').replace(/```/g, '').trim();\n\n  let parsed;\n  try {\n    parsed = JSON.parse(clean);\n  } catch (err) {\n    parsed = {\n      is_title_acceptable: false,\n      is_title_acceptable_reason: \"AI 回傳格式錯誤或無法解析。\",\n      is_content_acceptable: false,\n      is_content_acceptable_reason: err.message\n    };\n  }\n\n  return { json: parsed };\n});\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1664,
+        2752
+      ],
+      "id": "3ac177c8-3d96-4cb6-aa50-6b4ff3873863",
+      "name": "內文守門員AI回傳轉json",
+      "retryOnFail": true,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "content": "## AI品質驗證",
+        "height": 416,
+        "width": 1216,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1008,
+        2688
+      ],
+      "typeVersion": 1,
+      "id": "3ad4ebb5-e38f-44c9-ae9a-d38fd788b399",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "content": "## 回寫DB",
+        "height": 416,
+        "width": 1120,
+        "color": 2
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1856,
+        3168
+      ],
+      "typeVersion": 1,
+      "id": "1a5dc615-4388-452f-84ca-0fea760edee8",
+      "name": "Sticky Note3"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://dev88.newtalk.tw/newsapi/GetRewriteArticles",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{\n\"token\":\"61af9f535f694a56912a7ea660b01a7e8369b74cfac3199667dc82946f5d1e5c\"\n}",
+        "options": {
+          "allowUnauthorizedCerts": true
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        112,
+        2128
+      ],
+      "id": "daf3134b-a949-4743-9294-edd4cedc0ed7",
+      "name": "取得ES資料"
+    },
+    {
+      "parameters": {
+        "jsCode": "// 取得前一節點的資料\nconst inputData = items[0].json.data;\n\n// 篩選只保留 ArticleCategory = \"優惠折扣\" 的項目\nconst filteredData = inputData\n  .filter(article => article.ArticleCategory === \"優惠折扣\")\n  .map(article => article); // 不再移除任何欄位\n\nreturn [\n  {\n    json: {\n      isSuccess: true,\n      errorCode: 0,\n      data: filteredData,\n      errorMessage: null\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        288,
+        2128
+      ],
+      "id": "0d2be548-5e7a-40fd-91f6-972f88324a35",
+      "name": "篩選ES資料"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://dev88.newtalk.tw/newsapi/insertRewriteNews",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"token\": \"{{ $json.token }}\",\n  \"rewriteNews\": {{ JSON.stringify($json.rewriteNews) }}\n}",
+        "options": {
+          "allowUnauthorizedCerts": true
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2640,
+        3328
+      ],
+      "id": "ac944a87-2c54-4eda-86f1-cdcdbfc81a8c",
+      "name": "儲存到新頭殼DB"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "f66cb580-34bd-4e1a-9132-e581f94376cd",
+              "leftValue": "={{ $node.文章生成格式整理.json.title }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "5568448c-5cdf-4d33-8e94-51914aac7f19",
+              "leftValue": "={{ $node.文章生成格式整理.json.content }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        2144,
+        3344
+      ],
+      "id": "39f70104-ef2a-4e2c-a7f4-61ce9069019c",
+      "name": "驗證標題跟欄位都存在"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.articlesForAI.articles }}",
+        "options": {
+          "systemMessage": "={{ $json.aiPrompt }}"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        640,
+        2128
+      ],
+      "id": "12ddef8f-8f73-4fcc-ac0e-c83eb51c9173",
+      "name": "挑選文章AI"
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.5-pro",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        640,
+        2320
+      ],
+      "id": "7dda7050-edd2-4cb7-abc3-e29055c1f442",
+      "name": "Google Gemini Chat Model4",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "EQaOvDML3qAkESKf",
+          "name": "Google Gemini(PaLM) Api account 10"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const titleGatekeeperPrompt = `\n🎯【AI 系統角色與任務】\n角色定位：您是一位專精於撰寫高流量、高 SEO 權重優惠文章的 **內容總監**。  \n任務目標：根據提供的原始文章資訊，**改寫並生成一篇專屬且完整的深度文章**，並在一次執行中 **僅輸出一篇** 對應單一品牌的最高價值 JSON 物件。\n\n---\n\n## 【輸入資料格式】\n請嚴格依照以下欄位名稱理解輸入內容：\n1. 內容/優惠詳情：**ArticleTile**\n2. 發布時間：**PublishTime**（用於判斷時效性）\n3. 發文者/品牌帳號：**ArticleAuthor**（例如：@familymart_tw）\n\n---\n\n## 【輸出格式與內容規範】\n\n**⚠️ 輸出格式強制規定：**\n* 'content' 欄位禁止出現任何 HTML 標籤（如 <p>、<b>、<br>、<code> 等）。\n* 僅可使用 **Markdown 語法**（**粗體**、- 列點、\\\\n 換行）。\n* 嚴禁輸出任何 <br>、</br>、HTML Entities 或其他非 Markdown 格式字元。\n\n---\n\n### 🧱【文章結構規範】（以 \\\\n 控制換行）\n\n#### 一、標題與導言（決定點擊率）\n* 標題長度：**18~25 個中文字**\n* 必須包含：\n  - 品牌名稱\n  - 關鍵優惠字\n  - 精確時效性\n* 導言結束後，**以兩個換行符號 (\\\\n\\\\n)** 區隔下方的懶人包。\n\n---\n\n#### 二、核心懶人包（快速解決痛點）\n* 將與該品牌相關的有效優惠，以 **Markdown 粗體列點清單** 方式置於導言之後。\n* 日期提取原則：\n  - 儘可能從原文提取精確日期；\n  - 若無日期線索，請填「**詳見官方貼文**」。\n\n📘 清單格式範例：\n\\\\n\n**【本週 [品牌名稱] 必看優惠整理】**\\\\n\n- **優惠品項/代碼：** [精確品項或代碼]\\\\n\n  **內容：** [優惠內容/折扣額度]\\\\n\n  **活動日期：** [精確日期或詳見官方貼文]\\\\n\\\\n\n\n---\n\n#### 三、優惠詳細分類與說明（強化 SEO）\n* 請以段落分類方式撰寫（不可使用 H2/H3 標籤）\n* 每個分類標題使用 **粗體字**，上下各留 **兩個換行符號 (\\\\n\\\\n)**。\n* 每個優惠段落中，必須包含以下三項：\n  - **優惠條件：** [內容]\\\\n\\\\n\n  - **適用門市/對象：** [內容]\\\\n\\\\n\n  - **使用限制：** [內容]\\\\n\\\\n\n\n段落之間請以 **兩個換行符號 (\\\\n\\\\n)** 區隔。\n\n若原文缺乏必要資訊，請明確寫「無法判斷」或「詳見官方貼文」，不要自行生成或臆測內容。\n\n---\n\n## 【最終輸出 JSON 結構】\n請最終僅輸出以下 JSON 物件：\n\n{\n  \"IdentityKey\": \"<請直接使用提供的 IdentityKey，不可改寫>\",\n  \"title\": \"您生成的標題\",\n  \"content\": \"您生成的 Markdown 文章內容\"\n}\n`;\n\nreturn [\n  {\n    json: {\n      prompt: titleGatekeeperPrompt\n    },\n  },\n];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1136,
+        2272
+      ],
+      "id": "aec85b83-8c64-477a-81d7-e83b9077a5c4",
+      "name": "文章生成prompt"
+    },
+    {
+      "parameters": {
+        "jsCode": "/**\n * n8n Code 節點：根據 AI 序號決策提取原始文章\n * \n * 前置節點：\n * 1. 「準備AI輸入」節點（包含 articleIndexMap）\n * 2. 「AI決策」節點（回傳 selectedIndex）\n */\n\n// ============= 步驟1：解析 AI 回應 =============\nconst aiOutput = $input.first().json.output;\n\n// 從 markdown JSON 格式中提取 JSON\nconst jsonMatch = aiOutput.match(/```json\\n([\\s\\S]*?)\\n```/);\nlet aiDecision;\n\nif (jsonMatch && jsonMatch[1]) {\n  aiDecision = JSON.parse(jsonMatch[1]);\n} else {\n  // 直接嘗試解析（以防沒有 markdown 包裝）\n  aiDecision = JSON.parse(aiOutput);\n}\n\nconsole.log('AI 決策：', aiDecision);\n\n// ============= 步驟2：驗證序號 =============\nconst selectedIndex = aiDecision.selectedIndex;\n\nif (selectedIndex === null || selectedIndex === undefined) {\n  throw new Error('AI 未找到符合條件的文章');\n}\n\nif (typeof selectedIndex !== 'number' && isNaN(parseInt(selectedIndex))) {\n  throw new Error(`序號格式錯誤：${selectedIndex}，必須是數字`);\n}\n\nconst indexNum = parseInt(selectedIndex);\nconsole.log('選中的序號：', indexNum);\n\n// ============= 步驟3：從「篩選ES資料」節點取得原始資料 =============\nconst esDataItems = $('篩選ES資料').first().json.data; // 最後一個輸入通常是來自篩選ES資料的\n\nif (!esDataItems || esDataItems.length === 0) {\n  throw new Error('找不到 ES 資料，請檢查前置節點');\n}\n\nconsole.log('總資料筆數：', esDataItems.length);\n\n// ============= 步驟4：根據序號取出對應的文章（序號是 1-based）=============\nconst selectedArticle = esDataItems[indexNum - 1]; // 序號從 1 開始，陣列從 0 開始\n\nif (!selectedArticle) {\n  throw new Error(\n    `序號 ${indexNum} 超出範圍。總共有 ${esDataItems.length} 篇文章`\n  );\n}\n\n// ============= 步驟5：驗證（交叉檢查 AI 決策與實際資料是否一致）=============\nif (\n  selectedArticle.ArticleTitle !== aiDecision.selectedTitle ||\n  selectedArticle.ArticleAuthor !== aiDecision.selectedAuthor ||\n  selectedArticle.PublishTime !== aiDecision.selectedPublishTime\n) {\n  console.warn('警告：AI 決策資訊與實際資料有不符', {\n    ai: {\n      title: aiDecision.selectedTitle,\n      author: aiDecision.selectedAuthor,\n      publishTime: aiDecision.selectedPublishTime\n    },\n    actual: {\n      title: selectedArticle.ArticleTitle,\n      author: selectedArticle.ArticleAuthor,\n      publishTime: selectedArticle.PublishTime\n    }\n  });\n}\n\n// ============= 步驟6：返回完整的原始文章資訊 =============\nreturn {\n  json: {\n    // AI 決策記錄\n    aiDecision: {\n      selectedIndex: indexNum,\n      selectionReason: aiDecision.selectionReason\n    },\n    \n    // 原始文章完整資訊\n    IdentityKey: selectedArticle.IdentityKey,\n    ArticleUrl: selectedArticle.ArticleUrl,\n    ArticleTitle: selectedArticle.ArticleTitle,\n    ArticleContent: selectedArticle.ArticleContent,\n    CreateTime: selectedArticle.CreateTime,\n    UpdateTime: selectedArticle.UpdateTime,\n    PublishTime: selectedArticle.PublishTime,\n    ArticleCategory: selectedArticle.ArticleCategory,\n    ArticleSubcategory: selectedArticle.ArticleSubcategory,\n    ArticleSource: selectedArticle.ArticleSource,\n    ArticleTags: selectedArticle.ArticleTags,\n    ArticleAuthor: selectedArticle.ArticleAuthor,\n    ArticleImgUrl: selectedArticle.ArticleImgUrl,\n    \n    // 元資訊\n    metadata: {\n      extractionTime: new Date().toISOString(),\n      nodeVersion: '2.0'\n    }\n  }\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        944,
+        2128
+      ],
+      "id": "37bef9ef-536e-4f45-9eea-6dae391a9a1e",
+      "name": "整理挑選中的文章"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=原始文章：{{ $node.整理挑選中的文章.data.ArticleContent }}\n\n待驗證標題：{{ $node.文章生成格式整理.json.title }}\n\n待驗證文章：{{ $node.文章生成格式整理.json.html }}\n\n\n",
+        "options": {
+          "systemMessage": "={{ $json.prompt }}"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        1328,
+        2752
+      ],
+      "id": "95dd5526-695a-4254-9ddc-60d6e81049c0",
+      "name": "品質守門員"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $node.整理挑選中的文章.json }}",
+        "options": {
+          "systemMessage": "={{ $json.prompt }}"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        1312,
+        2272
+      ],
+      "id": "36047afb-0a07-4e6f-8f55-7d2dd6eb80f8",
+      "name": "文章生成"
+    },
+    {
+      "parameters": {
+        "jsCode": "// 取得上一個節點的 AI 回傳資料\nconst rawOutput = $json[\"output\"] || \"\";\n\n// 移除 ```json ``` 包裝與多餘換行符號\nlet cleanText = rawOutput\n  .replace(/^```json\\s*/i, \"\")   // 移除開頭 ```json\n  .replace(/```$/i, \"\")          // 移除結尾 ```\n  .trim();\n\n// 嘗試解析 JSON\nlet parsed;\ntry {\n  parsed = JSON.parse(cleanText);\n} catch (error) {\n  // 如果 JSON.parse 失敗，嘗試進一步清洗\n  cleanText = cleanText\n    .replace(/\\\\n/g, \"\\n\")        // 將 \\n 轉為真正換行\n    .replace(/\\\\\"/g, '\"');        // 處理轉義引號\n  try {\n    parsed = JSON.parse(cleanText);\n  } catch (err2) {\n    throw new Error(\"❌ 無法解析 AI 回傳的 JSON：\" + err2.message + \"\\n原始內容：\" + cleanText);\n  }\n}\n\n// 檢查結構是否正確\nif (!parsed.IdentityKey || !parsed.title || !parsed.content) {\n  throw new Error(\"⚠️ 缺少必要欄位，請檢查 AI 回傳內容：\" + JSON.stringify(parsed, null, 2));\n}\n\n// 函數：將文本內容轉換為 HTML\nfunction contentToHtml(content) {\n  if (!content) return \"\";\n  \n  let html = content\n    // 處理段落（兩個換行以上視為段落分隔）\n    .split(/\\n\\n+/)\n    .map(paragraph => {\n      // 處理無序列表項目 (- 或 *)\n      paragraph = paragraph.replace(/^[-*]\\s+(.+)$/gm, \"<li>$1</li>\");\n      // 處理有序列表項目 (1. 2. 等)\n      paragraph = paragraph.replace(/^\\d+\\.\\s+(.+)$/gm, \"<li>$1</li>\");\n      // 處理標題 (# ## ### 等)\n      paragraph = paragraph.replace(/^###\\s+(.+)$/gm, \"<h3>$1</h3>\");\n      paragraph = paragraph.replace(/^##\\s+(.+)$/gm, \"<h2>$1</h2>\");\n      paragraph = paragraph.replace(/^#\\s+(.+)$/gm, \"<h1>$1</h1>\");\n      // 處理粗體 (**text**)\n      paragraph = paragraph.replace(/\\*\\*(.+?)\\*\\*/g, \"<strong>$1</strong>\");\n      // 處理斜體 (*text* 或 _text_)\n      paragraph = paragraph.replace(/\\*(.+?)\\*/g, \"<em>$1</em>\");\n      paragraph = paragraph.replace(/_(.+?)_/g, \"<em>$1</em>\");\n      // 處理程式碼 (`code`)\n      paragraph = paragraph.replace(/`(.+?)`/g, \"<code>$1</code>\");\n      \n      // 如果沒有任何標籤，用段落包裹\n      if (!paragraph.match(/<(h[1-3]|li|code|strong|em)>/)) {\n        paragraph = `<p>${paragraph}</p>`;\n      }\n      return paragraph;\n    })\n    .join(\"\\n\");\n  \n  // 包裝列表項目到 <ul>\n  html = html.replace(/(<li>.+?<\\/li>)/s, (match) => {\n    return `<ul>\\n${match}\\n</ul>`;\n  });\n  \n  return html;\n}\n\n// 函數：轉義 HTML 特殊字符\nfunction escapeHtml(text) {\n  const map = {\n    '&': '&amp;',\n    '<': '&lt;',\n    '>': '&gt;',\n    '\"': '&quot;',\n    \"'\": '&#039;'\n  };\n  return text.replace(/[&<>\"']/g, char => map[char]);\n}\n\n// 成功輸出結構化資料\nreturn [\n  {\n    json: {\n      IdentityKey: parsed.IdentityKey,\n      title: parsed.title,\n      content: parsed.content,\n      html: contentToHtml(parsed.content),\n      raw: rawOutput, // 保留原始資料以便除錯\n    },\n  },\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1616,
+        2272
+      ],
+      "id": "7c9995a9-732a-4023-80cf-0e31ce17568a",
+      "name": "文章生成格式整理",
+      "retryOnFail": true,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "// n8n Code/Function node\n// 用途：建立 AI 驗證提示詞，檢查標題與內文是否合理\n// 輸出：每個 item 只包含 json.prompt\n\nconst titleGatekeeperPrompt = `\n你是新聞文章的品質守門員，負責以新聞編輯的專業眼光，嚴格篩選與評估優惠文章的標題與內文。\n\n任務：\n我會給你三個資料：\n1. 原始文章內容\n2. 待驗證標題\n3. 待驗證HTML內文\n\n請你依據原始文章的真實內容，判斷標題與內文是否合理、準確且無誤導。\n\n驗收準則如下：\n\n1️⃣ 標題驗收 (Title Check)\n- 是否忠實反映原文主旨。\n- 是否未誇大、未失焦。\n- 是否格式正常（語句通順、用字合宜）。\n- 字數在15~20字\n\n2️⃣ 內文驗收 (Content Check)\n- 是否忠於原文資訊（地點、時間、優惠內容皆正確）。\n- 是否沒有捏造原文沒有的資訊。\n- 是否語句自然通順、可讀性良好。\n- 格式為正確的HTML\n\n請僅依照以下 JSON 結構回傳結果（不要多餘說明文字）：\n\n{\n  \"is_title_acceptable\": true 或 false,\n  \"is_title_acceptable_reason\": \"若 false，說明原因\",\n  \"is_content_acceptable\": true 或 false,\n  \"is_content_acceptable_reason\": \"若 false，說明原因\"\n}\n`;\n\n// 每個 item 都輸出一個 prompt 給下一節點（例如 OpenAI）\nreturn $input.all().map(item => ({\n  json: {\n    prompt: titleGatekeeperPrompt\n  }\n}));\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1168,
+        2752
+      ],
+      "id": "b774dde0-eaf4-4df6-aa9c-17ff79e27ed2",
+      "name": "品質守門員prompt"
+    },
+    {
+      "parameters": {
+        "jsCode": "/**\n * n8n Code 節點：文章篩選 AI 準備模組\n * 根據實際 ES 資料結構調整\n * \n * 前置節點：「篩選ES資料」\n */\n\n// ============= 步驟1：從輸入資料中取得所有文章 =============\nconst esDataItems = $input.first().json.data;\n\nif (!esDataItems || esDataItems.length === 0) {\n  throw new Error('未取得任何文章資料，請檢查前置節點或輸入格式');\n}\n\n// 除錯：檢查第一個元素的結構\nconsole.log('第一個元素：', JSON.stringify(esDataItems[0], null, 2));\nconsole.log('第一個元素的 keys：', Object.keys(esDataItems[0]));\n\n// ============= 步驟2：為每篇文章加上序號（根據實際欄位結構）=============\nconst articlesWithIndex = esDataItems.map((article, index) => {\n  // data 陣列中的元素已經是直接的物件，不需要取 .json\n  \n  // 根據你的實際欄位提取資訊\n  const identityKey = article.IdentityKey || '';\n  const title = article.ArticleTitle || '';\n  const content = article.ArticleContent || '';\n  const publishTime = article.PublishTime || article.CreateTime || '';\n  const category = article.ArticleCategory || '';\n  const url = article.ArticleUrl || '';\n  const author = article.ArticleAuthor || '';\n  \n  // 提取內容摘要（前 80 字）\n  const contentSnippet = content\n    .replace(/\\n/g, ' ')\n    .replace(/\\s+/g, ' ')\n    .trim();\n  \n  return {\n    index: index + 1,\n    title: title || '[無標題]',\n    contentSnippet: contentSnippet || '[無內容]',\n    publishTime: publishTime,\n    category: category,\n    author: author,\n    url: url,\n    IdentityKey: identityKey,\n    ArticleContent: content,\n    CreateTime: article.CreateTime || '',\n    UpdateTime: article.UpdateTime || '',\n    ArticleSource: article.ArticleSource || ''\n  };\n});\n\n// 除錯輸出：檢查資料\nconsole.log('總文章數：', articlesWithIndex.length);\nconsole.log('第一篇文章：', articlesWithIndex[0]);\n\n// ============= 步驟3：生成 AI 提示詞 =============\nconst titleGatekeeperPrompt = `\n您是一位文章挑選專家。您的核心任務是：從提供的所有優惠資料中，**嚴格篩選**並**僅選擇出單一最適合發布的「頭條品牌」**。\n\n**【重要：文章識別方式】**\n每篇文章都有一個 **'index'** 欄位（序號，例如 1, 2, 3, ...）。\n請務必記住文章的 **index 序號**，不要試圖記住或複製 IdentityKey。\n\n**【輸入資料格式說明】**\n您將收到一個 JSON 陣列，每個物件包含：\n- index: 文章序號（1 到 ${articlesWithIndex.length}）\n- title: 文章標題\n- contentSnippet: 內容摘要（前 80 字）\n- publishTime: 發布日期（ISO 8601 格式）\n- category: 文章分類\n- author: 作者/品牌\n- url: 文章 URL\n\n**【篩選規則】**\n1. **品牌範圍**：優先處理以下 10 大品牌：\n   - 麥當勞 (McDonald's, mcdonaldstw)\n   - Foodpanda\n   - 好市多 (Costco)\n   - 高鐵 (THSR)\n   - 星巴克 (Starbucks, starbuckstw)\n   - 全家 (FamilyMart, familymart_tw)\n   - 全聯 (PX Mart, pxmartofficial)\n   - Uber\n   - 必勝客 (Pizza Hut, pizzahuttw)\n   - 7-ELEVEN (7eleven_tw)\n\n2. **時效性判斷**：\n   - 優先選擇 publishTime 在**今日起算 7 天內**的文章\n   - 同等條件下，選擇最新發布的內容\n\n3. **優惠吸引力**：\n   - 優先選擇 contentSnippet 或 title 中包含「優惠」、「折扣」、「免費」、「買一送一」、「套餐」等關鍵字\n   - 優先選擇具有時限性或限量性的優惠\n\n**【決策邏輯】**\n1. 先篩選符合時效性的文章（7 天內）\n2. 再從符合的文章中篩選出 10 大品牌\n3. 最後從符合的品牌文章中，選擇最具吸引力和最新的優惠\n\n**【回傳格式（必須遵守）】**\n請以 JSON 格式回傳以下資訊：\n\\`\\`\\`json\n{\n  \"selectedIndex\": 選中文章的序號（純數字，例如 1, 2, 3），\n  \"selectedTitle\": \"選中文章的 title\",\n  \"selectedAuthor\": \"選中文章的 author\",\n  \"selectedPublishTime\": \"選中文章的 publishTime\",\n  \"selectionReason\": \"簡述選擇原因（20字以內）\"\n}\n\\`\\`\\`\n\n**重要提醒：**\n- 只回傳序號（selectedIndex），不要回傳 IdentityKey\n- selectedIndex 必須是實際存在的序號（1 到 ${articlesWithIndex.length} 之間）\n- 必須使用純數字作為 selectedIndex，例如 1 或 5，不要使用字符串\n- 如果無法找到符合條件的文章，回傳 {\"selectedIndex\": null, \"selectionReason\": \"無符合條件的文章\"}\n- 回傳的 JSON 必須有效，不要包含任何解釋文字或 markdown 格式外的內容\n`;\n\n// ============= 步驟4：組織輸出結果 =============\nreturn {\n  json: {\n    // 提供給 AI 的提示詞\n    aiPrompt: titleGatekeeperPrompt,\n    \n    // 提供給 AI 的文章資料（序號化、簡潔版）\n    articlesForAI: {\n      totalCount: articlesWithIndex.length,\n      articles: articlesWithIndex.map(article => ({\n        index: article.index,\n        contentSnippet: article.contentSnippet,\n        publishTime: article.publishTime,\n        category: article.category,\n        author: article.author\n      }))\n    },\n    \n    // 用於後續 Code 節點查詢的完整對應表（序號 -> 完整資料）\n    articleIndexMap: articlesWithIndex.reduce((map, article) => {\n      map[article.index] = {\n        IdentityKey: article.IdentityKey,\n        author: article.author,\n        publishTime: article.publishTime,\n        url: article.url,\n        ArticleContent: article.ArticleContent,\n        CreateTime: article.CreateTime,\n        UpdateTime: article.UpdateTime,\n        ArticleSource: article.ArticleSource,\n        category: article.category\n      };\n      return map;\n    }, {}),\n    \n    // 完整的文章資料（供除錯和備查用）\n    fullArticlesData: articlesWithIndex,\n    \n    // 元資訊\n    metadata: {\n      totalArticles: articlesWithIndex.length,\n      preparationTime: new Date().toISOString(),\n      nodeVersion: '3.0'\n    }\n  }\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        464,
+        2128
+      ],
+      "id": "4a399c09-094d-4afe-ae01-f02a43f5d478",
+      "name": "挑選文章prompt"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "f66cb580-34bd-4e1a-9132-e581f94376cd",
+              "leftValue": "={{ $json.is_title_acceptable }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "6c825718-cf1b-49e6-a2b8-0ea39a0ac9b0",
+              "leftValue": "={{ $json.is_content_acceptable }}",
+              "rightValue": "=",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1920,
+        2736
+      ],
+      "id": "41615970-6efd-4f52-a96b-cb6fcfc3933e",
+      "name": "檢驗結果"
+    },
+    {
+      "parameters": {
+        "jsCode": "const token = \"61af9f535f694a56912a7ea660b01a7e8369b74cfac3199667dc82946f5d1e5c\";\n\nconst promotion_title = $node.文章生成格式整理.json.title;\nconst htmlContent = $node.文章生成格式整理.json.html;\n\n// 組合新的文章物件\nconst rewriteArticle = {\n    IdentityKey: $node.整理挑選中的文章.json.IdentityKey,\n    ArticleUrl: $node.整理挑選中的文章.json.ArticleUrl,\n    ArticleTitle: promotion_title,  // 使用新的標題\n    CreateTime: $node.整理挑選中的文章.json.CreateTime,\n    UpdateTime: $node.整理挑選中的文章.json.UpdateTime,\n    PublishTime: $node.整理挑選中的文章.json.PublishTime,\n    ArticleCategory: $node.整理挑選中的文章.json.ArticleCategory,\n    ArticleSubcategory: $node.整理挑選中的文章.json.ArticleCategory,\n    ArticleSource: $node.整理挑選中的文章.json.ArticleSource,\n    ArticleContent: htmlContent,  // 使用新的內容\n    ArticleDescription: \"優惠資訊\",\n    ArticleTags: \"優惠資訊\",\n    ArticleAuthor: $node.整理挑選中的文章.json.ArticleAuthor,\n    ArticleImgUrl: $node.整理挑選中的文章.json.ArticleImgUrl\n};\n\n// 回傳最終結構\nreturn {\n    token: token,\n    rewriteNews: [rewriteArticle]\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2416,
+        3328
+      ],
+      "id": "862e5cc4-34ac-44a9-9cd5-a3f2f5d04041",
+      "name": "整理回寫格式"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        2560,
+        1088
+      ],
+      "id": "11b351c2-6368-45a0-bf72-1ec70f6f832e",
+      "name": "AI Agent"
+    }
+  ],
+  "connections": {
+    "RSS Read(省錢主婦｜蝦皮、超商、好市多、優惠)": {
+      "main": [
+        [
+          {
+            "node": "寫入supabase DB",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "必勝客 台灣官方": {
+      "main": [
+        [
+          {
+            "node": "寫入supabase DB",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "7-ELEVEn Taiwan": {
+      "main": [
+        [
+          {
+            "node": "寫入supabase DB",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "全家便利商店": {
+      "main": [
+        [
+          {
+            "node": "寫入supabase DB",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "省錢主婦": {
+      "main": [
+        [
+          {
+            "node": "寫入supabase DB",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "省錢加雞腿": {
+      "main": [
+        [
+          {
+            "node": "寫入supabase DB",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "麥當勞": {
+      "main": [
+        [
+          {
+            "node": "寫入supabase DB",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "好康情報誌": {
+      "main": [
+        [
+          {
+            "node": "寫入supabase DB",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "foodpanda Taiwan": {
+      "main": [
+        [
+          {
+            "node": "寫入supabase DB",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "文章生成",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Supabase DB_threads": {
+      "ai_tool": [
+        [
+          {
+            "node": "文章生成",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "取得ES資料",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "內文_Markdown/換行符號轉成 HTML": {
+      "main": [
+        [
+          {
+            "node": "telegram通知",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "寫入supabase DB_new",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "寫入supabase DB_ALL",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "品質守門員",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "內文守門員AI回傳轉json": {
+      "main": [
+        [
+          {
+            "node": "檢驗結果",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "取得ES資料": {
+      "main": [
+        [
+          {
+            "node": "篩選ES資料",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "篩選ES資料": {
+      "main": [
+        [
+          {
+            "node": "挑選文章prompt",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "儲存到新頭殼DB": {
+      "main": [
+        []
+      ]
+    },
+    "驗證標題跟欄位都存在": {
+      "main": [
+        [
+          {
+            "node": "整理回寫格式",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model4": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "挑選文章AI",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "挑選文章AI": {
+      "main": [
+        [
+          {
+            "node": "整理挑選中的文章",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "整理挑選中的文章": {
+      "main": [
+        [
+          {
+            "node": "文章生成prompt",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "文章生成prompt": {
+      "main": [
+        [
+          {
+            "node": "文章生成",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "品質守門員": {
+      "main": [
+        [
+          {
+            "node": "內文守門員AI回傳轉json",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "文章生成": {
+      "main": [
+        [
+          {
+            "node": "文章生成格式整理",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "文章生成格式整理": {
+      "main": [
+        [
+          {
+            "node": "品質守門員prompt",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "品質守門員prompt": {
+      "main": [
+        [
+          {
+            "node": "品質守門員",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "挑選文章prompt": {
+      "main": [
+        [
+          {
+            "node": "挑選文章AI",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "檢驗結果": {
+      "main": [
+        [
+          {
+            "node": "驗證標題跟欄位都存在",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "整理回寫格式": {
+      "main": [
+        [
+          {
+            "node": "儲存到新頭殼DB",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": null,
+  "pinData": {
+    "telegram通知": [
+      {
+        "json": {
+          "ok": true,
+          "result": {
+            "message_id": 1072,
+            "from": {
+              "id": 8107273516,
+              "is_bot": true,
+              "first_name": "n8n 天氣",
+              "username": "n8n_peggy_weather_alert_bot"
+            },
+            "chat": {
+              "id": 7802109813,
+              "first_name": "FANG YU",
+              "last_name": "LIN",
+              "type": "private"
+            },
+            "date": 1760671092,
+            "text": "標題：7-ELEVEN週末優惠！思樂冰降價，黑糖珍珠撞奶買二送二\n內文：週末小確幸來了！7-ELEVEN 本週推出超值消暑優惠，不管是經典不敗的思樂冰、霜淇淋，還是人氣爆棚的黑糖珍珠撞奶，都有驚喜折扣，快揪朋友一起享受涼爽的週末時光！<br><br><br><strong>【本週 7-ELEVEN 必看優惠整理】</strong><br><br>- <strong>優惠品項/代碼：</strong> 黑糖珍珠撞奶等飲品<br><br>  <strong>內容：</strong> 享買二送二優惠<br><br>  <strong>活動日期：</strong> 本週末期間<br><br><br><br>- <strong>優惠品項/代碼：</strong> 思樂冰及霜淇淋<br><br>  <strong>內容：</strong> 享第二件10元優惠<br><br>  <strong>活動日期：</strong> 本週末期間<br><br><br><br><br><strong>週末消暑首選：思樂冰、霜淇淋清涼降價</strong><br><br>隨著天氣逐漸炎熱，最適合來點冰品消暑！7-ELEVEN 針對旗下超受歡迎的思樂冰與霜淇淋，推出了限時降價活動，絕對是週末出遊或宅在家的最佳良伴。<br><br><strong>優惠條件：</strong> 活動期間內，凡購買思樂冰或霜淇淋，即可享受同品項第二件只要10元的超值優惠。<br><br><strong>適用門市/對象：</strong> 全台有販售思樂冰及霜淇淋之 7-ELEVEN 特殊門市，所有消費者皆適用。<br><br><strong>使用限制：</strong> 優惠品項以各門市實際販售與庫存為準，建議可先向店員確認，避免撲空。<br><br><br><br><strong>手搖飲愛好者必看：黑糖珍珠撞奶買二送二</strong><br><br>喜歡咀嚼口感與濃郁奶香的你千萬別錯過！7-ELEVEN 的 CITY PEARL 系列飲品也加入了本週優惠陣容，超人氣的黑糖珍珠撞奶現在有買二送二活動，相當於半價就能喝到！<br><br><strong>優惠條件：</strong> 購買黑糖珍珠撞奶等指定 CITY PEARL 系列飲品，即可享有買二送二的優惠，平均一杯價格更划算。<br><br><strong>適用門市/對象：</strong> 適用於全台提供 CITY PEARL 現萃珍珠飲品的 7-ELEVEN 門市。<br><br><strong>使用限制：</strong> 實際參與活動的飲品項目與細節，請依 7-ELEVEN 官方公告或門市現場資訊為準。\n\nThis message was sent automatically with n8n",
+            "entities": [
+              {
+                "offset": 1129,
+                "length": 41,
+                "type": "italic"
+              },
+              {
+                "offset": 1170,
+                "length": 3,
+                "type": "text_link",
+                "url": "https://n8n.io/?utm_source=n8n-internal&utm_medium=powered_by&utm_campaign=n8n-nodes-base.telegram_5edfe094379a03db4a90892f3c4f30c1ff6c4a361d9f399c7dc290cec1e089ba"
+              }
+            ],
+            "link_preview_options": {
+              "is_disabled": true
+            }
+          }
+        }
+      }
+    ],
+    "寫入supabase DB_new": [
+      {
+        "json": {
+          "id": 22,
+          "created_at": "2025-10-17T03:18:12.898008+00:00",
+          "title": "7-ELEVEN週末優惠！思樂冰降價，黑糖珍珠撞奶買二送二",
+          "content": "週末小確幸來了！7-ELEVEN 本週推出超值消暑優惠，不管是經典不敗的思樂冰、霜淇淋，還是人氣爆棚的黑糖珍珠撞奶，都有驚喜折扣，快揪朋友一起享受涼爽的週末時光！\\n\\n\\n**【本週 7-ELEVEN 必看優惠整理】**\\n\\n- **優惠品項/代碼：** 黑糖珍珠撞奶等飲品\\n\\n  **內容：** 享買二送二優惠\\n\\n  **活動日期：** 本週末期間\\n\\n\\n\\n- **優惠品項/代碼：** 思樂冰及霜淇淋\\n\\n  **內容：** 享第二件10元優惠\\n\\n  **活動日期：** 本週末期間\\n\\n\\n\\n\\n**週末消暑首選：思樂冰、霜淇淋清涼降價**\\n\\n隨著天氣逐漸炎熱，最適合來點冰品消暑！7-ELEVEN 針對旗下超受歡迎的思樂冰與霜淇淋，推出了限時降價活動，絕對是週末出遊或宅在家的最佳良伴。\\n\\n**優惠條件：** 活動期間內，凡購買思樂冰或霜淇淋，即可享受同品項第二件只要10元的超值優惠。\\n\\n**適用門市/對象：** 全台有販售思樂冰及霜淇淋之 7-ELEVEN 特殊門市，所有消費者皆適用。\\n\\n**使用限制：** 優惠品項以各門市實際販售與庫存為準，建議可先向店員確認，避免撲空。\\n\\n\\n\\n**手搖飲愛好者必看：黑糖珍珠撞奶買二送二**\\n\\n喜歡咀嚼口感與濃郁奶香的你千萬別錯過！7-ELEVEN 的 CITY PEARL 系列飲品也加入了本週優惠陣容，超人氣的黑糖珍珠撞奶現在有買二送二活動，相當於半價就能喝到！\\n\\n**優惠條件：** 購買黑糖珍珠撞奶等指定 CITY PEARL 系列飲品，即可享有買二送二的優惠，平均一杯價格更划算。\\n\\n**適用門市/對象：** 適用於全台提供 CITY PEARL 現萃珍珠飲品的 7-ELEVEN 門市。\\n\\n**使用限制：** 實際參與活動的飲品項目與細節，請依 7-ELEVEN 官方公告或門市現場資訊為準。",
+          "source": null,
+          "prompt": "{\n  \"prompt\": \"階段一：單一最佳品牌選題與深度生成\\n\\n【AI 系統角色與任務】\\n角色：您是一位專門撰寫高流量、高 SEO 權重優惠文章的**內容總監**。您的核心任務是：從提供的所有原始優惠資料中，**嚴格篩選**並**僅選擇出單一最適合發布的「頭條品牌」**，然後將該品牌當天所有合格的優惠資訊，整合為一篇**專屬且完整的深度文章**。\\n\\n目標：在一次執行中，**僅產出一篇**針對單一品牌的最高價值文章 JSON 物件。\\n\\n**【輸入資料格式說明】**\\n請**嚴格**參考以下欄位名稱進行篩選與寫作：\\n1. 「內容/優惠詳情」：欄位名稱為 **'contentSnippet'**。\\n2. 「發布日期」：欄位名稱為 **'isoDate'** (用於判斷發文時間)。\\n3. 「發文者/品牌帳號」：欄位名稱為 **'creator'** (例如: '@familymart_tw')。\\n\\n【第一階段：資料篩選與判斷 — 絕對排除！】\\n在開始寫作前，您必須嚴格遵循以下規則。任何違反規則的資料，必須立即排除，不予寫作。\\n\\n1. 品牌範圍：\\n* **僅處理**以下 **10 大品牌**的資料：麥當勞, Foodpanda, 好市多, 高鐵, 星巴克, 全家, 全聯, Uber, 必勝客, 7-ELEVEN。請從 **'creator'** 欄位判斷品牌。資料若來自這 10 個品牌以外，請立即排除。\\n2. 內容類型排除（吸引力篩選）：\\n* 流量關鍵字：**必須**從 **'contentSnippet'** 中提取，包含以下任一實質優惠關鍵字：「優惠碼」、「折扣碼」、「買一送一」、「半價」、「降價」、「免費」、「最低 X 折」。\\n* 強制排除：若優惠內容屬於「聯名商品」、「周邊商品加購」、「集點活動」、「抽獎」，且無任何實質折扣或優惠碼，則立即排除。\\n3. 時效性判斷：\\n* **時效性判定標準：** 只要 **'isoDate'** 在**今日起算 7 天內**，且內容符合「流量關鍵字」，即通過篩選。\\n\\n---\\n\\n## 【第二階段：單一最佳品牌選擇與深度寫作】\\n\\n**重要指令：**\\n1.  **頭條品牌選擇：** 請比較所有通過第一階段篩選的優惠項目，您必須且只能選擇**單一**品牌作為本輪文章的主題。\\n2.  **優先級：** 優先選擇**擁有最多**「買一送一」或「優惠碼」活動的品牌。如果多個品牌數量相同，選擇**最近發布日期 ('isoDate')** 的品牌。\\n3.  **內容整合（關鍵！）：** 請將所有**通過篩選的，且與您選中品牌相關的所有優惠細節**，全部寫入同一篇文章中。\\n\\n---\\n\\n## 【嚴格格式規範與排除】\\n\\n**輸出格式強制要求：**\\n* 內文 **'content'** 欄位**絕對禁止**輸出任何 HTML 標籤。這包括但不限於：<p>、<b>、<br>、<code>或任何其他 HTML 標籤。\\n* **僅使用 Markdown 語法** (**粗體**、- 列點、\\n 換行) 來控制格式。\\n* **嚴禁**輸出任何形式的 <br> 標籤。\\n\\n### 文章結構寫作規範 (使用 \\n 控制換行)\\n\\n1. 標題與導言（決定點擊率）\\n標題規範：標題長度應在 18-25 個中文字之間。標題強制包含「品牌名稱」、「關鍵優惠字」和「精確時效性」。\\n**導言結束後：** 必須以 **兩個換行符號 (\\n\\n)** 區隔下方的懶人包。\\n\\n2. **核心懶人包（快速解決痛點 - 內容與日期強化！）**\\n**強制置頂：** 將**所有**與選定品牌相關的有效優惠資訊，以 **Markdown 粗體列點清單**的方式置於導言之後。\\n**日期提取強化：** 在「活動日期」欄位，**必須盡全力從原始資料中提取出精確的日期**。如果原始資料中沒有任何日期線索，才允許寫「**詳見官方貼文**」。\\n**清單結構範例：**\\n請務必使用粗體字來強調關鍵資訊。在每一個項目（例如：優惠品項/代碼、內容、**活動日期**）之間使用 **一個換行符號 (\\n)** 來保持緊湊，項目結束後再使用 **兩個換行符號 (\\n\\n)** 區隔下一個區塊：\\n**【本週 [品牌名稱] 必看優惠整理】**\\n\\n- **優惠品項/代碼：** [精確的品項名稱或代碼]\\n\\n  **內容：** [優惠內容/折扣額度]\\n\\n  **活動日期：** [**必須**是精確日期或**詳見官方貼文**]\\n\\n\\n\\n3. 優惠詳細分類與說明（強化 SEO）\\n結構化：將所有優惠資訊按類別分段落介紹。**嚴禁使用 H2 和 H3 標籤。**\\n**標籤模擬與換行強制規定：**\\n* 所有分類的大標題（例如：週末消暑首選），請使用**粗體字**，並在標題**上方與下方**各加上 **兩個換行符號 (\\n\\n)** 來模擬清晰的段落間隔。\\n* **強制細節分段：** 針對每個優惠活動，必須使用以下**獨立標註與分段**，確保細節清晰可讀：\\n    * 在段落內使用 **優惠條件：** [內容]\\n\\n\\n    * 在段落內使用 **適用門市/對象：** [內容]\\n\\n\\n    * 在段落內使用 **使用限制：** [內容]\\n\\n\\n* 每個**詳細內容段落**之間（例如：從「週末消暑首選」到「手搖飲愛好者必看」），必須使用 **兩個換行符號 (\\n\\n)** 來區隔。\\n詳細內容：必須針對該優惠，詳細說明「優惠條件」、「適用門市/對象」及「使用限制」。\\n\\n**請嚴格依照以下 JSON 結構回傳：**\\n{\\n  \\\"prompt\\\": \\\"<請直接塞入上面這段字串，不要改寫>\\\",\\n  \\\"title\\\": 標題,\\n  \\\"content\\\": 內文\\n}\",\n  \"title\": \"7-ELEVEN週末優惠！思樂冰降價，黑糖珍珠撞奶買二送二\",\n  \"content\": \"週末小確幸來了！7-ELEVEN 本週推出超值消暑優惠，不管是經典不敗的思樂冰、霜淇淋，還是人氣爆棚的黑糖珍珠撞奶，都有驚喜折扣，快揪朋友一起享受涼爽的週末時光！\\n\\n\\n**【本週 7-ELEVEN 必看優惠整理】**\\n\\n- **優惠品項/代碼：** 黑糖珍珠撞奶等飲品\\n\\n  **內容：** 享買二送二優惠\\n\\n  **活動日期：** 本週末期間\\n\\n\\n\\n- **優惠品項/代碼：** 思樂冰及霜淇淋\\n\\n  **內容：** 享第二件10元優惠\\n\\n  **活動日期：** 本週末期間\\n\\n\\n\\n\\n**週末消暑首選：思樂冰、霜淇淋清涼降價**\\n\\n隨著天氣逐漸炎熱，最適合來點冰品消暑！7-ELEVEN 針對旗下超受歡迎的思樂冰與霜淇淋，推出了限時降價活動，絕對是週末出遊或宅在家的最佳良伴。\\n\\n**優惠條件：** 活動期間內，凡購買思樂冰或霜淇淋，即可享受同品項第二件只要10元的超值優惠。\\n\\n**適用門市/對象：** 全台有販售思樂冰及霜淇淋之 7-ELEVEN 特殊門市，所有消費者皆適用。\\n\\n**使用限制：** 優惠品項以各門市實際販售與庫存為準，建議可先向店員確認，避免撲空。\\n\\n\\n\\n**手搖飲愛好者必看：黑糖珍珠撞奶買二送二**\\n\\n喜歡咀嚼口感與濃郁奶香的你千萬別錯過！7-ELEVEN 的 CITY PEARL 系列飲品也加入了本週優惠陣容，超人氣的黑糖珍珠撞奶現在有買二送二活動，相當於半價就能喝到！\\n\\n**優惠條件：** 購買黑糖珍珠撞奶等指定 CITY PEARL 系列飲品，即可享有買二送二的優惠，平均一杯價格更划算。\\n\\n**適用門市/對象：** 適用於全台提供 CITY PEARL 現萃珍珠飲品的 7-ELEVEN 門市。\\n\\n**使用限制：** 實際參與活動的飲品項目與細節，請依 7-ELEVEN 官方公告或門市現場資訊為準。\"\n}\n"
+        }
+      }
+    ],
+    "寫入supabase DB_ALL": [
+      {
+        "json": {
+          "id": 605,
+          "created_at": "2025-10-17T03:18:13.102288+00:00",
+          "title": "7-ELEVEN週末優惠！思樂冰降價，黑糖珍珠撞奶買二送二",
+          "content": "週末小確幸來了！7-ELEVEN 本週推出超值消暑優惠，不管是經典不敗的思樂冰、霜淇淋，還是人氣爆棚的黑糖珍珠撞奶，都有驚喜折扣，快揪朋友一起享受涼爽的週末時光！\\n\\n\\n**【本週 7-ELEVEN 必看優惠整理】**\\n\\n- **優惠品項/代碼：** 黑糖珍珠撞奶等飲品\\n\\n  **內容：** 享買二送二優惠\\n\\n  **活動日期：** 本週末期間\\n\\n\\n\\n- **優惠品項/代碼：** 思樂冰及霜淇淋\\n\\n  **內容：** 享第二件10元優惠\\n\\n  **活動日期：** 本週末期間\\n\\n\\n\\n\\n**週末消暑首選：思樂冰、霜淇淋清涼降價**\\n\\n隨著天氣逐漸炎熱，最適合來點冰品消暑！7-ELEVEN 針對旗下超受歡迎的思樂冰與霜淇淋，推出了限時降價活動，絕對是週末出遊或宅在家的最佳良伴。\\n\\n**優惠條件：** 活動期間內，凡購買思樂冰或霜淇淋，即可享受同品項第二件只要10元的超值優惠。\\n\\n**適用門市/對象：** 全台有販售思樂冰及霜淇淋之 7-ELEVEN 特殊門市，所有消費者皆適用。\\n\\n**使用限制：** 優惠品項以各門市實際販售與庫存為準，建議可先向店員確認，避免撲空。\\n\\n\\n\\n**手搖飲愛好者必看：黑糖珍珠撞奶買二送二**\\n\\n喜歡咀嚼口感與濃郁奶香的你千萬別錯過！7-ELEVEN 的 CITY PEARL 系列飲品也加入了本週優惠陣容，超人氣的黑糖珍珠撞奶現在有買二送二活動，相當於半價就能喝到！\\n\\n**優惠條件：** 購買黑糖珍珠撞奶等指定 CITY PEARL 系列飲品，即可享有買二送二的優惠，平均一杯價格更划算。\\n\\n**適用門市/對象：** 適用於全台提供 CITY PEARL 現萃珍珠飲品的 7-ELEVEN 門市。\\n\\n**使用限制：** 實際參與活動的飲品項目與細節，請依 7-ELEVEN 官方公告或門市現場資訊為準。",
+          "source": null,
+          "prompt": "{\n  \"prompt\": \"階段一：單一最佳品牌選題與深度生成\\n\\n【AI 系統角色與任務】\\n角色：您是一位專門撰寫高流量、高 SEO 權重優惠文章的**內容總監**。您的核心任務是：從提供的所有原始優惠資料中，**嚴格篩選**並**僅選擇出單一最適合發布的「頭條品牌」**，然後將該品牌當天所有合格的優惠資訊，整合為一篇**專屬且完整的深度文章**。\\n\\n目標：在一次執行中，**僅產出一篇**針對單一品牌的最高價值文章 JSON 物件。\\n\\n**【輸入資料格式說明】**\\n請**嚴格**參考以下欄位名稱進行篩選與寫作：\\n1. 「內容/優惠詳情」：欄位名稱為 **'contentSnippet'**。\\n2. 「發布日期」：欄位名稱為 **'isoDate'** (用於判斷發文時間)。\\n3. 「發文者/品牌帳號」：欄位名稱為 **'creator'** (例如: '@familymart_tw')。\\n\\n【第一階段：資料篩選與判斷 — 絕對排除！】\\n在開始寫作前，您必須嚴格遵循以下規則。任何違反規則的資料，必須立即排除，不予寫作。\\n\\n1. 品牌範圍：\\n* **僅處理**以下 **10 大品牌**的資料：麥當勞, Foodpanda, 好市多, 高鐵, 星巴克, 全家, 全聯, Uber, 必勝客, 7-ELEVEN。請從 **'creator'** 欄位判斷品牌。資料若來自這 10 個品牌以外，請立即排除。\\n2. 內容類型排除（吸引力篩選）：\\n* 流量關鍵字：**必須**從 **'contentSnippet'** 中提取，包含以下任一實質優惠關鍵字：「優惠碼」、「折扣碼」、「買一送一」、「半價」、「降價」、「免費」、「最低 X 折」。\\n* 強制排除：若優惠內容屬於「聯名商品」、「周邊商品加購」、「集點活動」、「抽獎」，且無任何實質折扣或優惠碼，則立即排除。\\n3. 時效性判斷：\\n* **時效性判定標準：** 只要 **'isoDate'** 在**今日起算 7 天內**，且內容符合「流量關鍵字」，即通過篩選。\\n\\n---\\n\\n## 【第二階段：單一最佳品牌選擇與深度寫作】\\n\\n**重要指令：**\\n1.  **頭條品牌選擇：** 請比較所有通過第一階段篩選的優惠項目，您必須且只能選擇**單一**品牌作為本輪文章的主題。\\n2.  **優先級：** 優先選擇**擁有最多**「買一送一」或「優惠碼」活動的品牌。如果多個品牌數量相同，選擇**最近發布日期 ('isoDate')** 的品牌。\\n3.  **內容整合（關鍵！）：** 請將所有**通過篩選的，且與您選中品牌相關的所有優惠細節**，全部寫入同一篇文章中。\\n\\n---\\n\\n## 【嚴格格式規範與排除】\\n\\n**輸出格式強制要求：**\\n* 內文 **'content'** 欄位**絕對禁止**輸出任何 HTML 標籤。這包括但不限於：<p>、<b>、<br>、<code>或任何其他 HTML 標籤。\\n* **僅使用 Markdown 語法** (**粗體**、- 列點、\\n 換行) 來控制格式。\\n* **嚴禁**輸出任何形式的 <br> 標籤。\\n\\n### 文章結構寫作規範 (使用 \\n 控制換行)\\n\\n1. 標題與導言（決定點擊率）\\n標題規範：標題長度應在 18-25 個中文字之間。標題強制包含「品牌名稱」、「關鍵優惠字」和「精確時效性」。\\n**導言結束後：** 必須以 **兩個換行符號 (\\n\\n)** 區隔下方的懶人包。\\n\\n2. **核心懶人包（快速解決痛點 - 內容與日期強化！）**\\n**強制置頂：** 將**所有**與選定品牌相關的有效優惠資訊，以 **Markdown 粗體列點清單**的方式置於導言之後。\\n**日期提取強化：** 在「活動日期」欄位，**必須盡全力從原始資料中提取出精確的日期**。如果原始資料中沒有任何日期線索，才允許寫「**詳見官方貼文**」。\\n**清單結構範例：**\\n請務必使用粗體字來強調關鍵資訊。在每一個項目（例如：優惠品項/代碼、內容、**活動日期**）之間使用 **一個換行符號 (\\n)** 來保持緊湊，項目結束後再使用 **兩個換行符號 (\\n\\n)** 區隔下一個區塊：\\n**【本週 [品牌名稱] 必看優惠整理】**\\n\\n- **優惠品項/代碼：** [精確的品項名稱或代碼]\\n\\n  **內容：** [優惠內容/折扣額度]\\n\\n  **活動日期：** [**必須**是精確日期或**詳見官方貼文**]\\n\\n\\n\\n3. 優惠詳細分類與說明（強化 SEO）\\n結構化：將所有優惠資訊按類別分段落介紹。**嚴禁使用 H2 和 H3 標籤。**\\n**標籤模擬與換行強制規定：**\\n* 所有分類的大標題（例如：週末消暑首選），請使用**粗體字**，並在標題**上方與下方**各加上 **兩個換行符號 (\\n\\n)** 來模擬清晰的段落間隔。\\n* **強制細節分段：** 針對每個優惠活動，必須使用以下**獨立標註與分段**，確保細節清晰可讀：\\n    * 在段落內使用 **優惠條件：** [內容]\\n\\n\\n    * 在段落內使用 **適用門市/對象：** [內容]\\n\\n\\n    * 在段落內使用 **使用限制：** [內容]\\n\\n\\n* 每個**詳細內容段落**之間（例如：從「週末消暑首選」到「手搖飲愛好者必看」），必須使用 **兩個換行符號 (\\n\\n)** 來區隔。\\n詳細內容：必須針對該優惠，詳細說明「優惠條件」、「適用門市/對象」及「使用限制」。\\n\\n**請嚴格依照以下 JSON 結構回傳：**\\n{\\n  \\\"prompt\\\": \\\"<請直接塞入上面這段字串，不要改寫>\\\",\\n  \\\"title\\\": 標題,\\n  \\\"content\\\": 內文\\n}\",\n  \"title\": \"7-ELEVEN週末優惠！思樂冰降價，黑糖珍珠撞奶買二送二\",\n  \"content\": \"週末小確幸來了！7-ELEVEN 本週推出超值消暑優惠，不管是經典不敗的思樂冰、霜淇淋，還是人氣爆棚的黑糖珍珠撞奶，都有驚喜折扣，快揪朋友一起享受涼爽的週末時光！\\n\\n\\n**【本週 7-ELEVEN 必看優惠整理】**\\n\\n- **優惠品項/代碼：** 黑糖珍珠撞奶等飲品\\n\\n  **內容：** 享買二送二優惠\\n\\n  **活動日期：** 本週末期間\\n\\n\\n\\n- **優惠品項/代碼：** 思樂冰及霜淇淋\\n\\n  **內容：** 享第二件10元優惠\\n\\n  **活動日期：** 本週末期間\\n\\n\\n\\n\\n**週末消暑首選：思樂冰、霜淇淋清涼降價**\\n\\n隨著天氣逐漸炎熱，最適合來點冰品消暑！7-ELEVEN 針對旗下超受歡迎的思樂冰與霜淇淋，推出了限時降價活動，絕對是週末出遊或宅在家的最佳良伴。\\n\\n**優惠條件：** 活動期間內，凡購買思樂冰或霜淇淋，即可享受同品項第二件只要10元的超值優惠。\\n\\n**適用門市/對象：** 全台有販售思樂冰及霜淇淋之 7-ELEVEN 特殊門市，所有消費者皆適用。\\n\\n**使用限制：** 優惠品項以各門市實際販售與庫存為準，建議可先向店員確認，避免撲空。\\n\\n\\n\\n**手搖飲愛好者必看：黑糖珍珠撞奶買二送二**\\n\\n喜歡咀嚼口感與濃郁奶香的你千萬別錯過！7-ELEVEN 的 CITY PEARL 系列飲品也加入了本週優惠陣容，超人氣的黑糖珍珠撞奶現在有買二送二活動，相當於半價就能喝到！\\n\\n**優惠條件：** 購買黑糖珍珠撞奶等指定 CITY PEARL 系列飲品，即可享有買二送二的優惠，平均一杯價格更划算。\\n\\n**適用門市/對象：** 適用於全台提供 CITY PEARL 現萃珍珠飲品的 7-ELEVEN 門市。\\n\\n**使用限制：** 實際參與活動的飲品項目與細節，請依 7-ELEVEN 官方公告或門市現場資訊為準。\"\n}\n"
+        }
+      }
+    ]
+  },
+  "versionId": "08cd2cbd-dd1d-4a86-aa76-8a6640e52500",
+  "triggerCount": 0,
+  "shared": [
+    {
+      "createdAt": "2025-10-29T03:10:57.087Z",
+      "updatedAt": "2025-10-29T03:10:57.087Z",
+      "role": "workflow:owner",
+      "workflowId": "KJCxovROBdPC1mPc",
+      "projectId": "7zEhqNTzyMiFsXF6",
+      "project": {
+        "createdAt": "2025-07-09T03:38:25.411Z",
+        "updatedAt": "2025-07-09T03:39:14.390Z",
+        "id": "7zEhqNTzyMiFsXF6",
+        "name": "jun yeh <jungu.ye@wanin.tw>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "projectRelations": [
+          {
+            "createdAt": "2025-07-09T03:38:25.416Z",
+            "updatedAt": "2025-07-09T03:38:25.416Z",
+            "userId": "d1b2f434-11f0-4091-b631-2379b0470044",
+            "projectId": "7zEhqNTzyMiFsXF6",
+            "user": {
+              "createdAt": "2025-07-09T03:38:25.408Z",
+              "updatedAt": "2025-10-31T09:17:04.851Z",
+              "id": "d1b2f434-11f0-4091-b631-2379b0470044",
+              "email": "jungu.ye@wanin.tw",
+              "firstName": "jun",
+              "lastName": "yeh",
+              "personalizationAnswers": {
+                "version": "v4",
+                "personalization_survey_submitted_at": "2025-07-09T03:39:17.136Z",
+                "personalization_survey_n8n_version": "1.102.0"
+              },
+              "settings": {
+                "easyAIWorkflowOnboarded": true,
+                "firstSuccessfulWorkflowId": "YAUQSrZhZ8qeZ9DB",
+                "userActivated": true,
+                "userActivatedAt": 1761902117305
+              },
+              "disabled": false,
+              "mfaEnabled": false,
+              "lastActiveAt": "2025-10-31",
+              "isPending": false
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "tags": []
+}

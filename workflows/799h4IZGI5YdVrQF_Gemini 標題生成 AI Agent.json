@@ -1,0 +1,230 @@
+{
+  "createdAt": "2025-07-31T10:00:12.493Z",
+  "updatedAt": "2025-07-31T10:31:18.000Z",
+  "id": "799h4IZGI5YdVrQF",
+  "name": "Gemini 標題生成 AI Agent",
+  "active": false,
+  "isArchived": true,
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "generate-titles",
+        "options": {}
+      },
+      "id": "webhook-trigger",
+      "name": "接收內容",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        32,
+        304
+      ],
+      "webhookId": "7f64cfe1-fc8b-408d-84d4-b1a551e54bfa"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "prepare-prompt",
+      "name": "準備 AI Prompt",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.2,
+      "position": [
+        240,
+        304
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "***REMOVED***",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {}
+          ]
+        },
+        "options": {}
+      },
+      "id": "gemini-api",
+      "name": "呼叫 Gemini API",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        464,
+        304
+      ],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "9TlCSEkFfpxQKUXt",
+          "name": "Gemini API Key"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// 解析 Gemini API 回應\nconst response = $input.all()[0].json;\nconst originalContent = $input.all()[0].json.original_content;\n\ntry {\n  // 提取生成的文字\n  const generatedText = response.candidates[0].content.parts[0].text;\n  \n  // 解析標題（假設每行是一個標題）\n  const titles = generatedText\n    .split('\\n')\n    .map(line => line.trim())\n    .filter(line => line.length > 0)\n    .map(line => {\n      // 清理數字編號和特殊符號\n      return line.replace(/^\\d+\\.\\s*/, '').replace(/^[-*]\\s*/, '').trim();\n    })\n    .filter(title => title.length > 0);\n\n  return {\n    success: true,\n    original_content: originalContent,\n    generated_titles: titles,\n    raw_response: generatedText,\n    timestamp: new Date().toISOString(),\n    title_count: titles.length\n  };\n  \n} catch (error) {\n  return {\n    success: false,\n    error: error.message,\n    original_content: originalContent,\n    timestamp: new Date().toISOString()\n  };\n}"
+      },
+      "id": "process-response",
+      "name": "處理 AI 回應",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        688,
+        304
+      ]
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "format-output",
+      "name": "格式化輸出",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.2,
+      "position": [
+        912,
+        304
+      ]
+    }
+  ],
+  "connections": {
+    "接收內容": {
+      "main": [
+        [
+          {
+            "node": "準備 AI Prompt",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "準備 AI Prompt": {
+      "main": [
+        [
+          {
+            "node": "呼叫 Gemini API",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "呼叫 Gemini API": {
+      "main": [
+        [
+          {
+            "node": "處理 AI 回應",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "處理 AI 回應": {
+      "main": [
+        [
+          {
+            "node": "格式化輸出",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "Asia/Taipei",
+    "saveDataErrorExecution": "all",
+    "saveDataSuccessExecution": "all",
+    "saveManualExecutions": false,
+    "saveExecutionProgress": false
+  },
+  "staticData": null,
+  "meta": null,
+  "pinData": {
+    "接收內容": [
+      {
+        "json": {
+          "body": {
+            "content": "人工智慧正在改變我們的工作方式，從自動化重複性任務到協助創意工作，AI技術為各行各業帶來了前所未有的機遇和挑戰。"
+          }
+        }
+      }
+    ]
+  },
+  "versionId": "c0d70a49-7a1e-4352-9906-d1e3a0f17ea7",
+  "triggerCount": 1,
+  "shared": [
+    {
+      "createdAt": "2025-07-31T10:00:12.499Z",
+      "updatedAt": "2025-07-31T10:00:12.499Z",
+      "role": "workflow:owner",
+      "workflowId": "799h4IZGI5YdVrQF",
+      "projectId": "cSCIDan8gJxZ0cWD",
+      "project": {
+        "createdAt": "2025-07-11T06:18:02.598Z",
+        "updatedAt": "2025-07-11T06:24:23.467Z",
+        "id": "cSCIDan8gJxZ0cWD",
+        "name": "玟誼 李 <elly.li@wanin.tw>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "projectRelations": [
+          {
+            "createdAt": "2025-07-11T06:18:02.613Z",
+            "updatedAt": "2025-07-11T06:18:02.613Z",
+            "userId": "568ba390-eb32-41ab-88b9-7769cb094f4f",
+            "projectId": "cSCIDan8gJxZ0cWD",
+            "user": {
+              "createdAt": "2025-07-11T06:18:02.591Z",
+              "updatedAt": "2025-11-03T03:20:08.000Z",
+              "id": "568ba390-eb32-41ab-88b9-7769cb094f4f",
+              "email": "elly.li@wanin.tw",
+              "firstName": "玟誼",
+              "lastName": "李",
+              "personalizationAnswers": {
+                "version": "v4",
+                "personalization_survey_submitted_at": "2025-07-11T06:25:17.807Z",
+                "personalization_survey_n8n_version": "1.102.0",
+                "companySize": "20-99",
+                "companyType": "digital-agency",
+                "role": "data-science",
+                "reportedSource": "friend"
+              },
+              "settings": {
+                "easyAIWorkflowOnboarded": true,
+                "firstSuccessfulWorkflowId": "WonDjzXioRrXqYad",
+                "userActivated": true,
+                "userActivatedAt": 1754366405376,
+                "npsSurvey": {
+                  "waitingForResponse": true,
+                  "ignoredCount": 1,
+                  "lastShownAt": 1754989668491
+                }
+              },
+              "disabled": false,
+              "mfaEnabled": false,
+              "lastActiveAt": "2025-11-02",
+              "isPending": false
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "tags": []
+}

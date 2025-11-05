@@ -1,0 +1,171 @@
+{
+  "createdAt": "2025-07-09T04:23:27.618Z",
+  "updatedAt": "2025-07-09T04:50:09.000Z",
+  "id": "lpz83waLIVyBInzR",
+  "name": "My workflow 2",
+  "active": false,
+  "isArchived": true,
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -432,
+        -96
+      ],
+      "id": "6eeb9103-3c6e-4245-836a-34fb56f65b19",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        80,
+        -96
+      ],
+      "id": "7ef51e75-965e-4d5b-8e15-7601e62e65e4",
+      "name": "When chat message received",
+      "webhookId": "3bde139b-5664-4400-a27a-4340f9f44018"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.1,
+      "position": [
+        304,
+        -96
+      ],
+      "id": "a8d60de1-73a3-4cfe-9159-e504630b1a44",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4.1-mini"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        128,
+        128
+      ],
+      "id": "d81d31a8-b1a2-4c90-929b-480ef3136a85",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "fWcL2ZedpEVI9GIg",
+          "name": "OpenAi account"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {},
+  "versionId": "770c2103-517e-4179-9f01-bb7c8a8192f2",
+  "triggerCount": 0,
+  "shared": [
+    {
+      "createdAt": "2025-07-09T04:23:27.625Z",
+      "updatedAt": "2025-07-09T04:23:27.625Z",
+      "role": "workflow:owner",
+      "workflowId": "lpz83waLIVyBInzR",
+      "projectId": "zSWUD5rme1j6NTeu",
+      "project": {
+        "createdAt": "2025-07-09T03:28:13.022Z",
+        "updatedAt": "2025-07-09T03:30:34.927Z",
+        "id": "zSWUD5rme1j6NTeu",
+        "name": "bot web <webdepbot@wanin.tw>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "projectRelations": [
+          {
+            "createdAt": "2025-07-09T03:28:13.022Z",
+            "updatedAt": "2025-07-09T03:28:13.022Z",
+            "userId": "d3e7955a-fd2d-4887-80d8-fa053a00f83f",
+            "projectId": "zSWUD5rme1j6NTeu",
+            "user": {
+              "createdAt": "2025-07-09T03:28:07.595Z",
+              "updatedAt": "2025-11-05T08:30:09.000Z",
+              "id": "d3e7955a-fd2d-4887-80d8-fa053a00f83f",
+              "email": "webdepbot@wanin.tw",
+              "firstName": "bot",
+              "lastName": "web",
+              "personalizationAnswers": {
+                "version": "v4",
+                "personalization_survey_submitted_at": "2025-07-09T03:30:40.464Z",
+                "personalization_survey_n8n_version": "1.102.0"
+              },
+              "settings": {
+                "userActivated": true,
+                "easyAIWorkflowOnboarded": true,
+                "firstSuccessfulWorkflowId": "ySPX7YsHgnJyEB7T",
+                "userActivatedAt": 1752039483754,
+                "npsSurvey": {
+                  "responded": true,
+                  "lastShownAt": 1761900557870
+                }
+              },
+              "disabled": false,
+              "mfaEnabled": false,
+              "lastActiveAt": "2025-11-05",
+              "isPending": false
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "tags": []
+}

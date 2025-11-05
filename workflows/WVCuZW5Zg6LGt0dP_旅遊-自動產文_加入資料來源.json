@@ -1,0 +1,492 @@
+{
+  "createdAt": "2025-09-04T04:00:35.770Z",
+  "updatedAt": "2025-09-10T10:33:46.000Z",
+  "id": "WVCuZW5Zg6LGt0dP",
+  "name": "旅遊-自動產文_加入資料來源",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "url": "https://rss.app/feeds/vppucruZ3fK2M2Tt.xml",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.rssFeedRead",
+      "typeVersion": 1.2,
+      "position": [
+        -1296,
+        -224
+      ],
+      "id": "19c19362-1c99-445a-87c8-b7021d756329",
+      "name": "RSS Read"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        -1056,
+        -224
+      ],
+      "id": "c39985b0-ae84-4495-8c21-0485f6dff34f",
+      "name": "Loop Over Items"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "name": "Replace Me",
+      "typeVersion": 1,
+      "position": [
+        -592,
+        -208
+      ],
+      "id": "e69be04d-0217-4a59-954a-cdd71bc459d6"
+    },
+    {
+      "parameters": {
+        "tableId": "threads_test",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "title",
+              "fieldValue": "={{ $json.title }}"
+            },
+            {
+              "fieldId": "content",
+              "fieldValue": "={{ $json.content }}"
+            },
+            {
+              "fieldId": "contentSnippet",
+              "fieldValue": "={{ $json.contentSnippet }}"
+            },
+            {
+              "fieldId": "isoDate",
+              "fieldValue": "={{ $json.isoDate }}"
+            },
+            {
+              "fieldId": "link",
+              "fieldValue": "={{ $json.link }}"
+            },
+            {
+              "fieldId": "creator",
+              "fieldValue": "={{ $json.creator }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        -800,
+        -208
+      ],
+      "id": "f4c09919-f190-4cec-8e08-4f06ec3f1992",
+      "name": "寫入supabase DB1",
+      "credentials": {
+        "supabaseApi": {
+          "id": "fPPNqZ5ZGXEc0sc1",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.prompt }}",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        -1136,
+        336
+      ],
+      "id": "63cf6c76-611b-443e-b91d-0df357b76cfb",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        -1120,
+        560
+      ],
+      "id": "d8b8c53a-b1d6-4157-8985-f1055c6e0be7",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "rzGYcHVXRNXHjFPp",
+          "name": "Google Gemini(PaLM) Api account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "## 透過RSS取得threads文章\nhttps://rss.app/",
+        "height": 416,
+        "width": 1312
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -1632,
+        -368
+      ],
+      "typeVersion": 1,
+      "id": "3f7c041d-53d9-4389-b497-69d95a8f8a87",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "tableId": "travel_test",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "content",
+              "fieldValue": "={{ $json.content }}"
+            },
+            {
+              "fieldId": "prompt",
+              "fieldValue": "={{ $json.prompt }}"
+            },
+            {
+              "fieldId": "title",
+              "fieldValue": "={{ $json.title }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        -560,
+        432
+      ],
+      "id": "a4f3f648-4606-4287-b145-3c8c2b4ff118",
+      "name": "寫入supabase DB2",
+      "credentials": {
+        "supabaseApi": {
+          "id": "fPPNqZ5ZGXEc0sc1",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "tableId": "threads_test"
+      },
+      "type": "n8n-nodes-base.supabaseTool",
+      "typeVersion": 1,
+      "position": [
+        -992,
+        560
+      ],
+      "id": "c26ea836-0636-481b-846f-918aa4ae2e7e",
+      "name": "Supabase DB_threads",
+      "credentials": {
+        "supabaseApi": {
+          "id": "fPPNqZ5ZGXEc0sc1",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const titleGatekeeperPrompt = `\n階段一：智慧選題\n\n請分析 Supabase DB_threads 資料庫中的所有文件，從中挑選最適合撰寫為「旅遊新聞」的主題。\n篩選標準如下：\n\n時效性：是否為近期或即將發生的活動（例：音樂節、光雕展、期間限定美食節）。\n\n獨特性：是否具備新穎特色（例：瑜伽頌缽課程、特色在地節慶、限定秘境）。\n\n單一聚焦：選擇「單一景點」或「單一活動」為核心，而非泛泛多主題。\n\n階段二：新聞撰寫\n\n針對所選主題，以旅遊新聞記者的視角撰寫一篇專業報導。文章需包含：\n\n1. 新聞標題\n\n簡潔有力，凸顯主題核心與吸睛元素。\n\n範例：\n\n「XXX 音樂節登場！光雕＋頌缽瑜伽體驗點亮夜空」\n\n「隱藏版秘境溫泉揭曉！秋冬限定療癒行程」\n\n2. 導言（Lead）\n\n在首段明確交代：時間、地點、核心亮點。\n\n範例：\n\n「本週末於台中舉辦的 XXX 音樂節，不僅有光雕秀，更結合頌缽療癒與瑜伽體驗，打造全方位的沉浸式旅遊活動。」\n\n3. 核心特色\n\n分段描述主題的獨特體驗，並補充文化背景或實用資訊。\n\n善用資料庫中的關鍵字（如「瑜伽」、「頌缽」、「光雕音樂會」）。\n\n內容示例：\n\n主題活動特色（表演、設施、體驗內容）\n\n在地文化連結（歷史、習俗、社群熱度）\n\n實用旅遊資訊（購票、交通、開放時間）\n\n4. 行動呼籲（CTA）\n\n結尾附上「如何前往」或「注意事項」。\n\n範例：\n\n「活動地點位於 XXX 公園，捷運出口 5 分鐘步行即可抵達，建議提前線\n\n**請嚴格依照以下 JSON 結構回傳：**\n{\n  \"prompt\": \"<請直接塞入上面這段字串，不要改寫>\",\n  \"title\": 標題,\n  \"content\": 內文\n}\n`;\n\nreturn [\n  {\n    json: {\n      prompt: titleGatekeeperPrompt, // 固定塞入\n      // title 和 content 要交給 AI 生成，這裡先留空\n      title: \"\",\n      content: \"\",\n    },\n  },\n];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1360,
+        336
+      ],
+      "id": "fbdb70d0-c544-43ae-8104-257cfc5d22cf",
+      "name": "撰寫prompt"
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "minutes",
+              "minutesInterval": 15
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -1584,
+        336
+      ],
+      "id": "37645540-acff-43de-b9a3-ece9c263b580",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "jsCode": "const inputText = $input.first().json.output;\n\n// 找出 ```json ... ``` 區塊\nconst regex = /```json\\s*([\\s\\S]*?)```/;\nconst match = inputText.match(regex);\nif (!match) throw new Error(\"找不到 JSON 格式區塊\");\n\n// 取出內容\nconst jsonBlock = match[1];\n\n// 手動抓 title 與 content\n// 假設 title 以 \"title\": \" 開頭，content 以 \"content\": \" 開頭\nconst titleStart = jsonBlock.indexOf('\"title\": \"') + 10;\nconst titleEnd = jsonBlock.indexOf('\",', titleStart);\nconst contentStart = jsonBlock.indexOf('\"content\": \"') + 12;\nconst contentEnd = jsonBlock.lastIndexOf('\"'); // 最後一個雙引號\n\nconst title = jsonBlock.substring(titleStart, titleEnd);\nconst content = jsonBlock.substring(contentStart, contentEnd);\n\n// 輸出\nreturn [{\n  json: {\n    prompt: jsonBlock, // 原始 JSON 區塊，保留\n    title: title,\n    content: content\n  }\n}];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -784,
+        336
+      ],
+      "id": "d9d048fb-b5e0-478a-b118-3d3f5de15188",
+      "name": "AI回傳轉json1",
+      "retryOnFail": true,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -1520,
+        -224
+      ],
+      "id": "b7c24e42-6d19-4164-bce2-a72fbe33da8c",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "chatId": "7802109813",
+        "text": "=標題：{{ $json.title }}\n內文：{{ $json.content }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        -560,
+        240
+      ],
+      "id": "82737ff0-da01-49d2-9c74-9a8a743b71de",
+      "name": "旅遊1",
+      "webhookId": "3d8abdd9-f4b2-49fe-a771-c610ba9a4adb",
+      "credentials": {
+        "telegramApi": {
+          "id": "ADiZMdkyDmUbDLRw",
+          "name": "Telegram account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "## AI取資料來源寫文章",
+        "height": 560,
+        "width": 1440,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -1632,
+        208
+      ],
+      "typeVersion": 1,
+      "id": "43cb4615-5f51-4ec2-a289-2269bdb7f14b",
+      "name": "Sticky Note1"
+    }
+  ],
+  "connections": {
+    "RSS Read": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [],
+        [
+          {
+            "node": "寫入supabase DB1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Replace Me": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "寫入supabase DB1": {
+      "main": [
+        [
+          {
+            "node": "Replace Me",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "AI回傳轉json1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Supabase DB_threads": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "撰寫prompt": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "撰寫prompt",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI回傳轉json1": {
+      "main": [
+        [
+          {
+            "node": "寫入supabase DB2",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "旅遊1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        []
+      ]
+    },
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        []
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": {
+    "node:Schedule Trigger": {
+      "recurrenceRules": []
+    }
+  },
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {},
+  "versionId": "d3239a50-85d8-4373-946e-bcabc7dd100d",
+  "triggerCount": 1,
+  "shared": [
+    {
+      "createdAt": "2025-09-04T04:00:35.782Z",
+      "updatedAt": "2025-09-04T04:00:35.782Z",
+      "role": "workflow:owner",
+      "workflowId": "WVCuZW5Zg6LGt0dP",
+      "projectId": "7goAssCGKgwfIAES",
+      "project": {
+        "createdAt": "2025-08-06T02:37:42.802Z",
+        "updatedAt": "2025-08-06T02:39:07.720Z",
+        "id": "7goAssCGKgwfIAES",
+        "name": "peggy lin <peggy.lin@wanin.tw>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "projectRelations": [
+          {
+            "createdAt": "2025-08-06T02:37:42.807Z",
+            "updatedAt": "2025-08-06T02:37:42.807Z",
+            "userId": "67944008-c997-4154-bbd0-26d022398054",
+            "projectId": "7goAssCGKgwfIAES",
+            "user": {
+              "createdAt": "2025-08-06T02:37:42.798Z",
+              "updatedAt": "2025-11-05T00:21:52.000Z",
+              "id": "67944008-c997-4154-bbd0-26d022398054",
+              "email": "peggy.lin@wanin.tw",
+              "firstName": "peggy",
+              "lastName": "lin",
+              "personalizationAnswers": {
+                "version": "v4",
+                "personalization_survey_submitted_at": "2025-08-06T02:41:04.705Z",
+                "personalization_survey_n8n_version": "1.102.0",
+                "companySize": "100-499",
+                "companyType": "saas",
+                "role": "data-science",
+                "reportedSource": "friend"
+              },
+              "settings": {
+                "firstSuccessfulWorkflowId": "qxXV0YFTbqnC75xr",
+                "userActivated": true,
+                "userActivatedAt": 1754532013419,
+                "easyAIWorkflowOnboarded": true,
+                "npsSurvey": {
+                  "responded": true,
+                  "lastShownAt": 1756796314100
+                }
+              },
+              "disabled": false,
+              "mfaEnabled": false,
+              "lastActiveAt": "2025-11-04",
+              "isPending": false
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "tags": []
+}

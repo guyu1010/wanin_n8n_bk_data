@@ -1,0 +1,258 @@
+{
+  "createdAt": "2025-10-27T05:57:52.587Z",
+  "updatedAt": "2025-10-27T06:02:47.000Z",
+  "id": "h4j0VB3SkzS5yo5H",
+  "name": "AI新聞擷取工作流",
+  "active": false,
+  "isArchived": true,
+  "nodes": [
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "8f5e3c4a-1b2d-4e9f-a3c6-7d8e9f0a1b2c",
+              "name": "url",
+              "value": "https://news.google.com/rss/articles/CBMigAFBVV95cUxPOS1iSi1tTkF0RWgwMmxYYzMxVW8tSDJBMk9fQkNDMEhKRExJN3VFaW1fQWY3ck05dzRGNDhWVnBqeDVGUC1jbzVVMHdRZ0EwVlJnUE41dElteFpXMHpiTFVNYnBfejRUdkdIWEFiN0szMjJ6aTRkSW40MlVtQ3hzag?oc=5",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "349956c0-38cd-407c-9a4d-f4ae5c830fc8",
+      "name": "設定新聞 URL",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.3,
+      "position": [
+        -256,
+        -48
+      ]
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.url }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "User-Agent",
+              "value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
+            }
+          ]
+        },
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "text"
+            }
+          },
+          "timeout": 30000
+        }
+      },
+      "id": "db5b21dd-b1b2-4d0f-80b3-f91a6118f6a3",
+      "name": "抓取網頁內容",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -16,
+        -64
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// 清理 HTML，只保留主要內容\nconst html = $input.item.json.data || '';\n\n// 移除 script, style, nav, footer 等無關標籤\nlet cleaned = html\n  .replace(/<script[\\s\\S]*?<\\/script>/gi, '')\n  .replace(/<style[\\s\\S]*?<\\/style>/gi, '')\n  .replace(/<nav[\\s\\S]*?<\\/nav>/gi, '')\n  .replace(/<header[\\s\\S]*?<\\/header>/gi, '')\n  .replace(/<footer[\\s\\S]*?<\\/footer>/gi, '')\n  .replace(/<aside[\\s\\S]*?<\\/aside>/gi, '')\n  .replace(/<iframe[\\s\\S]*?<\\/iframe>/gi, '')\n  .replace(/<!--[\\s\\S]*?-->/g, '')\n  .replace(/<[^>]+>/g, ' ')\n  .replace(/\\s+/g, ' ')\n  .trim();\n\n// 限制長度，避免 token 過多（約 3000 tokens = 12000 字元）\ncleaned = cleaned.substring(0, 12000);\n\nreturn {\n  json: {\n    cleanedContent: cleaned,\n    url: $input.item.json.url\n  }\n};"
+      },
+      "id": "7eaa8404-b7eb-4c5f-ad22-6cc554fe6c03",
+      "name": "清理 HTML",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        208,
+        -64
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.anthropic.com/v1/messages",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "x-api-key",
+              "value": "=uEgthqcfGom3iaLkHO7skeNIYxW_AkM1Jt4Z4Cpbr_0f_ZBtCDDPsxDF3T_Am9KaFKMiR6vqC0iEejfsdovClg"
+            },
+            {
+              "name": "anthropic-version",
+              "value": "2023-06-01"
+            },
+            {
+              "name": "content-type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"model\": \"claude-sonnet-4-5-20250929\",\n  \"max_tokens\": 4096,\n  \"temperature\": 0.3,\n  \"messages\": [\n    {\n      \"role\": \"user\",\n      \"content\": \"請從以下新聞內容中提取資訊，並以嚴格的 JSON 格式回傳（不要包含其他文字）：\\n\\n{\\n  \\\"title\\\": \\\"新聞標題（原文）\\\",\\n  \\\"content\\\": \\\"完整正文內容（原文）\\\",\\n  \\\"summary\\\": \\\"用繁體中文撰寫 150-200 字的摘要\\\",\\n  \\\"category\\\": \\\"新聞分類（科技/財經/娛樂/體育/政治/生活/國際/其他）\\\"\\n}\\n\\n新聞來源網址：{{ $json.url }}\\n\\n新聞內容：\\n{{ $json.cleanedContent }}\"\n    }\n  ]\n}",
+        "options": {
+          "timeout": 60000
+        }
+      },
+      "id": "fd37e0a2-f662-4d44-87e8-1ed0daf52850",
+      "name": "呼叫 Claude API",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        432,
+        -64
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// 解析 Claude 的回應\nconst response = $input.item.json;\n\n// 取得 Claude 的回覆內容\nconst content = response.content;\nconst textContent = content.find(item => item.type === 'text');\n\nif (!textContent) {\n  throw new Error('無法從 Claude 回應中找到文字內容');\n}\n\nlet resultText = textContent.text;\n\n// 嘗試提取 JSON（處理 Claude 可能在 JSON 前後加說明文字的情況）\nlet jsonMatch = resultText.match(/\\{[\\s\\S]*\\}/);\n\nif (jsonMatch) {\n  const extractedJson = JSON.parse(jsonMatch[0]);\n  return {\n    json: {\n      title: extractedJson.title,\n      content: extractedJson.content,\n      summary: extractedJson.summary,\n      category: extractedJson.category,\n      sourceUrl: $input.item.json.url || $('清理 HTML').item.json.url,\n      extractedAt: new Date().toISOString(),\n      tokensUsed: {\n        input: response.usage.input_tokens,\n        output: response.usage.output_tokens\n      }\n    }\n  };\n} else {\n  // 如果找不到 JSON，返回原始文字讓使用者檢查\n  return {\n    json: {\n      error: '無法解析 JSON',\n      rawResponse: resultText\n    }\n  };\n}"
+      },
+      "id": "65e9d536-d836-4747-a5b9-e7b09252c3ed",
+      "name": "解析結果",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        640,
+        -64
+      ]
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -448,
+        -48
+      ],
+      "id": "be988e77-7756-4cc9-85d5-df85744ad884",
+      "name": "When clicking ‘Execute workflow’"
+    }
+  ],
+  "connections": {
+    "設定新聞 URL": {
+      "main": [
+        [
+          {
+            "node": "抓取網頁內容",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "抓取網頁內容": {
+      "main": [
+        [
+          {
+            "node": "清理 HTML",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "清理 HTML": {
+      "main": [
+        [
+          {
+            "node": "呼叫 Claude API",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "呼叫 Claude API": {
+      "main": [
+        [
+          {
+            "node": "解析結果",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "設定新聞 URL",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": null,
+  "pinData": {},
+  "versionId": "e0a20877-a8ec-48b2-bc48-2fe5017088e0",
+  "triggerCount": 0,
+  "shared": [
+    {
+      "createdAt": "2025-10-27T05:57:52.591Z",
+      "updatedAt": "2025-10-27T05:57:52.591Z",
+      "role": "workflow:owner",
+      "workflowId": "h4j0VB3SkzS5yo5H",
+      "projectId": "iZydbwsMPJYYjvth",
+      "project": {
+        "createdAt": "2025-09-16T02:39:54.633Z",
+        "updatedAt": "2025-09-16T02:43:19.908Z",
+        "id": "iZydbwsMPJYYjvth",
+        "name": "common web <web@wanin.tw>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "projectRelations": [
+          {
+            "createdAt": "2025-09-16T02:39:54.639Z",
+            "updatedAt": "2025-09-16T02:39:54.639Z",
+            "userId": "55f25be3-69cb-4a61-849e-09b3e6328043",
+            "projectId": "iZydbwsMPJYYjvth",
+            "user": {
+              "createdAt": "2025-09-16T02:39:54.628Z",
+              "updatedAt": "2025-11-05T08:31:58.000Z",
+              "id": "55f25be3-69cb-4a61-849e-09b3e6328043",
+              "email": "web@wanin.tw",
+              "firstName": "common",
+              "lastName": "web",
+              "personalizationAnswers": {
+                "version": "v4",
+                "personalization_survey_submitted_at": "2025-09-16T02:43:24.324Z",
+                "personalization_survey_n8n_version": "1.108.1"
+              },
+              "settings": {
+                "easyAIWorkflowOnboarded": true,
+                "firstSuccessfulWorkflowId": "XN79dmNc8yPVm6XU",
+                "userActivated": true,
+                "userActivatedAt": 1758096117396,
+                "npsSurvey": {
+                  "responded": true,
+                  "lastShownAt": 1761544952978
+                }
+              },
+              "disabled": false,
+              "mfaEnabled": false,
+              "lastActiveAt": "2025-11-05",
+              "isPending": false
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "tags": []
+}

@@ -1,0 +1,310 @@
+{
+  "createdAt": "2025-07-31T10:41:10.971Z",
+  "updatedAt": "2025-08-04T10:02:25.000Z",
+  "id": "4oj3UicPA2ybAXtG",
+  "name": "每日新聞標題生成器 v2",
+  "active": false,
+  "isArchived": true,
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "cron-trigger",
+      "name": "每日觸發器",
+      "type": "n8n-nodes-base.cron",
+      "position": [
+        32,
+        304
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "fields": {
+          "values": [
+            {
+              "name": "today_date",
+              "stringValue": "2025-07-31"
+            },
+            {
+              "name": "news_url",
+              "stringValue": "=https://newtalk.tw/epaper/2025-07-31"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "date-generator",
+      "name": "生成日期 URL",
+      "type": "n8n-nodes-base.set",
+      "position": [
+        256,
+        304
+      ],
+      "typeVersion": 3.2
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.news_url }}",
+        "options": {}
+      },
+      "id": "http-fetch",
+      "name": "抓取新聞頁面",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        480,
+        304
+      ],
+      "typeVersion": 4.1
+    },
+    {
+      "parameters": {
+        "jsCode": "// 完全動態的新頭殼電子報新聞標題提取器\nconst response = $input.all()[0];\nconst htmlData = response.json.data || response.json.body || '';\n\ntry {\n  let news = [];\n  \n  // 動態提取策略1: 尋找 td.text 內的 p.subtitle 標籤\n  const textCellPattern = /<td\\s+class=\"text\"[^>]*>([\\s\\S]*?)<\\/td>/g;\n  let cellMatch;\n  \n  while ((cellMatch = textCellPattern.exec(htmlData)) !== null && news.length < 5) {\n    const cellContent = cellMatch[1];\n    \n    // 在每個 td.text 中尋找 p.subtitle\n    const subtitleMatch = cellContent.match(/<p\\s+class=\"subtitle\"[^>]*>([\\s\\S]*?)<\\/p>/);\n    \n    if (subtitleMatch) {\n      // 移除所有HTML標籤，只保留純文字\n      const title = subtitleMatch[1]\n        .replace(/<[^>]*>/g, '')  // 移除HTML標籤\n        .replace(/\\s+/g, ' ')    // 合併多個空白\n        .trim();\n      \n      if (title && title.length > 5) {\n        news.push({\n          title: title,\n          content: '',\n          index: news.length + 1\n        });\n      }\n    }\n  }\n  \n  // 動態提取策略2: 尋找主要新聞（第一個大標題）\n  if (news.length < 5) {\n    const mainNewsPattern = /<td\\s+class=\"first-news\"[^>]*>[\\s\\S]*?<p\\s+class=\"subtitle\"[^>]*>([\\s\\S]*?)<\\/p>/;\n    const mainMatch = htmlData.match(mainNewsPattern);\n    \n    if (mainMatch) {\n      const title = mainMatch[1]\n        .replace(/<[^>]*>/g, '')\n        .replace(/\\s+/g, ' ')\n        .trim();\n      \n      if (title && title.length > 5) {\n        // 檢查是否已存在\n        const exists = news.some(item => item.title === title);\n        if (!exists) {\n          news.unshift({ // 插入到開頭\n            title: title,\n            content: '',\n            index: 1\n          });\n          \n          // 重新調整其他新聞的index\n          for (let i = 1; i < news.length; i++) {\n            news[i].index = i + 1;\n          }\n        }\n      }\n    }\n  }\n  \n  // 動態提取策略3: 如果前面方法沒找到足夠新聞，使用更寬鬆的subtitle搜尋\n  if (news.length < 3) {\n    const allSubtitlePattern = /<p\\s+class=\"subtitle\"[^>]*>([\\s\\S]*?)<\\/p>/g;\n    let subtitleMatch;\n    \n    while ((subtitleMatch = allSubtitlePattern.exec(htmlData)) !== null && news.length < 5) {\n      const title = subtitleMatch[1]\n        .replace(/<[^>]*>/g, '')\n        .replace(/\\s+/g, ' ')\n        .trim();\n      \n      if (title && \n          title.length > 10 && \n          title.length < 150 &&\n          !title.includes('熱門新聞') &&\n          !title.includes('熱門議題') &&\n          !title.includes('熱門話題')) {\n        \n        // 檢查是否已存在\n        const exists = news.some(item => item.title === title);\n        if (!exists) {\n          news.push({\n            title: title,\n            content: '',\n            index: news.length + 1\n          });\n        }\n      }\n    }\n  }\n  \n  // 動態提取策略4: 最後備用 - 尋找所有包含新聞特徵的文字\n  if (news.length < 2) {\n    // 移除所有HTML標籤，按行分析\n    const cleanText = htmlData.replace(/<script[\\s\\S]*?<\\/script>/gi, '')  // 移除script\n                               .replace(/<style[\\s\\S]*?<\\/style>/gi, '')   // 移除style\n                               .replace(/<[^>]*>/g, '\\n')                  // 替換HTML標籤為換行\n                               .replace(/\\s+/g, ' ')                       // 合併空白\n                               .split('\\n');\n    \n    for (let line of cleanText) {\n      if (news.length >= 5) break;\n      \n      line = line.trim();\n      \n      // 檢查是否符合新聞標題特徵\n      if (line && \n          line.length > 15 && \n          line.length < 100 &&\n          (line.includes('！') || line.includes('？') || line.includes('：') || line.includes('》')) &&\n          !line.includes('發布') &&\n          !line.includes('版權') &&\n          !line.includes('電子報') &&\n          !line.includes('因為您') &&\n          !line.match(/^\\d/) &&           // 不以數字開頭\n          !line.includes('http')) {\n        \n        const exists = news.some(item => \n          item.title.substring(0, 20) === line.substring(0, 20)\n        );\n        \n        if (!exists) {\n          news.push({\n            title: line,\n            content: '',\n            index: news.length + 1\n          });\n        }\n      }\n    }\n  }\n  \n  // 最終整理：確保標題品質\n  news = news.filter(item => \n    item.title && \n    item.title.length > 5 && \n    item.title.length < 200 &&\n    !item.title.includes('undefined')\n  );\n  \n  // 重新編號\n  news.forEach((item, index) => {\n    item.index = index + 1;\n  });\n  \n  return {\n    date: new Date().toISOString().split('T')[0],\n    news: news.slice(0, 5),\n    total_count: Math.min(news.length, 5),\n    source_url: response.json.url || 'unknown',\n    debug_info: {\n      html_length: htmlData.length,\n      extraction_success: news.length > 0,\n      strategies_used: [\n        'td.text + p.subtitle',\n        'main news extraction', \n        'all subtitle tags',\n        'text pattern analysis'\n      ]\n    }\n  };\n  \n} catch (error) {\n  return {\n    error: error.message,\n    date: new Date().toISOString().split('T')[0],\n    news: [],\n    total_count: 0\n  };\n}"
+      },
+      "id": "extract-news",
+      "name": "提取新聞內容",
+      "type": "n8n-nodes-base.code",
+      "position": [
+        704,
+        304
+      ],
+      "typeVersion": 2
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "news_summary",
+              "name": "news_summary",
+              "type": "string",
+              "value": "今日新頭殼熱門新聞"
+            },
+            {
+              "id": "prompt",
+              "name": "prompt",
+              "type": "string",
+              "value": "=請為以下新聞標題生成吸引人的電子報標題：\n標題1：{{ $json.news[0] ? $json.news[0].title : '無' }}\n標題2：{{ $json.news[1] ? $json.news[1].title : '無' }}\n標題3：{{ $json.news[2] ? $json.news[2].title : '無' }}\n標題4：{{ $json.news[3] ? $json.news[3].title : '無' }}\n標題5：{{ $json.news[4] ? $json.news[4].title : '無' }}\n\n要求：\n- 將上述五則新聞合併成一個25-35字的吸引人電子報標題\n- 標題要吸睛但不造成誤會或斷章取義\n- 使用繁體中文\n- 不同新聞主題不要用逗號連接\n- 優先選擇民生、政治相關的新聞主題\n- 如果有具體數字可善加運用\n- 請只提供一個最佳標題建議"
+            }
+          ]
+        }
+      },
+      "id": "prepare-content",
+      "name": "準備AI內容",
+      "type": "n8n-nodes-base.set",
+      "position": [
+        928,
+        304
+      ],
+      "typeVersion": 3.4
+    },
+    {
+      "parameters": {
+        "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent",
+        "requestMethod": "POST",
+        "authentication": "none",
+        "sendBody": true,
+        "bodyContentType": "json",
+        "jsonBody": "{\n  \"contents\": [\n    {\n      \"parts\": [\n        {\n          \"text\": \"{{ $json.prompt }}\"\n        }\n      ]\n    }\n  ]\n}",
+        "sendHeaders": true,
+        "specifyHeaders": "keypair",
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "x-goog-api-key",
+              "value": "={{ $credentials.httpHeaderAuth.headerAuth }}"
+            }
+          ]
+        },
+        "options": {
+          "timeout": 60000,
+          "response": {
+            "response": {
+              "neverError": false,
+              "fullResponse": false,
+              "responseFormat": "autodetect",
+              "outputPropertyName": "data"
+            }
+          }
+        }
+      },
+      "id": "gemini-api",
+      "name": "呼叫 Gemini API",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        1152,
+        304
+      ],
+      "typeVersion": 4.2,
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "9TlCSEkFfpxQKUXt",
+          "name": "Gemini API Key"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// 處理Gemini回應和格式化最終結果\nconst inputs = $input.all();\n\nconst geminiResponse = inputs[0].json;\nconst newsData = inputs.find(input => input.json.news) ? inputs.find(input => input.json.news).json : {};\n\ntry {\n  const generatedText = geminiResponse.candidates[0].content.parts[0].text;\n\n  // 將標題分隔為陣列（假設標題以 * 和 行首標記）\n  const aiSuggestions = generatedText\n    .split('\\n*   ')\n    .filter(line => line.trim().startsWith('**') || line.trim().startsWith('*'))\n    .map(line => line.trim().replace(/^\\*+\\s*/, ''));\n\n  return {\n    success: true,\n    date: newsData.date || new Date().toISOString().split('T')[0],\n    source_url: newsData.source_url,\n    original_news: newsData.news || [],\n    ai_suggestions: aiSuggestions,\n    total_processed: newsData.total_count || 0,\n    timestamp: new Date().toISOString()\n  };\n\n} catch (error) {\n  return {\n    success: false,\n    error: error.message,\n    date: newsData.date || new Date().toISOString().split('T')[0],\n    source_url: newsData.source_url,\n    original_news: newsData.news || [],\n    ai_suggestions: '無法生成AI建議',\n    total_processed: newsData.total_count || 0,\n    timestamp: new Date().toISOString()\n  };\n}"
+      },
+      "id": "process-result",
+      "name": "處理結果",
+      "type": "n8n-nodes-base.code",
+      "position": [
+        1376,
+        304
+      ],
+      "typeVersion": 2
+    }
+  ],
+  "connections": {
+    "準備AI內容": {
+      "main": [
+        [
+          {
+            "node": "呼叫 Gemini API",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "每日觸發器": {
+      "main": [
+        [
+          {
+            "node": "生成日期 URL",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "呼叫 Gemini API": {
+      "main": [
+        [
+          {
+            "node": "處理結果",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "抓取新聞頁面": {
+      "main": [
+        [
+          {
+            "node": "提取新聞內容",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "提取新聞內容": {
+      "main": [
+        [
+          {
+            "node": "準備AI內容",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "生成日期 URL": {
+      "main": [
+        [
+          {
+            "node": "抓取新聞頁面",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "處理結果": {
+      "main": [
+        []
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "Asia/Taipei",
+    "saveDataErrorExecution": "all",
+    "saveDataSuccessExecution": "all",
+    "saveManualExecutions": true,
+    "saveExecutionProgress": true
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {},
+  "versionId": "33929429-ffda-4cf5-8751-4a9fb4adaa65",
+  "triggerCount": 1,
+  "shared": [
+    {
+      "createdAt": "2025-07-31T10:41:10.974Z",
+      "updatedAt": "2025-07-31T10:41:10.974Z",
+      "role": "workflow:owner",
+      "workflowId": "4oj3UicPA2ybAXtG",
+      "projectId": "cSCIDan8gJxZ0cWD",
+      "project": {
+        "createdAt": "2025-07-11T06:18:02.598Z",
+        "updatedAt": "2025-07-11T06:24:23.467Z",
+        "id": "cSCIDan8gJxZ0cWD",
+        "name": "玟誼 李 <elly.li@wanin.tw>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "projectRelations": [
+          {
+            "createdAt": "2025-07-11T06:18:02.613Z",
+            "updatedAt": "2025-07-11T06:18:02.613Z",
+            "userId": "568ba390-eb32-41ab-88b9-7769cb094f4f",
+            "projectId": "cSCIDan8gJxZ0cWD",
+            "user": {
+              "createdAt": "2025-07-11T06:18:02.591Z",
+              "updatedAt": "2025-11-03T03:20:08.000Z",
+              "id": "568ba390-eb32-41ab-88b9-7769cb094f4f",
+              "email": "elly.li@wanin.tw",
+              "firstName": "玟誼",
+              "lastName": "李",
+              "personalizationAnswers": {
+                "version": "v4",
+                "personalization_survey_submitted_at": "2025-07-11T06:25:17.807Z",
+                "personalization_survey_n8n_version": "1.102.0",
+                "companySize": "20-99",
+                "companyType": "digital-agency",
+                "role": "data-science",
+                "reportedSource": "friend"
+              },
+              "settings": {
+                "easyAIWorkflowOnboarded": true,
+                "firstSuccessfulWorkflowId": "WonDjzXioRrXqYad",
+                "userActivated": true,
+                "userActivatedAt": 1754366405376,
+                "npsSurvey": {
+                  "waitingForResponse": true,
+                  "ignoredCount": 1,
+                  "lastShownAt": 1754989668491
+                }
+              },
+              "disabled": false,
+              "mfaEnabled": false,
+              "lastActiveAt": "2025-11-02",
+              "isPending": false
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "tags": []
+}

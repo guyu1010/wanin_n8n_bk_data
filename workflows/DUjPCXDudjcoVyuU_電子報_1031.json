@@ -1,0 +1,458 @@
+{
+  "createdAt": "2025-10-31T03:29:11.418Z",
+  "updatedAt": "2025-11-04T04:18:10.000Z",
+  "id": "DUjPCXDudjcoVyuU",
+  "name": "電子報_1031",
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=你是一位專業的電子報編輯。請根據以下5則新聞，生成電子報標題：\n\n新聞內容：\n1. {{ $('Webhook1').item.json.body[0].title }} - {{ $('Webhook1').item.json.body[0].content }}\n2. {{ $('Webhook1').item.json.body[1].title }} - {{ $('Webhook1').item.json.body[1].content }}\n3. {{ $('Webhook1').item.json.body[2].title }} - {{ $('Webhook1').item.json.body[2].content }}\n4. {{ $('Webhook1').item.json.body[3].title }} - {{ $('Webhook1').item.json.body[3].content }}\n5. {{ $('Webhook1').item.json.body[4].title }} - {{ $('Webhook1').item.json.body[4].content }}\n\n摘要條件機制\n1. 不因為標點符號而斷章取義\n2. 吸睛但不標題殺人\n3. 將數字、人名、地名加入標題增加印象\n4. 善用問號夾帶懸疑氛圍\n5. 請一律使用input提供的內容，不能自己生成\n6. 同一個摘要的兩句話可以用空格隔開即可\n\n任務要求：\n1. 【必選】使用第一則新聞作為第一個摘要\n2. 從第二~五則新聞中，挑選最具新聞價值或最吸睛的一則作為第二個摘要\n3. 每個摘要精簡到10-15字\n4. 兩個摘要合計20-30字\n5. 輸出格式：●{第一則摘要} ●{第二則摘要}\n\n句型範例：\n●注意！普發現金一萬 464萬人這天直接入帳 ●中獎發票糊掉獎金飛掉？\n●200、2000元該繼續發行？超過6成搖頭了 ●輝達總部確定落角北市！\n●機車鑰匙忘了拔？網友大讚：謝謝好心人 ●以哈停火再破裂 新一輪空襲釀20死\n\n**請以下面JSON格式直接輸出一個title：**\n```json\n{\n  \"title\": \"你的電子報標題\"\n}\n",
+        "hasOutputParser": true,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        -1120,
+        -144
+      ],
+      "id": "f08e5f05-1579-40e0-bba3-bfa476e3001b",
+      "name": "產生電子報標題",
+      "executeOnce": false,
+      "retryOnFail": true,
+      "maxTries": 2
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        -1120,
+        48
+      ],
+      "id": "eb3a1854-2ce3-45f1-b982-fb3cb9bf53e9",
+      "name": "Gemini Chat Model (產生)",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "TcbdbxzebK9gSKPI",
+          "name": "Google Gemini(PaLM) Api account 6"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "schemaType": "manual",
+        "inputSchema": "{\n\t\"title\": \"電子報標題\"\n}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        -976,
+        48
+      ],
+      "id": "83bc03c1-dc8f-4655-ba86-64c42332ec92",
+      "name": "Output Parser (產生)"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=你是一個專業的標題品質審查專家。請仔細評估AI生成的整合標題品質。\n\n## 輸入資料\n- **生成的整合標題**:{{ $('產生電子報標題').item.json.output.title }}\n- **參考句型範例(不參考內容)**: \n  1. \"●輕颱楊柳恐直撲北台灣？ ●鄧愷威奪大聯盟首勝感言曝\"\n  2. \"●邱議瑩駁小賴配？ ●賴瑞隆大林蒲遷村2027啟動！\"\n  3. \"●楊柳颱風恐成「強颱」？ ●川普、普丁密會，澤倫斯基會被犧牲嗎？\"\n  4. \"●曾麗燕遭判12年該還司法公道？ ●川普會普丁談停戰，俄烏真的會停火嗎？\"\n\n## 審查任務\n請進行以下三項比較分析：\n\n### 1. 與參考句型的相似度分析(不參考內容)\n對照以下新聞標題格式範例：\n- \"●輕颱楊柳恐直撲北台灣？ ●鄧愷威奪大聯盟首勝感言曝\"\n- \"●邱議瑩駁小賴配？●賴瑞隆大林蒲遷村2027啟動！\"\n- \"●曾麗燕遭判12年該還司法公道？●川普會普丁談停戰，俄烏真的會停火嗎？\"\n\n評分項目：\n- 結構相似度：與參考句型的相似度(可能包含問號、驚嘆號、空格) (0-20分)\n- 表達方式符合度：語氣和用詞是否符合新聞標題風格 (0-15分)\n- 專業度匹配：是否具備新聞專業性和可信度 (0-20分)\n\n### 2. 整體品質評估\n- 語言流暢度 (0-10分)\n- 吸引力：是否讓讀者看到標題會產生好奇心、聳動性或是包含地名、人名、數字...等(0-20分)\n\n### 3. 內容品質評估\n- 整合的標題有符合內{{ $('彙整資料').item.json.all_contents_full }}任兩則新聞，如果不是裡面的新聞請直接給0分 (0-15分)\n\n## 評分標準\n**總分計算**: 各項分數相加，滿分100分\n**通過門檻**: 結構相似度>=10分，吸引力分數>=10分，其餘總分>=50分\n\n## 輸出格式\n請按以下JSON格式回應：\n\n```json\n{\n  \"scores\": {\n    \"structure_similarity\": XX,      // 結構相似度：是否採用「問句、空格」的格式 (0-20分)\n    \"expression_match\": XX,          // 表達方式符合度：語氣和用詞是否符合新聞標題風格 (0-20分)\n    \"professionalism\": XX,           // 專業度匹配：是否具備新聞專業性和可信度 (0-15分)\n    \"fluency\": XX,                   // 語言流暢度 (0-10分)\n    \"attractiveness\": XX,            // 吸引力：是否讓讀者看到標題會產生好奇心 (0-20分)\n    \"content_quality\": XX            // 內容品質評估：整合的標題有符合任兩個新聞，但不考慮放在一起是否有邏輯關聯 (0-15分)\n  },\n  \"total_score\": XX,                 // 總分 (滿分100分)\n  \"structure_score\": XX,             // 結構相似度分數 (用於判斷是否>=10分)\n  \"attractiveness_score\": XX,        // 吸引力分數 (用於判斷是否>=10分)\n  \"other_scores_total\": XX,          // 其他分數總和 (用於判斷是否>50分)\n  \"passed\": true/false,              // 通過標準：結構相似度>=10分 且 吸引力分數>= 10分 且內容品質評估>= 10 且其他(表達方式符合度 + 專業度匹配 + 語言流暢度)>=35分\n  \"pass_criteria\": {\n    \"structure_passed\": true/false,  // 結構分數是否>=10分\n    \"attractiveness\": true/false, // 吸引力分數是否>=10分\n    \"content_quality\": true/false, // 其內容品質評估是否>=10分\n    \"other_scores_passed\": true/false // 其他分數總和是否>35分\n  },\n  \"confidence_level\": \"high/medium/low\" // 適合當本次電子報標題的信心程度\n\n} \n\n\n## 通過邏輯判斷\n1. 檢查 structure_similarity 是否 >= 10分\n2. 檢查 (expression_match + professionalism + fluency ) 是否 >= 35分\n3. 檢查 content_quality 是否 >= 10分\n4. 檢查 attractiveness 是否 >= 10分\n5. 檢查'{{ $('產生電子報標題').item.json.output.title }}'字數23~30個繁體中文\n6. **重要**：如果所有pass_criteria都是true，passed必須設為true！\n\n請確保邏輯正確！",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "請一律使用以下格式回覆\n{\n  \"scores\": {\n    \"structure_similarity\": 10,\n    \"expression_match\": 12,\n    \"professionalism\": 10,\n    \"fluency\": 10,\n    \"attractiveness\": 10,\n    \"content_quality\": 10\n  },\n  \"total_score\": 87,\n  \"structure_score\": 85,\n  \"other_scores_total\": 42,\n  \"passed\": true,\n  \"pass_criteria\": {\n    \"structure_passed\": true,\n    \"attractiveness\": true,\n    \"content_quality\": true,\n    \"other_scores_passed\": true,\n    \"overall_passed\": true\n  },\n  \"confidence_level\": \"high\"\n}"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        -784,
+        -144
+      ],
+      "id": "590a47df-e3c3-4ab2-9ab3-5a738f36e97a",
+      "name": "驗證標題品質",
+      "retryOnFail": true,
+      "maxTries": 2
+    },
+    {
+      "parameters": {
+        "options": {
+          "maxOutputTokens": 5000
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        -784,
+        48
+      ],
+      "id": "c355b943-b48e-4393-983d-c4388c80efb0",
+      "name": "Gemini Chat Model (驗證)",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "TcbdbxzebK9gSKPI",
+          "name": "Google Gemini(PaLM) Api account 6"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "schemaType": "manual",
+        "inputSchema": "{\n  \"scores\": {\n    \"structure_similarity\": 10,\n    \"expression_match\": 12,\n    \"professionalism\": 10,\n    \"fluency\": 10,\n    \"attractiveness\": 10,\n    \"content_quality\": 10\n  },\n  \"total_score\": 87,\n  \"structure_score\": 85,\n  \"other_scores_total\": 42,\n  \"passed\": true,\n  \"pass_criteria\": {\n    \"structure_passed\": true,\n    \"attractiveness\": true,\n    \"content_quality\": true,\n    \"other_scores_passed\": true\n  },\n  \"confidence_level\": \"high\"\n}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        -624,
+        48
+      ],
+      "id": "908e4d1a-f2bf-4c0b-a24c-13afff4734c3",
+      "name": "Output Parser (驗證)"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={\n  \"success\": true,\n  \"text\":\"{{ $('產生電子報標題').item.json.output.title }}\"\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        288,
+        -160
+      ],
+      "id": "09df2063-261e-4501-be4e-0686d0b9c0ca",
+      "name": "回應成功"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={\n  \"success\": false,\n  \"message\": \"已達到最大重試次數(3次)\",\n  \"text\":\"●{{ $('Webhook1').item.json.body[0].title }}\"\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        304,
+        32
+      ],
+      "id": "c10b7612-405d-42cd-8453-0a1f2b9d8ef6",
+      "name": "回應失敗"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "newsletter-title-generator",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -1584,
+        -144
+      ],
+      "id": "a2b7de96-779a-458f-92b3-fc5b54a70724",
+      "name": "Webhook1",
+      "webhookId": "newsletter-title-generator"
+    },
+    {
+      "parameters": {
+        "jsCode": "// 修正後的 n8n Code 節點 - 處理 Webhook 新聞資料（簡化版）\n// 只輸出 all_contents_full\n\n// 從 webhook 輸入中提取新聞資料\nconst inputData = $input.all()[0].json;\n\n// 根據實際資料結構，新聞陣列在 body 屬性中\nconst newsArray = inputData.body;\n\n// 檢查是否有新聞資料\nif (!newsArray || !Array.isArray(newsArray) || newsArray.length === 0) {\n  return [{\n    json: {\n      all_contents_full: \"未找到新聞資料，請確認 webhook 資料格式正確\"\n    }\n  }];\n}\n\n// 彙整新聞內容 - 格式：編號. 標題\\n內容\\n\\n\nlet aggregatedContent = '';\nfor (let i = 0; i < newsArray.length; i++) {\n  const news = newsArray[i];\n  const title = news.title || '無標題';\n  const content = news.content || '無內容';\n  \n  // 建立格式化內容：編號. 標題\\n內容\n  aggregatedContent += `${i + 1}. ${title}\\n${content}`;\n  \n  // 如果不是最後一則新聞，添加兩個換行作為分隔\n  if (i < newsArray.length - 1) {\n    aggregatedContent += '\\n\\n';\n  }\n}\n\n// 輸出結果\nreturn [{\n  json: {\n    all_contents_full: aggregatedContent\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1360,
+        -144
+      ],
+      "id": "01672ad9-1042-4625-9db2-22f93b85d0bc",
+      "name": "彙整資料"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "0db9127d-44df-4a1f-8440-7c4e3040861e",
+              "leftValue": "={{ $json.output.passed }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -256,
+        -144
+      ],
+      "id": "62ec83d3-6e40-48c8-9aeb-1b73ec2e5aa3",
+      "name": "驗證標題是否通過"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "check-limit",
+              "leftValue": "={{ $json.retryCount }}",
+              "rightValue": 2,
+              "operator": {
+                "type": "number",
+                "operation": "gt"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -64,
+        48
+      ],
+      "id": "2d0975b9-8eb2-41eb-9b67-581f21c94be4",
+      "name": "檢查重試次數"
+    },
+    {
+      "parameters": {
+        "jsCode": "let retryCount = 0;\n\ntry {\n  retryCount = $('初始化或計數+1').first().json.retryCount ?? 0; //若有數值直接使用\n} \ncatch (e) {\n  retryCount = 0; //若錯誤代表未初始化，直接設為0\n}\n\nreturn [{\n  json: {\n    ...($json), //傳遞原本資訊\n    retryCount: retryCount + 1 //計數+1\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -448,
+        -144
+      ],
+      "id": "08873693-789f-49de-a316-60102a2447da",
+      "name": "初始化或計數+1"
+    }
+  ],
+  "connections": {
+    "產生電子報標題": {
+      "main": [
+        [
+          {
+            "node": "驗證標題品質",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gemini Chat Model (產生)": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "產生電子報標題",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Output Parser (產生)": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "產生電子報標題",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "驗證標題品質": {
+      "main": [
+        [
+          {
+            "node": "初始化或計數+1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gemini Chat Model (驗證)": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "驗證標題品質",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Output Parser (驗證)": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "驗證標題品質",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook1": {
+      "main": [
+        [
+          {
+            "node": "彙整資料",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "彙整資料": {
+      "main": [
+        [
+          {
+            "node": "產生電子報標題",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "驗證標題是否通過": {
+      "main": [
+        [
+          {
+            "node": "回應成功",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "檢查重試次數",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "檢查重試次數": {
+      "main": [
+        [
+          {
+            "node": "回應失敗",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "產生電子報標題",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "初始化或計數+1": {
+      "main": [
+        [
+          {
+            "node": "驗證標題是否通過",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {},
+  "versionId": "efbd9dde-2791-4906-9bf7-d0a0623de38e",
+  "triggerCount": 1,
+  "shared": [
+    {
+      "createdAt": "2025-10-31T03:29:11.430Z",
+      "updatedAt": "2025-10-31T03:29:11.430Z",
+      "role": "workflow:owner",
+      "workflowId": "DUjPCXDudjcoVyuU",
+      "projectId": "iZydbwsMPJYYjvth",
+      "project": {
+        "createdAt": "2025-09-16T02:39:54.633Z",
+        "updatedAt": "2025-09-16T02:43:19.908Z",
+        "id": "iZydbwsMPJYYjvth",
+        "name": "common web <web@wanin.tw>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "projectRelations": [
+          {
+            "createdAt": "2025-09-16T02:39:54.639Z",
+            "updatedAt": "2025-09-16T02:39:54.639Z",
+            "userId": "55f25be3-69cb-4a61-849e-09b3e6328043",
+            "projectId": "iZydbwsMPJYYjvth",
+            "user": {
+              "createdAt": "2025-09-16T02:39:54.628Z",
+              "updatedAt": "2025-11-05T08:31:58.000Z",
+              "id": "55f25be3-69cb-4a61-849e-09b3e6328043",
+              "email": "web@wanin.tw",
+              "firstName": "common",
+              "lastName": "web",
+              "personalizationAnswers": {
+                "version": "v4",
+                "personalization_survey_submitted_at": "2025-09-16T02:43:24.324Z",
+                "personalization_survey_n8n_version": "1.108.1"
+              },
+              "settings": {
+                "easyAIWorkflowOnboarded": true,
+                "firstSuccessfulWorkflowId": "XN79dmNc8yPVm6XU",
+                "userActivated": true,
+                "userActivatedAt": 1758096117396,
+                "npsSurvey": {
+                  "responded": true,
+                  "lastShownAt": 1761544952978
+                }
+              },
+              "disabled": false,
+              "mfaEnabled": false,
+              "lastActiveAt": "2025-11-05",
+              "isPending": false
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "tags": []
+}

@@ -1,0 +1,141 @@
+{
+  "createdAt": "2025-11-04T02:31:38.811Z",
+  "updatedAt": "2025-11-04T10:44:11.000Z",
+  "id": "T8ezysAC0d1P3NiQ",
+  "name": "My workflow 13",
+  "active": false,
+  "isArchived": true,
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -240,
+        0
+      ],
+      "id": "cedbfed3-abc0-4701-917a-feda13a5dba6",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "dataId": "1",
+        "description": "這張照片生動捕捉了美國前總統唐納·川普（左）與中國國家主席習近平（右）在一次外交場合中親切握手的歷史性瞬間。兩位國家領導人皆身著剪裁合身的深色西裝，佩戴著莊重的領帶，面對鏡頭露出微笑。川普的笑容顯得較為開朗和外放，而習近平的微笑則較為內斂沉穩。他們的身後分別矗立著象徵各自國家的美國國旗與中華人民共和國國旗，清晰地標示出這是一場重要的雙邊會談。背景的綠色植物為正式的會面增添了一絲生氣。整個畫面呈現出一種正式、專業且帶有友好氛圍的外交情境，通常會出現在報導國際高層峰會、雙邊關係發展、貿易談判或國家元首級交流的新聞中。",
+        "tags": "唐納·川普, 習近平, 美國, 中國, 握手, 外交, 政治, 國際關係, 元首會晤, 雙邊會談, 國旗, 商務西裝, 峰會",
+        "link": "https://edjhwqmelybecpiepfpw.supabase.co/storage/v1/object/sign/news-images/59616dd2e2ce0.jpg?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV9jMzA1ZGMxNi04OWM0LTQyOTYtYTJhZS1kNDA5YjY0MjRkZGIiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJuZXdzLWltYWdlcy81OTYxNmRkMmUyY2UwLmpwZyIsImlhdCI6MTc2MTY0Mzc1OCwiZXhwIjoxNzY0MjM1NzU4fQ.bF9IwInfp60HpqvQpykrYBsx3bGSpG1FyPtA33YMJyo",
+        "qdrantApiKey": "wanin24438615",
+        "googleApiKey": "AIzaSyAkOGWgEtTP2bGaRKBFyrXbPLieQtFlVDs"
+      },
+      "type": "CUSTOM.qdrantUpsert",
+      "typeVersion": 1,
+      "position": [
+        96,
+        0
+      ],
+      "id": "38041f1c-a091-483b-8012-b3fd9b9ac7d0",
+      "name": "Wanin RAG Upsert"
+    },
+    {
+      "parameters": {
+        "searchQuery": "川普",
+        "scoreThreshold": 0.1,
+        "qdrantApiKey": "wanin24438615",
+        "googleApiKey": "AIzaSyAkOGWgEtTP2bGaRKBFyrXbPLieQtFlVDs"
+      },
+      "type": "CUSTOM.qdrantSearch",
+      "typeVersion": 1,
+      "position": [
+        304,
+        0
+      ],
+      "id": "3a461c32-e478-4b4e-a167-362d1123c924",
+      "name": "Wanin RAG Search"
+    }
+  ],
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Wanin RAG Upsert",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wanin RAG Upsert": {
+      "main": [
+        [
+          {
+            "node": "Wanin RAG Search",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": null,
+  "pinData": {},
+  "versionId": "e6993380-59fc-40e3-a214-5566ecdeb53a",
+  "triggerCount": 0,
+  "shared": [
+    {
+      "createdAt": "2025-11-04T02:31:38.819Z",
+      "updatedAt": "2025-11-04T02:31:38.819Z",
+      "role": "workflow:owner",
+      "workflowId": "T8ezysAC0d1P3NiQ",
+      "projectId": "iZydbwsMPJYYjvth",
+      "project": {
+        "createdAt": "2025-09-16T02:39:54.633Z",
+        "updatedAt": "2025-09-16T02:43:19.908Z",
+        "id": "iZydbwsMPJYYjvth",
+        "name": "common web <web@wanin.tw>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "projectRelations": [
+          {
+            "createdAt": "2025-09-16T02:39:54.639Z",
+            "updatedAt": "2025-09-16T02:39:54.639Z",
+            "userId": "55f25be3-69cb-4a61-849e-09b3e6328043",
+            "projectId": "iZydbwsMPJYYjvth",
+            "user": {
+              "createdAt": "2025-09-16T02:39:54.628Z",
+              "updatedAt": "2025-11-05T08:31:58.000Z",
+              "id": "55f25be3-69cb-4a61-849e-09b3e6328043",
+              "email": "web@wanin.tw",
+              "firstName": "common",
+              "lastName": "web",
+              "personalizationAnswers": {
+                "version": "v4",
+                "personalization_survey_submitted_at": "2025-09-16T02:43:24.324Z",
+                "personalization_survey_n8n_version": "1.108.1"
+              },
+              "settings": {
+                "easyAIWorkflowOnboarded": true,
+                "firstSuccessfulWorkflowId": "XN79dmNc8yPVm6XU",
+                "userActivated": true,
+                "userActivatedAt": 1758096117396,
+                "npsSurvey": {
+                  "responded": true,
+                  "lastShownAt": 1761544952978
+                }
+              },
+              "disabled": false,
+              "mfaEnabled": false,
+              "lastActiveAt": "2025-11-05",
+              "isPending": false
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "tags": []
+}

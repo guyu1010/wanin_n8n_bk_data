@@ -1,0 +1,95 @@
+{
+  "createdAt": "2025-07-21T02:21:39.545Z",
+  "updatedAt": "2025-08-22T00:46:35.000Z",
+  "id": "oh82tDP2RdIeLE1g",
+  "name": "註冊小幫手",
+  "active": false,
+  "isArchived": true,
+  "nodes": [
+    {
+      "parameters": {
+        "public": true,
+        "options": {}
+      },
+      "id": "4e8a7b2c-3d9f-4e1a-8b5c-6f0d9e8a7b2c",
+      "name": "Chat Trigger",
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1,
+      "position": [
+        304,
+        304
+      ],
+      "webhookId": "25c59775-92a3-4d49-8a30-3c88565a0d0c"
+    }
+  ],
+  "connections": {
+    "Chat Trigger": {
+      "main": [
+        []
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "saveDataErrorExecution": "all",
+    "saveDataSuccessExecution": "all",
+    "saveManualExecutions": true,
+    "saveExecutionProgress": true,
+    "timezone": "Asia/Taipei"
+  },
+  "staticData": null,
+  "meta": null,
+  "pinData": {},
+  "versionId": "1367dd06-6387-4a95-a260-0b5ffee34016",
+  "triggerCount": 1,
+  "shared": [
+    {
+      "createdAt": "2025-07-21T02:21:39.551Z",
+      "updatedAt": "2025-07-21T02:21:39.551Z",
+      "role": "workflow:owner",
+      "workflowId": "oh82tDP2RdIeLE1g",
+      "projectId": "7zEhqNTzyMiFsXF6",
+      "project": {
+        "createdAt": "2025-07-09T03:38:25.411Z",
+        "updatedAt": "2025-07-09T03:39:14.390Z",
+        "id": "7zEhqNTzyMiFsXF6",
+        "name": "jun yeh <jungu.ye@wanin.tw>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "projectRelations": [
+          {
+            "createdAt": "2025-07-09T03:38:25.416Z",
+            "updatedAt": "2025-07-09T03:38:25.416Z",
+            "userId": "d1b2f434-11f0-4091-b631-2379b0470044",
+            "projectId": "7zEhqNTzyMiFsXF6",
+            "user": {
+              "createdAt": "2025-07-09T03:38:25.408Z",
+              "updatedAt": "2025-10-31T09:17:04.851Z",
+              "id": "d1b2f434-11f0-4091-b631-2379b0470044",
+              "email": "jungu.ye@wanin.tw",
+              "firstName": "jun",
+              "lastName": "yeh",
+              "personalizationAnswers": {
+                "version": "v4",
+                "personalization_survey_submitted_at": "2025-07-09T03:39:17.136Z",
+                "personalization_survey_n8n_version": "1.102.0"
+              },
+              "settings": {
+                "easyAIWorkflowOnboarded": true,
+                "firstSuccessfulWorkflowId": "YAUQSrZhZ8qeZ9DB",
+                "userActivated": true,
+                "userActivatedAt": 1761902117305
+              },
+              "disabled": false,
+              "mfaEnabled": false,
+              "lastActiveAt": "2025-10-31",
+              "isPending": false
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "tags": []
+}

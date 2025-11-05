@@ -1,0 +1,4531 @@
+{
+  "createdAt": "2025-08-06T03:14:54.250Z",
+  "updatedAt": "2025-09-22T04:34:38.000Z",
+  "id": "qxXV0YFTbqnC75xr",
+  "name": "天氣特報提醒文字生成",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "url": "=https://alerts.ncdr.nat.gov.tw/api/dump/datastore?apikey=+EjEarnbPKmnaqNxJnaZPIBhBV/WiYrzUzHLhLrBkdSU+G0+5BWzmCJwVigs7jOf&format=json&capid={{ $json.result[0].capid }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        80,
+        -336
+      ],
+      "id": "e9906b58-175e-4534-a542-f66183af5ee5",
+      "name": "民生示警-取得特報細節"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=AIzaSyD5TWSCIQBvkTevLJm51lU3eTsmav7msII",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"contents\": [\n    {\n      \"parts\": [\n        {\n          \"text\": \"你是台灣氣象新聞小編，請根據以下警示資訊，輸出1句與此警示相關的有趣冷知識，15字內，符合AI搜尋及SEO，語氣如圖卡宣導語，請不要使用任何 emoji 或特殊符號，請不要帶到任何縣市。\\n\\n警示類型：{{ $json.info[0].event }}\\n警示描述：{{ $json.info[0].description }}\\n影響區域：{{ $json.info[0].parameter }}\"\n        }\n      ]\n    }\n  ]\n}\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        384,
+        -720
+      ],
+      "id": "918fb3f8-8ff7-485a-b1bc-4920a3302361",
+      "name": "gemini產冷知識"
+    },
+    {
+      "parameters": {
+        "jsCode": "const alertType = $('民生示警-取得特報細節').item.json.info[0].event;\nconst coldFact = $json.candidates[0].content.parts[0].text;\n\nreturn [{\n  filePath: 'D:\\AI test\\\\weather_coldfacts.csv', // 這裡改成你的路徑\n  content: `${alertType},${coldFact}\\n`\n}];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1008,
+        -720
+      ],
+      "id": "1d7d747f-33f6-4edf-91ff-ba9984dcc391",
+      "name": "整理&輸出文字"
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {}
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -2944,
+        4208
+      ],
+      "id": "c6de5814-4aee-4298-887e-686df23534f4",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "chatId": "7802109813",
+        "text": "={{ $json.content }}\n",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1520,
+        -400
+      ],
+      "id": "d21e1380-a91d-4f80-93ef-15f8d5a54877",
+      "name": "Send a text message",
+      "webhookId": "b33113d9-28bc-4a47-bac6-21ce33b0d71d",
+      "credentials": {
+        "telegramApi": {
+          "id": "ADiZMdkyDmUbDLRw",
+          "name": "Telegram account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "https://alerts.ncdr.nat.gov.tw/api/datastore?apikey=+EjEarnbPKmnaqNxJnaZPIBhBV/WiYrzUzHLhLrBkdSU+G0+5BWzmCJwVigs7jOf&format=json&capcode=htW",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -336,
+        -336
+      ],
+      "id": "3ffb1265-4c27-4b68-a930-73a6a22e45e1",
+      "name": "民生示警-取得目前特報(高溫)"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=AIzaSyD5TWSCIQBvkTevLJm51lU3eTsmav7msII",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ $json }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        816,
+        -720
+      ],
+      "id": "86df8c87-3c17-4a40-bb12-c2ec32f49fb9",
+      "name": "gemini產圖prompt"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=AIzaSyD5TWSCIQBvkTevLJm51lU3eTsmav7msII",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ $json }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1200,
+        -176
+      ],
+      "id": "6ba3daec-1d7b-451c-b19f-df5ab5e573d9",
+      "name": "gemini-SEO評分"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=AIzaSyD5TWSCIQBvkTevLJm51lU3eTsmav7msII",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"contents\": [\n    {\n      \"parts\": [\n        {\n          \"text\": \"你是台灣氣象新聞小編，請根據以下警示資訊，不要廢話，只需提供1個「建議穿著」，並依下述風格產出。\\n產出風格：AI Agent 可解析、Schema Friendly 風格文案，只需要提供包含全身穿搭(配件、上衣、下著)。請注意：\\n1.這Part需要提升我站內SEO 跟AAO-AI Agent Optimization\\n2.不能超過15字，不能使用emoji\\n3.只需要提供包含全身穿搭(配件、上衣、下著)。\\n3.產品需要台灣人常用的。\\n\\n警示類型：{{ $json.info[0].event }}\\n警示描述：{{ $json.info[0].description }}\\n影響區域：{{ $json.info[0].parameter }}\"\n        }\n      ]\n    }\n  ]\n}\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        368,
+        -320
+      ],
+      "id": "62fd23c9-7b8a-4538-9b5e-55346d2eed65",
+      "name": "gemini產建議穿著"
+    },
+    {
+      "parameters": {
+        "jsCode": "return [\n  {\n    json: {\n      contents: [\n        {\n          parts: [\n            {\n              text: \n`你是台灣氣象新聞的內容企劃，請根據以下資訊輸出 JSON 格式：\n{\n  知識分享文字: ${$json.candidates[0].content.parts[0].text},\n   請將上述情境套用下方模板，最後須提供我填答完成的模板，並且背景需要有台灣元素\n    此為${$('民生示警-取得特報細節').item.json.info[0].event}\n    須強調${$('民生示警-取得特報細節').first().json.info[0].parameter[1].value}\n    模板：\n    畫面主題為【特報類型名稱】下的情境：「【畫面情境描述】」，以【推薦畫風】繪製。（圖中不得出現文字）      \n\n請著重以下產圖模板參數：\n- 推薦畫風：\n- 格數描述：\n- 材質表現：\n- 細節呈現：\n- 鏡頭視角：\n- 表現手法：\n- 場景地點：\n- 主體人物設定：\n- 必備元素：\n- 尺寸固定為 1:1\n}\n`\n            }\n          ]\n        }\n      ]\n    }\n  }\n];\n\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        592,
+        -720
+      ],
+      "id": "52babc66-dfb1-4151-a310-a7ef5e9384b9",
+      "name": "產圖prompt先轉文字"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=AIzaSyD5TWSCIQBvkTevLJm51lU3eTsmav7msII",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"contents\": [\n    {\n      \"parts\": [\n        {\n          \"text\": \"你是嚴肅的台灣氣象新聞小編，請根據以下警示資訊，不要廢話，提供1個「健康風險」，並依下述風格產出。\\n產出風格：AI Agent 可解析、Schema Friendly 風格文案，只需要提供包含全身穿搭(配件、上衣、下著)。請注意：\\n1.這Part需要提升我站內SEO 跟AAO-AI Agent Optimization\\n2.不能超過15字，不能使用emoji\\n3.請審核語句完整性：生成後要確認句子是否包含主詞、動詞、賓語，語意是否完整通順。\\n4.用口語或日常用語重寫：模擬自然說話習慣，避免過於書面或機械。\\n5.請重點提示健康風險及預防行為，不能提到穿著。\\n\\n警示類型：{{ $json.info[0].event }}\\n警示描述：{{ $json.info[0].description }}\\n影響區域：{{ $json.info[0].parameter }}\"\n        }\n      ]\n    }\n  ]\n}\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        384,
+        -16
+      ],
+      "id": "563f4c78-0b52-4c35-87f0-f8a40668f299",
+      "name": "gemini產健康風險"
+    },
+    {
+      "parameters": {
+        "jsCode": "// 安全取值函式，避免 AI 節點不是純文字時出錯\nfunction safeGetText(nodeName) {\n  const nodeData = $node[nodeName].json;\n\n  // Gemini / OpenAI 格式\n  if (nodeData?.candidates?.[0]?.content?.parts?.[0]?.text) {\n    return nodeData.candidates[0].content.parts[0].text.trim();\n  }\n\n  // 如果是直接回傳 text\n  if (typeof nodeData?.text === 'string') {\n    return nodeData.text.trim();\n  }\n\n  // 如果是直接回傳純字串\n  if (typeof nodeData === 'string') {\n    return nodeData.trim();\n  }\n\n  return '';\n}\n\n// 從三個 AI 節點抓資料\nconst coldFact = safeGetText(\"gemini產冷知識\");\nconst clothingAdvice = safeGetText(\"gemini產建議穿著\");\nconst healthRisk = safeGetText(\"gemini產健康風險\");\n\n// 組成最終 Prompt\nconst promptText = `\n請針對下述資訊，提供 SEO 分數、原因、分析 AI 搜尋成效、模擬分析吸引目標受眾，：\n{\n  天氣提醒: ${coldFact},\n  建議穿著: ${clothingAdvice},\n  健康風險: ${healthRisk},\n  此文字會放在天氣特報圖文中，圖片將於社群露出，並會使用 HTML 手法以<p>方式放在新聞站內\n}\n`;\n\n// 輸出給下一個節點（例如 AI 分析）\nreturn [\n  {\n    json: {\n      contents: [\n        {\n          parts: [\n            {\n              text: promptText\n            }\n          ]\n        }\n      ]\n    }\n  }\n];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1008,
+        -176
+      ],
+      "id": "cbd8b893-5fde-433d-b43f-de70c912b60a",
+      "name": "SEO評分前merge"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        624,
+        -336
+      ],
+      "id": "a474d7c8-c094-4c07-b6b6-fb5a1857e858",
+      "name": "Merge"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        832,
+        -336
+      ],
+      "id": "a47b962f-9a76-4b0b-99ee-2a3e1a4b21aa",
+      "name": "Merge1"
+    },
+    {
+      "parameters": {
+        "jsCode": "const alertType = $('gemini-SEO評分').first().json.candidates[0].content.parts[0].text;\nconst coldFact = $json.candidates[0].content.parts[0].text;\n\nreturn [{\n  filePath: 'D:\\AI test\\\\weather_coldfacts.csv', // 這裡改成你的路徑\n  content: `${alertType},${coldFact}\\n`\n}];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1360,
+        -240
+      ],
+      "id": "4bfc7fc2-9135-4172-b64a-3431f973ad38",
+      "name": "整理&輸出文字1"
+    },
+    {
+      "parameters": {
+        "url": "https://alerts.ncdr.nat.gov.tw/JSONAtomFeed.ashx?AlertType=2107",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -880,
+        1360
+      ],
+      "id": "d626b15d-306c-413b-b82a-760d4aae91d2",
+      "name": "民生示警-取得目前特報(高溫)1"
+    },
+    {
+      "parameters": {
+        "jsCode": "const data = $input.all()[0].json;\n\nif (!data.entry || !Array.isArray(data.entry)) {\n  throw new Error(\"找不到 entry 陣列\");\n}\n\nconst cwaItems = data.entry\n  .filter(item => item.id && item.id.toUpperCase().startsWith(\"CWA\"))\n  .map((item, index) => {\n    const text = item.summary && item.summary[\"#text\"] ? item.summary[\"#text\"] : \"\";\n    return {\n      json: {\n        index: index + 1,        // 順序編號\n        summary: text,\n        bulletPoint: `${index + 1}. ${text}`  // 列點格式文字\n      }\n    };\n  });\n\nreturn cwaItems;\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        208,
+        992
+      ],
+      "id": "a2beeedb-4911-4e96-8ec7-d25a6abf2e6a",
+      "name": "Code"
+    },
+    {
+      "parameters": {
+        "options": {
+          "reset": false
+        }
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        608,
+        1216
+      ],
+      "id": "4dfc7c72-c865-4fec-9672-38533d060938",
+      "name": "Loop Over Items"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "name": "Replace Me",
+      "typeVersion": 1,
+      "position": [
+        3088,
+        2304
+      ],
+      "id": "8eeebabd-54d0-43f2-a50f-ff5a70232128"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=AIzaSyBN10RVLBCIPKYNb0KW12G9hT1iZ9VlL6I",
+        "sendBody": true,
+        "contentType": "raw",
+        "rawContentType": "application/json",
+        "body": "={{ $json.body }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1408,
+        1152
+      ],
+      "id": "e89ec70d-b066-491b-a8d2-f70635b809e5",
+      "name": "gemini產冷知識1"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=AIzaSyBN10RVLBCIPKYNb0KW12G9hT1iZ9VlL6I",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ $json }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2000,
+        1040
+      ],
+      "id": "af7aecf7-12a7-41d5-8ae7-2a5af95d5690",
+      "name": "gemini產圖prompt1"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=AIzaSyBN10RVLBCIPKYNb0KW12G9hT1iZ9VlL6I",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ $json.body }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1424,
+        1600
+      ],
+      "id": "886848a3-53e2-4812-b29a-b039df0c8e2b",
+      "name": "gemini產建議穿著1"
+    },
+    {
+      "parameters": {
+        "jsCode": "return [\n  {\n    json: {\n      contents: [\n        {\n          parts: [\n            {\n              text: \n`你是台灣氣象新聞的內容企劃，請根據以下資訊輸出 JSON 格式：\n{\n  知識分享文字: ${$input.first().json.candidates[0].content.parts[0].text},\n   請將上述情境套用下方模板，最後須提供我填答完成的模板，並且背景需要有台灣元素\n    此為台灣高溫特報\n    須強調${$input.first().json.candidates[0].content.parts[0].text}\n    模板：\n   畫面主題為【高溫特報】下的情境：「請將知識分享文字的情境，以日系插畫風格描繪，並以1隻「可愛的小動物」作為畫面絕對的主體。小動物需要展現出豐富的情緒，並與天氣情境以及台灣在地元素產生生動的互動。」背景乾淨，以【推薦畫風】繪製。（圖中不得出現文字）      \n\n請著重以下產圖模板參數：\n- 推薦畫風：日系插畫風，線條清晰，色彩柔和飽滿，帶有溫暖手繪感，適合後續去背。\n- 格數描述：單格\n- 材質表現：\n- 細節呈現：\n- 鏡頭視角：\n- 表現手法：\n- 場景地點：\n- 主體人物設定：\n- 必備元素：\n- 尺寸固定為 1:1\n}\n`\n            }\n          ]\n        }\n      ]\n    }\n  }\n];\n\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1776,
+        1040
+      ],
+      "id": "f6eca2ee-2fab-48c8-9c49-b3924919c88e",
+      "name": "產圖prompt先轉文字1"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=AIzaSyBN10RVLBCIPKYNb0KW12G9hT1iZ9VlL6I",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ $json.body }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1536,
+        1920
+      ],
+      "id": "1fa9d31e-3e39-414b-b761-037927a8a9c1",
+      "name": "gemini產健康風險1"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        1920,
+        1632
+      ],
+      "id": "e96e8b57-0d03-4128-bfc6-7b2ed739ed68",
+      "name": "Merge2"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        2224,
+        1840
+      ],
+      "id": "1b086c2d-419d-49eb-8e60-c44f98f2b715",
+      "name": "Merge3"
+    },
+    {
+      "parameters": {
+        "jsCode": "// 1. 讀取 Split In Batches 傳入的單筆資料\n//    $input.all() 會是一個包含單一物件的陣列\nconst item = $input.all()[0]; \n\nlet promptText = \"你是台灣氣象新聞小編，請根據以下警示資訊，不要廢話，只需輸出1句與此警示相關的有趣冷知識，須強化情境感受，15字內，符合 AI 搜尋與 SEO 最佳實踐，易於被檢索，語氣如圖卡宣導語，嚴格禁止使用任何 emoji 或特殊符號，嚴格禁止帶到任何縣市\\n\\n\";\n\n// 2. 直接使用 item.json 來存取資料\npromptText += `${item.json.index}. ${item.json.summary}\\n`;\n\nreturn [\n  {\n    json: {\n      prompt: promptText\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        928,
+        1216
+      ],
+      "id": "3863e1c0-81f2-4c9d-a411-5c38cbfcae1c",
+      "name": "下prompt組合1"
+    },
+    {
+      "parameters": {
+        "jsCode": "return {\n  body: JSON.stringify({\n    contents: [\n      {\n        parts: [\n          {\n            text: $input.first().json.prompt\n          }\n        ]\n      }\n    ]\n  })\n};\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1136,
+        1216
+      ],
+      "id": "b646be01-a8fd-40a5-9465-381e5ac22766",
+      "name": "prompt轉格式"
+    },
+    {
+      "parameters": {
+        "jsCode": "return [\n  {\n    json: {\n      contents: [\n        {\n          parts: [\n            {\n              text: \n`【高溫特報】${$input.first().json.candidates[0].content.parts[0].text}\n`\n            }\n          ]\n        }\n      ]\n    }\n  }\n];\n\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2192,
+        1040
+      ],
+      "id": "cec774ad-89f2-42fa-bfaa-ee46d7d437e3",
+      "name": "產圖prompt先轉文字2"
+    },
+    {
+      "parameters": {
+        "jsCode": "const alertType =$input.first().json.contents[0].parts[0].text;\n\nreturn [{\n  filePath: 'D:\\AI test\\\\weather_coldfacts.csv', // 這裡改成你的路徑\n  content: `${alertType}\\n`\n}];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2448,
+        1152
+      ],
+      "id": "c6d66b3c-b951-44a5-9632-4eec9504b330",
+      "name": "整理&輸出文字2"
+    },
+    {
+      "parameters": {
+        "chatId": "7802109813",
+        "text": "={{ $json.content }}\n",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        6464,
+        3296
+      ],
+      "id": "6353dc10-31d4-480a-8e5d-98bef3a5e05c",
+      "name": "製圖prompt",
+      "webhookId": "b33113d9-28bc-4a47-bac6-21ce33b0d71d",
+      "credentials": {
+        "telegramApi": {
+          "id": "ADiZMdkyDmUbDLRw",
+          "name": "Telegram account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "7802109813",
+        "text": "={{ $json.text }}\n",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        4544,
+        2448
+      ],
+      "id": "6b56e09a-c5c2-4c82-a472-4e6ae03d7ba1",
+      "name": "天氣提醒",
+      "webhookId": "b33113d9-28bc-4a47-bac6-21ce33b0d71d",
+      "credentials": {
+        "telegramApi": {
+          "id": "WBzuZLfipP7CJJSk",
+          "name": "Telegram account 3"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "amount": 10
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        4960,
+        2480
+      ],
+      "id": "dca9be01-b86d-4e34-96d5-dde1a8569d56",
+      "name": "Wait",
+      "webhookId": "d0c13fc6-e0e7-4a52-b220-2089b050b59b"
+    },
+    {
+      "parameters": {
+        "jsCode": "// 1. 讀取 Split In Batches 傳入的單筆資料\n//    $input.all() 會是一個包含單一物件的陣列\nconst item = $input.all()[0]; \n\nlet promptText = \"你是台灣氣象新聞小編，請根據以下警示資訊，不要廢話，只需提供1個「建議穿著」，並依下述風格產出。\\n產出風格：AI Agent 可解析、Schema Friendly 風格文案，只需要提供包含全身穿搭(配件、上衣、下著)。請注意：\\n1.這Part需要提升我站內SEO 跟AAO-AI Agent Optimization\\n2.嚴格禁止超過15字\\n3.只需要提供包含全身穿搭(配件、上衣、下著)。\\n3.產品需要台灣人常用的。\\n4.嚴格禁止使用任何 emoji 或特殊符號，嚴格禁止帶到任何縣市\\n\\n\";\n\n// 2. 直接使用 item.json 來存取資料\npromptText += `${item.json.index}. ${item.json.summary}\\n`;\n\nreturn [\n  {\n    json: {\n      prompt: promptText\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        976,
+        1600
+      ],
+      "id": "60f6c517-5c49-4857-84bc-25e16e286f27",
+      "name": "下prompt組合"
+    },
+    {
+      "parameters": {
+        "jsCode": "return {\n  body: JSON.stringify({\n    contents: [\n      {\n        parts: [\n          {\n            text: $input.first().json.prompt\n          }\n        ]\n      }\n    ]\n  })\n};\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1152,
+        1600
+      ],
+      "id": "31abe5c4-4ea8-4071-88dd-872ea67ac6cf",
+      "name": "prompt轉格式1"
+    },
+    {
+      "parameters": {
+        "jsCode": "// 1. 讀取 Split In Batches 傳入的單筆資料\n//    $input.all() 會是一個包含單一物件的陣列\nconst item = $input.all()[0]; \n\nlet promptText = \"你你是嚴肅的台灣氣象新聞小編，請根據以下警示資訊，不要廢話，提供1個「健康風險」，並依下述風格產出。\\n產出風格：AI Agent 可解析、Schema Friendly 風格文案，只需要提供包含全身穿搭(配件、上衣、下著)。請注意：\\n1.這Part需要提升我站內SEO 跟AAO-AI Agent Optimization\\n2.嚴格禁止超過15字，嚴格禁止使用任何 emoji 或特殊符號，嚴格禁止帶到任何縣市\\n3.請審核語句完整性：生成後要確認句子是否包含主詞、動詞、賓語，語意是否完整通順。\\n4.用口語或日常用語重寫：模擬自然說話習慣，避免過於書面或機械。\\n5.請重點提示健康風險及預防行為，不能提到穿著。\\n\\n\";\n\n// 2. 直接使用 item.json 來存取資料\npromptText += `${item.json.index}. ${item.json.summary}\\n`;\n\nreturn [\n  {\n    json: {\n      prompt: promptText\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1008,
+        1936
+      ],
+      "id": "0d0ddf1b-a430-4336-a0c1-b0481e997ec5",
+      "name": "下prompt組合2"
+    },
+    {
+      "parameters": {
+        "jsCode": "return {\n  body: JSON.stringify({\n    contents: [\n      {\n        parts: [\n          {\n            text: $input.first().json.prompt\n          }\n        ]\n      }\n    ]\n  })\n};\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1184,
+        1936
+      ],
+      "id": "4bd67cf8-7d2d-4ca2-b4f3-9eb66266b73d",
+      "name": "prompt轉格式2"
+    },
+    {
+      "parameters": {
+        "jsCode": "// 安全取值函式，避免 AI 節點不是純文字時出錯\nfunction safeGetText(nodeName) {\n  const nodeData = $node[nodeName].json;\n\n  // Gemini / OpenAI 格式\n  if (nodeData?.candidates?.[0]?.content?.parts?.[0]?.text) {\n    return nodeData.candidates[0].content.parts[0].text.trim();\n  }\n\n  // 如果是直接回傳 text\n  if (typeof nodeData?.text === 'string') {\n    return nodeData.text.trim();\n  }\n\n  // 如果是直接回傳純字串\n  if (typeof nodeData === 'string') {\n    return nodeData.trim();\n  }\n\n  return '';\n}\n\n// 從三個 AI 節點抓資料\nconst coldFact = safeGetText(\"gemini產冷知識1\");\nconst clothingAdvice = safeGetText(\"gemini產建議穿著1\");\nconst healthRisk = safeGetText(\"gemini產健康風險1\");\n\n// 組成最終 Prompt\nconst promptText = `高溫特報\n{\n  天氣提醒: ${coldFact},\n  建議穿著: ${clothingAdvice},\n  健康風險: ${healthRisk},\n}\n`;\n\n// 輸出給下一個節點（例如 AI 分析）\nreturn [\n  {\n    json: {\n      contents: [\n        {\n          parts: [\n            {\n              text: promptText\n            }\n          ]\n        }\n      ]\n    }\n  }\n];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2448,
+        1856
+      ],
+      "id": "e5f2a62a-b9dc-465d-80f8-a68826ec396a",
+      "name": "產圖prompt先轉文字3"
+    },
+    {
+      "parameters": {
+        "amount": 10
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        1296,
+        1456
+      ],
+      "id": "b1d045e3-f3e0-430c-be5d-a311f70a4a4d",
+      "name": "Wait1",
+      "webhookId": "d0c13fc6-e0e7-4a52-b220-2089b050b59b"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        1360,
+        1952
+      ],
+      "id": "b6d9e3ea-6868-4389-8a96-713303dcc289",
+      "name": "Wait2",
+      "webhookId": "d0c13fc6-e0e7-4a52-b220-2089b050b59b"
+    },
+    {
+      "parameters": {
+        "url": "https://alerts.ncdr.nat.gov.tw/JSONAtomFeed.ashx?AlertType=1060",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -912,
+        3056
+      ],
+      "id": "11358973-0ce2-41b9-a09d-9d02a698ded5",
+      "name": "民生示警-取得目前特報(低溫)"
+    },
+    {
+      "parameters": {
+        "jsCode": "const data = $input.all()[0].json;\n\nif (!data.entry || !Array.isArray(data.entry)) {\n  throw new Error(\"找不到 entry 陣列\");\n}\n\nconst cwaItems = data.entry\n  .filter(item => item.id && item.id.toUpperCase().startsWith(\"CWA\"))\n  .map((item, index) => {\n    const text = item.summary && item.summary[\"#text\"] ? item.summary[\"#text\"] : \"\";\n    return {\n      json: {\n        index: index + 1,        // 順序編號\n        summary: text,\n        bulletPoint: `${index + 1}. ${text}`  // 列點格式文字\n      }\n    };\n  });\n\nreturn cwaItems;\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        240,
+        3328
+      ],
+      "id": "0da3b669-0b5d-467a-9d69-8858221f9e67",
+      "name": "Code1"
+    },
+    {
+      "parameters": {
+        "options": {
+          "reset": false
+        }
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        672,
+        2848
+      ],
+      "id": "099600fa-177b-4817-b32b-5542cef0d6b7",
+      "name": "Loop Over Items1"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "name": "Replace Me1",
+      "typeVersion": 1,
+      "position": [
+        3408,
+        3776
+      ],
+      "id": "d6f1e8fe-3a15-4274-a411-e81f10fe925f"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=AIzaSyBN10RVLBCIPKYNb0KW12G9hT1iZ9VlL6I",
+        "sendBody": true,
+        "contentType": "raw",
+        "rawContentType": "application/json",
+        "body": "={{ $json.body }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1472,
+        2784
+      ],
+      "id": "8d6f4fa0-da42-4c77-9949-375994f67499",
+      "name": "gemini產冷知識2"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=AIzaSyBN10RVLBCIPKYNb0KW12G9hT1iZ9VlL6I",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ $json }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2064,
+        2672
+      ],
+      "id": "b851ffce-9d64-4da0-bd97-1277004ef61f",
+      "name": "gemini產圖prompt2"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=AIzaSyBN10RVLBCIPKYNb0KW12G9hT1iZ9VlL6I",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ $json.body }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1488,
+        3232
+      ],
+      "id": "adc600ab-3c4f-4079-9bd7-6d06d79edf05",
+      "name": "gemini產建議穿著2"
+    },
+    {
+      "parameters": {
+        "jsCode": "return [\n  {\n    json: {\n      contents: [\n        {\n          parts: [\n            {\n              text: \n`你是台灣氣象新聞的內容企劃，請根據以下資訊輸出 JSON 格式：\n{\n  知識分享文字: ${$input.first().json.candidates[0].content.parts[0].text},\n   請將上述情境套用下方模板，最後須提供我填答完成的模板，並且背景需要有台灣元素\n    此為台灣低溫特報\n    須強調${$input.first().json.candidates[0].content.parts[0].text}\n    模板：\n    畫面主題為【低溫特報】下的情境：「請將知識分享文字的情境，以日系插畫風格描繪，並以1隻「可愛的小動物」作為畫面絕對的主體。小動物需要展現出豐富的情緒，並與天氣情境以及台灣在地元素產生生動的互動。」背景乾淨，以【推薦畫風】繪製。（圖中不得出現文字）      \n\n請著重以下產圖模板參數：\n- 推薦畫風：Q版卡通風格，線條清晰，色彩柔和飽滿，帶有溫暖手繪感，適合後續去背。\n- 格數描述：單格\n- 材質表現：\n- 細節呈現：\n- 鏡頭視角：\n- 表現手法：\n- 場景地點：\n- 主體人物設定：\n- 必備元素：\n- 尺寸固定為 1:1\n}\n`\n            }\n          ]\n        }\n      ]\n    }\n  }\n];\n\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1840,
+        2672
+      ],
+      "id": "5bcb65f3-6f62-46be-b3f4-846c2bbdf724",
+      "name": "產圖prompt先轉文字4"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=AIzaSyBN10RVLBCIPKYNb0KW12G9hT1iZ9VlL6I",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ $json.body }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1600,
+        3552
+      ],
+      "id": "6061b129-4b9b-43df-8d89-80c96c91d5f3",
+      "name": "gemini產健康風險2"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        1984,
+        3264
+      ],
+      "id": "aa230946-5a6c-4f7b-aea7-eab064670068",
+      "name": "Merge4"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        2288,
+        3472
+      ],
+      "id": "6ad11632-8b39-452a-b17f-b6b6d0b5d163",
+      "name": "Merge5"
+    },
+    {
+      "parameters": {
+        "jsCode": "// 1. 讀取 Split In Batches 傳入的單筆資料\n//    $input.all() 會是一個包含單一物件的陣列\nconst item = $input.all()[0]; \n\nlet promptText = \"你是台灣氣象新聞小編，請根據以下警示資訊，不要廢話，只需輸出1句與此警示相關的有趣冷知識，須強化情境感受，15字內，符合 AI 搜尋與 SEO 最佳實踐，易於被檢索，語氣如圖卡宣導語，嚴格禁止使用任何 emoji 或特殊符號，嚴格禁止帶到任何縣市\\n\\n\";\n\n// 2. 直接使用 item.json 來存取資料\npromptText += `${item.json.index}. ${item.json.summary}\\n`;\n\nreturn [\n  {\n    json: {\n      prompt: promptText\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        992,
+        2848
+      ],
+      "id": "0d86c9b2-274e-4698-9e7c-7f1196f024ef",
+      "name": "下prompt組合3"
+    },
+    {
+      "parameters": {
+        "jsCode": "return {\n  body: JSON.stringify({\n    contents: [\n      {\n        parts: [\n          {\n            text: $input.first().json.prompt\n          }\n        ]\n      }\n    ]\n  })\n};\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1200,
+        2848
+      ],
+      "id": "75b6a4c3-3d6a-4a5a-a4a5-16aa409bb65a",
+      "name": "prompt轉格式3"
+    },
+    {
+      "parameters": {
+        "jsCode": "return [\n  {\n    json: {\n      contents: [\n        {\n          parts: [\n            {\n              text: \n`【低溫特報】${$input.first().json.candidates[0].content.parts[0].text}\n`\n            }\n          ]\n        }\n      ]\n    }\n  }\n];\n\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2256,
+        2672
+      ],
+      "id": "c5450ba0-9ee7-4ac7-b4e2-feab898e1ffd",
+      "name": "產圖prompt先轉文字5"
+    },
+    {
+      "parameters": {
+        "jsCode": "const alertType =$input.first().json.contents[0].parts[0].text;\n\nreturn [{\n  filePath: 'D:\\AI test\\\\weather_coldfacts.csv', // 這裡改成你的路徑\n  content: `${alertType}\\n`\n}];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2512,
+        2784
+      ],
+      "id": "7eadb786-4c56-4999-b669-a710889eb4fe",
+      "name": "整理&輸出文字3"
+    },
+    {
+      "parameters": {
+        "chatId": "7802109813",
+        "text": "={{ $json.text }}\n",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        3072,
+        3488
+      ],
+      "id": "c8bb9c71-6b19-476a-ae80-8ed0adb6591a",
+      "name": "天氣提醒1",
+      "webhookId": "b33113d9-28bc-4a47-bac6-21ce33b0d71d",
+      "retryOnFail": true,
+      "credentials": {
+        "telegramApi": {
+          "id": "WBzuZLfipP7CJJSk",
+          "name": "Telegram account 3"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "amount": 10
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        3680,
+        3472
+      ],
+      "id": "53b0dbb7-33d2-4d69-b892-d3e09832a17a",
+      "name": "Wait3",
+      "webhookId": "d0c13fc6-e0e7-4a52-b220-2089b050b59b"
+    },
+    {
+      "parameters": {
+        "jsCode": "// 1. 讀取 Split In Batches 傳入的單筆資料\n//    $input.all() 會是一個包含單一物件的陣列\nconst item = $input.all()[0]; \n\nlet promptText = \"你是台灣氣象新聞小編，請根據以下警示資訊，不要廢話，只需提供1個「建議穿著」，並依下述風格產出。\\n產出風格：AI Agent 可解析、Schema Friendly 風格文案，只需要提供包含全身穿搭(配件、上衣、下著)。請注意：\\n1.這Part需要提升我站內SEO 跟AAO-AI Agent Optimization\\n2.嚴格禁止超過15字\\n3.只需要提供包含全身穿搭(配件、上衣、下著)。\\n3.產品需要台灣人常用的。\\n4.嚴格禁止使用任何 emoji 或特殊符號，嚴格禁止帶到任何縣市\\n\\n\";\n\n// 2. 直接使用 item.json 來存取資料\npromptText += `${item.json.index}. ${item.json.summary}\\n`;\n\nreturn [\n  {\n    json: {\n      prompt: promptText\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1040,
+        3232
+      ],
+      "id": "41fcb4c4-a7bd-40c4-bbd9-0c3b1f47d029",
+      "name": "下prompt組合4"
+    },
+    {
+      "parameters": {
+        "jsCode": "return {\n  body: JSON.stringify({\n    contents: [\n      {\n        parts: [\n          {\n            text: $input.first().json.prompt\n          }\n        ]\n      }\n    ]\n  })\n};\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1216,
+        3232
+      ],
+      "id": "793367d5-a2c1-4bb3-8ab7-87de53bd5f61",
+      "name": "prompt轉格式4"
+    },
+    {
+      "parameters": {
+        "jsCode": "// 1. 讀取 Split In Batches 傳入的單筆資料\n//    $input.all() 會是一個包含單一物件的陣列\nconst item = $input.all()[0]; \n\nlet promptText = \"你你是嚴肅的台灣氣象新聞小編，請根據以下警示資訊，不要廢話，提供1個「健康風險」，並依下述風格產出。\\n產出風格：AI Agent 可解析、Schema Friendly 風格文案，只需要提供包含全身穿搭(配件、上衣、下著)。請注意：\\n1.這Part需要提升我站內SEO 跟AAO-AI Agent Optimization\\n2.嚴格禁止超過15字，嚴格禁止使用任何 emoji 或特殊符號，嚴格禁止帶到任何縣市\\n3.請審核語句完整性：生成後要確認句子是否包含主詞、動詞、賓語，語意是否完整通順。\\n4.用口語或日常用語重寫：模擬自然說話習慣，避免過於書面或機械。\\n5.請重點提示健康風險及預防行為，不能提到穿著。\\n\\n\";\n\n// 2. 直接使用 item.json 來存取資料\npromptText += `${item.json.index}. ${item.json.summary}\\n`;\n\nreturn [\n  {\n    json: {\n      prompt: promptText\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1072,
+        3568
+      ],
+      "id": "ba33cf1d-935c-4dbe-8e65-d6afa149876c",
+      "name": "下prompt組合5"
+    },
+    {
+      "parameters": {
+        "jsCode": "return {\n  body: JSON.stringify({\n    contents: [\n      {\n        parts: [\n          {\n            text: $input.first().json.prompt\n          }\n        ]\n      }\n    ]\n  })\n};\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1248,
+        3568
+      ],
+      "id": "7781b307-7827-45d5-9b76-44607f366580",
+      "name": "prompt轉格式5"
+    },
+    {
+      "parameters": {
+        "jsCode": "// 安全取值函式，避免 AI 節點不是純文字時出錯\nfunction safeGetText(nodeName) {\n  const nodeData = $node[nodeName].json;\n\n  // Gemini / OpenAI 格式\n  if (nodeData?.candidates?.[0]?.content?.parts?.[0]?.text) {\n    return nodeData.candidates[0].content.parts[0].text.trim();\n  }\n\n  // 如果是直接回傳 text\n  if (typeof nodeData?.text === 'string') {\n    return nodeData.text.trim();\n  }\n\n  // 如果是直接回傳純字串\n  if (typeof nodeData === 'string') {\n    return nodeData.trim();\n  }\n\n  return '';\n}\n\n// 從三個 AI 節點抓資料\nconst coldFact = safeGetText(\"gemini產冷知識2\");\nconst clothingAdvice = safeGetText(\"gemini產建議穿著2\");\nconst healthRisk = safeGetText(\"gemini產健康風險2\");\n\n// 組成最終 Prompt\nconst promptText = `【低溫特報】\n{\n  天氣提醒: ${coldFact},\n  建議穿著: ${clothingAdvice},\n  健康風險: ${healthRisk},\n}\n`;\n\n// 輸出給下一個節點（例如 AI 分析）\nreturn [\n  {\n    json: {\n      contents: [\n        {\n          parts: [\n            {\n              text: promptText\n            }\n          ]\n        }\n      ]\n    }\n  }\n];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2512,
+        3488
+      ],
+      "id": "cd4096ce-c623-4339-bdef-9802269eb353",
+      "name": "產圖prompt先轉文字6"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Get the full content from the previous node.\nconst input = $input.first().json.contents[0].parts[0].text;\n\n// Split the content into an array of lines.\nconst lines = input.split('\\n');\n\n// Extract and format each part of the content.\nconst title = lines[0];\nconst weatherTip = lines[2].replace('天氣提醒: ', '');\nconst dressTip = lines[3].replace('建議穿著: ', '');\n\n// Get the health risk content and remove all asterisks.\nconst healthRisk = lines.slice(4).join('\\n');\nconst cleanedHealthRisk = healthRisk.replace(/\\*/g, ''); \n\n// Combine the parts into a clean Markdown-formatted message.\nconst formattedMessage = `${title}\\n\\n**天氣提醒：**\\n${weatherTip}\\n\\n**建議穿著：**\\n${dressTip}\\n\\n${cleanedHealthRisk}`;\n\n// Return a clean JSON object.\nreturn [\n  {\n    json: {\n      text: formattedMessage\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2688,
+        3488
+      ],
+      "id": "3c199a3c-e24d-49dc-9067-1098335d3f60",
+      "name": "整理&輸出文字5",
+      "retryOnFail": true,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "amount": 10
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        1360,
+        3088
+      ],
+      "id": "ee9f2879-3964-40c8-b2fd-6579842a6894",
+      "name": "Wait4",
+      "webhookId": "d0c13fc6-e0e7-4a52-b220-2089b050b59b"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        1424,
+        3584
+      ],
+      "id": "a41a214a-6f13-4e00-9f95-690b2865f8c8",
+      "name": "Wait5",
+      "webhookId": "d0c13fc6-e0e7-4a52-b220-2089b050b59b"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Get the full content from the previous node.\nconst input = $input.first().json.contents[0].parts[0].text;\n\n// Split the content into an array of lines.\nconst lines = input.split('\\n');\n\n// Extract and format each part of the content.\nconst title = lines[0];\nconst weatherTip = lines[2].replace('天氣提醒: ', '');\nconst dressTip = lines[3].replace('建議穿著: ', '');\n\n// Get the health risk content and remove all asterisks.\nconst healthRisk = lines.slice(4).join('\\n');\nconst cleanedHealthRisk = healthRisk.replace(/\\*/g, ''); \n\n// Combine the parts into a clean Markdown-formatted message.\nconst formattedMessage = `${title}\\n\\n**天氣提醒：**\\n${weatherTip}\\n\\n**建議穿著：**\\n${dressTip}\\n\\n${cleanedHealthRisk}`;\n\n// Return a clean JSON object.\nreturn [\n  {\n    json: {\n      text: formattedMessage\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2640,
+        1696
+      ],
+      "id": "d361d190-1907-4dbb-b535-4c6767a76d0b",
+      "name": "產圖prompt先轉文字7"
+    },
+    {
+      "parameters": {
+        "url": "https://alerts.ncdr.nat.gov.tw/JSONAtomFeed.ashx?AlertType=1051",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -912,
+        4592
+      ],
+      "id": "daa3b475-0437-4e91-8896-af481cced02e",
+      "name": "民生示警-取得目前特報雷雨"
+    },
+    {
+      "parameters": {
+        "jsCode": "const data = $input.all()[0].json;\n\nif (!data.entry || !Array.isArray(data.entry)) {\n  throw new Error(\"找不到 entry 陣列\");\n}\n\nconst cwaItems = data.entry\n  .filter(item => item.id && item.id.toUpperCase().startsWith(\"CWA\"))\n  .map((item, index) => {\n    const text = item.summary && item.summary[\"#text\"] ? item.summary[\"#text\"] : \"\";\n    return {\n      json: {\n        index: index + 1,        // 順序編號\n        summary: text,\n        bulletPoint: `${index + 1}. ${text}`  // 列點格式文字\n      }\n    };\n  });\n\nreturn cwaItems;\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        240,
+        4976
+      ],
+      "id": "6023d86c-2cfe-4d66-8da0-414836c3e24f",
+      "name": "Code2"
+    },
+    {
+      "parameters": {
+        "options": {
+          "reset": false
+        }
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        672,
+        4496
+      ],
+      "id": "63753dad-95a9-4863-83b0-709c73e6e4f3",
+      "name": "Loop Over Items2"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "name": "Replace Me2",
+      "typeVersion": 1,
+      "position": [
+        3408,
+        5424
+      ],
+      "id": "7e686a4b-bf2c-427d-bcde-c6038a062f42"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=AIzaSyBN10RVLBCIPKYNb0KW12G9hT1iZ9VlL6I",
+        "sendBody": true,
+        "contentType": "raw",
+        "rawContentType": "application/json",
+        "body": "={{ $json.body }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1472,
+        4432
+      ],
+      "id": "38392876-26a8-4b06-996e-fcc4eac9de44",
+      "name": "gemini產冷知識3"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=AIzaSyBN10RVLBCIPKYNb0KW12G9hT1iZ9VlL6I",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ $json }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2064,
+        4320
+      ],
+      "id": "f6a8a6ec-b7b9-4555-9721-99f194a86eca",
+      "name": "gemini產圖prompt3"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=AIzaSyBN10RVLBCIPKYNb0KW12G9hT1iZ9VlL6I",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ $json.body }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1488,
+        4880
+      ],
+      "id": "c00226c3-be76-4a3f-b234-7700f33b80af",
+      "name": "gemini產建議穿著3"
+    },
+    {
+      "parameters": {
+        "jsCode": "return [\n  {\n    json: {\n      contents: [\n        {\n          parts: [\n            {\n              text: \n`你是台灣氣象新聞的內容企劃，請根據以下資訊輸出 JSON 格式：\n{\n  知識分享文字: ${$input.first().json.candidates[0].content.parts[0].text},\n   請將上述情境套用下方模板，最後須提供我填答完成的模板，並且背景需要有台灣元素\n    此為台灣雷雨特報\n    須強調${$input.first().json.candidates[0].content.parts[0].text}\n    模板：\n    畫面主題為【雷雨特報】下的情境：「請將知識分享文字的情境，以日系插畫風格描繪，並以1隻「可愛的小動物」作為畫面絕對的主體。小動物需要展現出豐富的情緒，並與天氣情境以及台灣在地元素產生生動的互動。」背景乾淨，以【推薦畫風】繪製。（圖中不得出現文字）      \n\n請著重以下產圖模板參數：\n- 推薦畫風：Q版卡通風格，線條清晰，色彩柔和飽滿，帶有溫暖手繪感，適合後續去背。\n- 格數描述：單格\n- 材質表現：\n- 細節呈現：\n- 鏡頭視角：\n- 表現手法：\n- 場景地點：\n- 主體人物設定：\n- 必備元素：\n- 尺寸固定為 1:1\n}\n`\n            }\n          ]\n        }\n      ]\n    }\n  }\n];\n\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1840,
+        4320
+      ],
+      "id": "fb8e2210-b551-404c-9e26-5ae067a6a95c",
+      "name": "產圖prompt先轉文字8"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=AIzaSyBN10RVLBCIPKYNb0KW12G9hT1iZ9VlL6I",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ $json.body }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1600,
+        5200
+      ],
+      "id": "9f40765a-c2f0-4454-a1f1-3e59d06d20c9",
+      "name": "gemini產健康風險3"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        1984,
+        4912
+      ],
+      "id": "26b49832-01d4-4735-851d-08d1fac5ae45",
+      "name": "Merge6"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        2288,
+        5120
+      ],
+      "id": "de0f452e-0d3e-42e0-9e32-adda283606b5",
+      "name": "Merge7"
+    },
+    {
+      "parameters": {
+        "jsCode": "// 1. 讀取 Split In Batches 傳入的單筆資料\n//    $input.all() 會是一個包含單一物件的陣列\nconst item = $input.all()[0]; \n\nlet promptText = \"你是台灣氣象新聞小編，請根據以下警示資訊，不要廢話，只需輸出1句與此警示(台灣的大雷雨即時特報)相關的資訊型冷知識，25字內，語氣如圖卡宣導語，嚴格禁止使用任何 emoji 或特殊符號，嚴格禁止帶到任何縣市。範例：雷雨是空氣在極端不穩定狀況下，所產生的劇烈天氣現象、雷雨後空氣為什麼特別清新？；禁止產出：「雷雨胞生命週期短暫」相關的冷知識\";\n\n// 2. 直接使用 item.json 來存取資料\npromptText += `${item.json.index}. ${item.json.summary}\\n`;\n\nreturn [\n  {\n    json: {\n      prompt: promptText\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        992,
+        4496
+      ],
+      "id": "12289fc0-b84c-476a-b07a-81c7948f3915",
+      "name": "下prompt組合6"
+    },
+    {
+      "parameters": {
+        "jsCode": "return {\n  body: JSON.stringify({\n    contents: [\n      {\n        parts: [\n          {\n            text: $input.first().json.prompt\n          }\n        ]\n      }\n    ]\n  })\n};\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1200,
+        4496
+      ],
+      "id": "1d103220-69bf-4ed7-9729-a1e5abcf4536",
+      "name": "prompt轉格式6"
+    },
+    {
+      "parameters": {
+        "jsCode": "return [\n  {\n    json: {\n      contents: [\n        {\n          parts: [\n            {\n              text: \n`【雷雨特報】${$input.first().json.candidates[0].content.parts[0].text}\n`\n            }\n          ]\n        }\n      ]\n    }\n  }\n];\n\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2256,
+        4320
+      ],
+      "id": "4a7736aa-c44e-456d-8b68-631e350cdf3b",
+      "name": "產圖prompt先轉文字9"
+    },
+    {
+      "parameters": {
+        "jsCode": "const alertType =$input.first().json.contents[0].parts[0].text;\n\nreturn [{\n  filePath: 'D:\\AI test\\\\weather_coldfacts.csv', // 這裡改成你的路徑\n  content: `${alertType}\\n`\n}];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2512,
+        4432
+      ],
+      "id": "5ca7f6f6-55b8-40da-b19a-4adead007522",
+      "name": "整理&輸出文字6"
+    },
+    {
+      "parameters": {
+        "chatId": "7802109813",
+        "text": "={{ $json.text }}\n",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        3072,
+        5136
+      ],
+      "id": "7669be5f-cfce-4326-abe5-ba2d2221f7df",
+      "name": "天氣提醒2",
+      "webhookId": "b33113d9-28bc-4a47-bac6-21ce33b0d71d",
+      "credentials": {
+        "telegramApi": {
+          "id": "WBzuZLfipP7CJJSk",
+          "name": "Telegram account 3"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "amount": 10
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        6320,
+        4816
+      ],
+      "id": "73455057-652f-4f5c-832f-8a6391908f39",
+      "name": "Wait6",
+      "webhookId": "d0c13fc6-e0e7-4a52-b220-2089b050b59b"
+    },
+    {
+      "parameters": {
+        "jsCode": "// 1. 讀取 Split In Batches 傳入的單筆資料\n//    $input.all() 會是一個包含單一物件的陣列\nconst item = $input.all()[0]; \n\nlet promptText = \"你是台灣氣象新聞小編，請根據以下警示資訊，不要廢話，只需提供1個「建議穿著」，並依下述風格產出。\\n產出風格：AI Agent 可解析、Schema Friendly 風格文案，只需要提供包含全身穿搭(配件、上衣、下著)。請注意：\\n1.這Part需要提升我站內SEO 跟AAO-AI Agent Optimization\\n2.嚴格禁止超過15字\\n3.只需要提供包含全身穿搭(配件、上衣、下著)。\\n3.產品需要台灣人常用的。\\n4.嚴格禁止使用任何 emoji 或特殊符號，嚴格禁止帶到任何縣市\\n\\n\";\n\n// 2. 直接使用 item.json 來存取資料\npromptText += `${item.json.index}. ${item.json.summary}\\n`;\n\nreturn [\n  {\n    json: {\n      prompt: promptText\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1040,
+        4880
+      ],
+      "id": "47da1ab0-2684-48f2-bbf0-e878e3bedbfd",
+      "name": "下prompt組合7"
+    },
+    {
+      "parameters": {
+        "jsCode": "return {\n  body: JSON.stringify({\n    contents: [\n      {\n        parts: [\n          {\n            text: $input.first().json.prompt\n          }\n        ]\n      }\n    ]\n  })\n};\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1216,
+        4880
+      ],
+      "id": "b931b6c8-f5f5-4b04-b76b-57567f6dad1e",
+      "name": "prompt轉格式7"
+    },
+    {
+      "parameters": {
+        "jsCode": "// 1. 讀取 Split In Batches 傳入的單筆資料\n//    $input.all() 會是一個包含單一物件的陣列\nconst item = $input.all()[0]; \n\nlet promptText = \"你你是嚴肅的台灣氣象新聞小編，請根據以下警示資訊，不要廢話，提供1個「健康風險」，並依下述風格產出。\\n產出風格：AI Agent 可解析、Schema Friendly 風格文案，只需要提供包含全身穿搭(配件、上衣、下著)。請注意：\\n1.這Part需要提升我站內SEO 跟AAO-AI Agent Optimization\\n2.嚴格禁止超過15字，嚴格禁止使用任何 emoji 或特殊符號，嚴格禁止帶到任何縣市\\n3.請審核語句完整性：生成後要確認句子是否包含主詞、動詞、賓語，語意是否完整通順。\\n4.用口語或日常用語重寫：模擬自然說話習慣，避免過於書面或機械。\\n5.請重點提示健康風險及預防行為，不能提到穿著。\\n\\n\";\n\n// 2. 直接使用 item.json 來存取資料\npromptText += `${item.json.index}. ${item.json.summary}\\n`;\n\nreturn [\n  {\n    json: {\n      prompt: promptText\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1072,
+        5216
+      ],
+      "id": "397c42e2-ab40-4194-b838-ebd69de06049",
+      "name": "下prompt組合8"
+    },
+    {
+      "parameters": {
+        "jsCode": "return {\n  body: JSON.stringify({\n    contents: [\n      {\n        parts: [\n          {\n            text: $input.first().json.prompt\n          }\n        ]\n      }\n    ]\n  })\n};\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1248,
+        5216
+      ],
+      "id": "8fcad0b6-bcd7-41a6-8ac6-c3166ca869da",
+      "name": "prompt轉格式8"
+    },
+    {
+      "parameters": {
+        "jsCode": "// 安全取值函式，避免 AI 節點不是純文字時出錯\nfunction safeGetText(nodeName) {\n  const nodeData = $node[nodeName].json;\n\n  // Gemini / OpenAI 格式\n  if (nodeData?.candidates?.[0]?.content?.parts?.[0]?.text) {\n    return nodeData.candidates[0].content.parts[0].text.trim();\n  }\n\n  // 如果是直接回傳 text\n  if (typeof nodeData?.text === 'string') {\n    return nodeData.text.trim();\n  }\n\n  // 如果是直接回傳純字串\n  if (typeof nodeData === 'string') {\n    return nodeData.trim();\n  }\n\n  return '';\n}\n\n// 從三個 AI 節點抓資料\nconst coldFact = safeGetText(\"gemini產冷知識3\");\nconst clothingAdvice = safeGetText(\"gemini產建議穿著3\");\nconst healthRisk = safeGetText(\"gemini產健康風險3\");\n\n// 組成最終 Prompt\nconst promptText = `【雷雨特報】\n{\n  天氣提醒: ${coldFact},\n  建議穿著: ${clothingAdvice},\n  健康風險: ${healthRisk},\n}\n`;\n\n// 輸出給下一個節點（例如 AI 分析）\nreturn [\n  {\n    json: {\n      contents: [\n        {\n          parts: [\n            {\n              text: promptText\n            }\n          ]\n        }\n      ]\n    }\n  }\n];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2512,
+        5136
+      ],
+      "id": "5b3f79b1-25a0-485c-90a7-4ec1d2446fb3",
+      "name": "產圖prompt先轉文字10"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Get the full content from the previous node.\nconst input = $input.first().json.contents[0].parts[0].text;\n\n// Split the content into an array of lines.\nconst lines = input.split('\\n');\n\n// Extract and format each part of the content.\nconst title = lines[0];\nconst weatherTip = lines[2].replace('天氣提醒: ', '');\nconst dressTip = lines[3].replace('建議穿著: ', '');\n\n// Get the health risk content and remove all asterisks.\nconst healthRisk = lines.slice(4).join('\\n');\nconst cleanedHealthRisk = healthRisk.replace(/\\*/g, ''); \n\n// Combine the parts into a clean Markdown-formatted message.\nconst formattedMessage = `${title}\\n\\n**天氣提醒：**\\n${weatherTip}\\n\\n**建議穿著：**\\n${dressTip}\\n\\n${cleanedHealthRisk}`;\n\n// Return a clean JSON object.\nreturn [\n  {\n    json: {\n      text: formattedMessage\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2688,
+        5136
+      ],
+      "id": "5062b892-2b2f-44a8-b17b-0eb6004064e1",
+      "name": "整理&輸出文字7",
+      "retryOnFail": true,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "amount": 10
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        1360,
+        4736
+      ],
+      "id": "bd0d88a0-c6c3-481c-abaa-6bb82be9c603",
+      "name": "Wait7",
+      "webhookId": "d0c13fc6-e0e7-4a52-b220-2089b050b59b"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        1424,
+        5232
+      ],
+      "id": "3daa6164-bf79-4be0-8bae-09958d9c0253",
+      "name": "Wait8",
+      "webhookId": "d0c13fc6-e0e7-4a52-b220-2089b050b59b"
+    },
+    {
+      "parameters": {
+        "jsCode": "const data = $input.all()[0].json;\n\nif (!data.entry || !Array.isArray(data.entry)) {\n  throw new Error(\"找不到 entry 陣列\");\n}\n\nconst cwaItems = data.entry\n  .filter(item => item.id && item.id.toUpperCase().startsWith(\"CWA\"))\n  .map((item, index) => {\n    const text = item.summary && item.summary[\"#text\"] ? item.summary[\"#text\"] : \"\";\n    return {\n      json: {\n        index: index + 1,        // 順序編號\n        summary: text,\n        bulletPoint: `${index + 1}. ${text}`  // 列點格式文字\n      }\n    };\n  });\n\nreturn cwaItems;\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        384,
+        6832
+      ],
+      "id": "22437edb-63b0-43e9-8fcd-82622d6fea0f",
+      "name": "Code3"
+    },
+    {
+      "parameters": {
+        "options": {
+          "reset": false
+        }
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        816,
+        6352
+      ],
+      "id": "17eb6dc6-22f6-4f25-ad3c-e6537494f0f7",
+      "name": "Loop Over Items3"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "name": "Replace Me3",
+      "typeVersion": 1,
+      "position": [
+        3552,
+        7280
+      ],
+      "id": "355babe9-06bc-477a-b057-ec3ca99eac66"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=AIzaSyBN10RVLBCIPKYNb0KW12G9hT1iZ9VlL6I",
+        "sendBody": true,
+        "contentType": "raw",
+        "rawContentType": "application/json",
+        "body": "={{ $json.body }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1616,
+        6288
+      ],
+      "id": "03029c08-fb5c-467a-845d-a946816c1a05",
+      "name": "gemini產冷知識4"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=AIzaSyBN10RVLBCIPKYNb0KW12G9hT1iZ9VlL6I",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ $json }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2208,
+        6176
+      ],
+      "id": "0b18ac27-f1cb-4c55-b67c-c5733d169154",
+      "name": "gemini產圖prompt4"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=AIzaSyBN10RVLBCIPKYNb0KW12G9hT1iZ9VlL6I",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ $json.body }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1632,
+        6736
+      ],
+      "id": "e8d2128b-9306-47a4-b8eb-356538cfcc7d",
+      "name": "gemini產建議穿著4"
+    },
+    {
+      "parameters": {
+        "jsCode": "return [\n  {\n    json: {\n      contents: [\n        {\n          parts: [\n            {\n              text: \n`你是台灣氣象新聞的內容企劃，請根據以下資訊輸出 JSON 格式：\n{\n  知識分享文字: ${$input.first().json.candidates[0].content.parts[0].text},\n   請將上述情境套用下方模板，最後須提供我填答完成的模板，並且背景需要有台灣元素\n    此為台灣降雨特報\n    須強調${$input.first().json.candidates[0].content.parts[0].text}\n    模板：\n    畫面主題為【降雨特報】下的情境：「請將知識分享文字的情境，以日系插畫風格描繪，並以1隻「可愛的小動物」作為畫面絕對的主體。小動物需要展現出豐富的情緒，並與天氣情境以及台灣在地元素產生生動的互動。」背景乾淨，以【推薦畫風】繪製。（圖中不得出現文字）      \n\n請著重以下產圖模板參數：\n- 推薦畫風：Q版卡通風格，線條清晰，色彩柔和飽滿，帶有溫暖手繪感，適合後續去背。\n- 格數描述：單格\n- 材質表現：\n- 細節呈現：\n- 鏡頭視角：\n- 表現手法：\n- 場景地點：\n- 主體人物設定：\n- 必備元素：\n- 尺寸固定為 1:1\n}\n`\n            }\n          ]\n        }\n      ]\n    }\n  }\n];\n\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1984,
+        6176
+      ],
+      "id": "0b81e7bf-e217-4650-9f96-fba9c851de8e",
+      "name": "產圖prompt先轉文字11"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=AIzaSyBN10RVLBCIPKYNb0KW12G9hT1iZ9VlL6I",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ $json.body }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1744,
+        7056
+      ],
+      "id": "58994b81-710d-4be8-899f-d1017520ebc2",
+      "name": "gemini產健康風險4"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        2128,
+        6768
+      ],
+      "id": "31c750a8-b035-4e02-88ca-dbd8604679e3",
+      "name": "Merge8"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        2432,
+        6976
+      ],
+      "id": "89da6bdd-12bc-462a-99ba-735fab84f3d2",
+      "name": "Merge9"
+    },
+    {
+      "parameters": {
+        "jsCode": "// 1. 讀取 Split In Batches 傳入的單筆資料\n//    $input.all() 會是一個包含單一物件的陣列\nconst item = $input.all()[0]; \n\nlet promptText = \"你是台灣氣象新聞小編，請根據以下警示資訊，不要廢話，只需輸出1句與此警示相關的有趣冷知識，須強化情境感受，15字內，符合 AI 搜尋與 SEO 最佳實踐，易於被檢索，語氣如圖卡宣導語，嚴格禁止使用任何 emoji 或特殊符號，嚴格禁止帶到任何縣市\\n\\n\";\n\n// 2. 直接使用 item.json 來存取資料\npromptText += `${item.json.index}. ${item.json.summary}\\n`;\n\nreturn [\n  {\n    json: {\n      prompt: promptText\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1136,
+        6352
+      ],
+      "id": "a6772f92-8c2e-4b31-b04c-c730aee28c92",
+      "name": "下prompt組合9"
+    },
+    {
+      "parameters": {
+        "jsCode": "return {\n  body: JSON.stringify({\n    contents: [\n      {\n        parts: [\n          {\n            text: $input.first().json.prompt\n          }\n        ]\n      }\n    ]\n  })\n};\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1344,
+        6352
+      ],
+      "id": "df455f23-ac77-432c-8822-f23e4a698ed7",
+      "name": "prompt轉格式9"
+    },
+    {
+      "parameters": {
+        "jsCode": "return [\n  {\n    json: {\n      contents: [\n        {\n          parts: [\n            {\n              text: \n`【降雨特報】${$input.first().json.candidates[0].content.parts[0].text}\n`\n            }\n          ]\n        }\n      ]\n    }\n  }\n];\n\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2400,
+        6176
+      ],
+      "id": "86120d52-8b35-42ef-b7a7-1302fef967b7",
+      "name": "產圖prompt先轉文字12"
+    },
+    {
+      "parameters": {
+        "jsCode": "const alertType =$input.first().json.contents[0].parts[0].text;\n\nreturn [{\n  filePath: 'D:\\AI test\\\\weather_coldfacts.csv', // 這裡改成你的路徑\n  content: `${alertType}\\n`\n}];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2656,
+        6288
+      ],
+      "id": "354d8b59-501b-4fbe-a1ae-a3180c2bde93",
+      "name": "整理&輸出文字8"
+    },
+    {
+      "parameters": {
+        "chatId": "7802109813",
+        "text": "={{ $json.text }}\n",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        3216,
+        6992
+      ],
+      "id": "12929cd8-804f-486d-8dd1-447000b6d0ce",
+      "name": "天氣提醒3",
+      "webhookId": "b33113d9-28bc-4a47-bac6-21ce33b0d71d",
+      "credentials": {
+        "telegramApi": {
+          "id": "WBzuZLfipP7CJJSk",
+          "name": "Telegram account 3"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "amount": 10
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        3824,
+        6976
+      ],
+      "id": "ab3c26d5-c59e-415a-add9-d659eff56f66",
+      "name": "Wait9",
+      "webhookId": "d0c13fc6-e0e7-4a52-b220-2089b050b59b"
+    },
+    {
+      "parameters": {
+        "jsCode": "// 1. 讀取 Split In Batches 傳入的單筆資料\n//    $input.all() 會是一個包含單一物件的陣列\nconst item = $input.all()[0]; \n\nlet promptText = \"你是台灣氣象新聞小編，請根據以下警示資訊，不要廢話，只需提供1個「建議穿著」，並依下述風格產出。\\n產出風格：AI Agent 可解析、Schema Friendly 風格文案，只需要提供包含全身穿搭(配件、上衣、下著)。請注意：\\n1.這Part需要提升我站內SEO 跟AAO-AI Agent Optimization\\n2.嚴格禁止超過15字\\n3.只需要提供包含全身穿搭(配件、上衣、下著)。\\n3.產品需要台灣人常用的。\\n4.嚴格禁止使用任何 emoji 或特殊符號，嚴格禁止帶到任何縣市\\n\\n\";\n\n// 2. 直接使用 item.json 來存取資料\npromptText += `${item.json.index}. ${item.json.summary}\\n`;\n\nreturn [\n  {\n    json: {\n      prompt: promptText\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1184,
+        6736
+      ],
+      "id": "236ab64e-394e-4eb7-a819-49b63343d97d",
+      "name": "下prompt組合10"
+    },
+    {
+      "parameters": {
+        "jsCode": "return {\n  body: JSON.stringify({\n    contents: [\n      {\n        parts: [\n          {\n            text: $input.first().json.prompt\n          }\n        ]\n      }\n    ]\n  })\n};\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1360,
+        6736
+      ],
+      "id": "ec844e6c-a55a-4cbd-b580-aa936abb2257",
+      "name": "prompt轉格式10"
+    },
+    {
+      "parameters": {
+        "jsCode": "// 1. 讀取 Split In Batches 傳入的單筆資料\n//    $input.all() 會是一個包含單一物件的陣列\nconst item = $input.all()[0]; \n\nlet promptText = \"你你是嚴肅的台灣氣象新聞小編，請根據以下警示資訊，不要廢話，提供1個「健康風險」，並依下述風格產出。\\n產出風格：AI Agent 可解析、Schema Friendly 風格文案，只需要提供包含全身穿搭(配件、上衣、下著)。請注意：\\n1.這Part需要提升我站內SEO 跟AAO-AI Agent Optimization\\n2.嚴格禁止超過15字，嚴格禁止使用任何 emoji 或特殊符號，嚴格禁止帶到任何縣市\\n3.請審核語句完整性：生成後要確認句子是否包含主詞、動詞、賓語，語意是否完整通順。\\n4.用口語或日常用語重寫：模擬自然說話習慣，避免過於書面或機械。\\n5.請重點提示健康風險及預防行為，不能提到穿著。\\n\\n\";\n\n// 2. 直接使用 item.json 來存取資料\npromptText += `${item.json.index}. ${item.json.summary}\\n`;\n\nreturn [\n  {\n    json: {\n      prompt: promptText\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1216,
+        7072
+      ],
+      "id": "aee14097-3b41-4721-890d-bcdc257967e2",
+      "name": "下prompt組合11"
+    },
+    {
+      "parameters": {
+        "jsCode": "return {\n  body: JSON.stringify({\n    contents: [\n      {\n        parts: [\n          {\n            text: $input.first().json.prompt\n          }\n        ]\n      }\n    ]\n  })\n};\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1392,
+        7072
+      ],
+      "id": "e6e6860a-d319-481b-afc5-b724b2bfc234",
+      "name": "prompt轉格式11"
+    },
+    {
+      "parameters": {
+        "jsCode": "// 安全取值函式，避免 AI 節點不是純文字時出錯\nfunction safeGetText(nodeName) {\n  const nodeData = $node[nodeName].json;\n\n  // Gemini / OpenAI 格式\n  if (nodeData?.candidates?.[0]?.content?.parts?.[0]?.text) {\n    return nodeData.candidates[0].content.parts[0].text.trim();\n  }\n\n  // 如果是直接回傳 text\n  if (typeof nodeData?.text === 'string') {\n    return nodeData.text.trim();\n  }\n\n  // 如果是直接回傳純字串\n  if (typeof nodeData === 'string') {\n    return nodeData.trim();\n  }\n\n  return '';\n}\n\n// 從三個 AI 節點抓資料\nconst coldFact = safeGetText(\"gemini產冷知識4\");\nconst clothingAdvice = safeGetText(\"gemini產建議穿著4\");\nconst healthRisk = safeGetText(\"gemini產健康風險4\");\n\n// 組成最終 Prompt\nconst promptText = `【降雨特報】\n{\n  天氣提醒: ${coldFact},\n  建議穿著: ${clothingAdvice},\n  健康風險: ${healthRisk},\n}\n`;\n\n// 輸出給下一個節點（例如 AI 分析）\nreturn [\n  {\n    json: {\n      contents: [\n        {\n          parts: [\n            {\n              text: promptText\n            }\n          ]\n        }\n      ]\n    }\n  }\n];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2656,
+        6992
+      ],
+      "id": "d46fd57d-16bf-4a31-b857-ccc0aeef9854",
+      "name": "產圖prompt先轉文字13"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Get the full content from the previous node.\nconst input = $input.first().json.contents[0].parts[0].text;\n\n// Split the content into an array of lines.\nconst lines = input.split('\\n');\n\n// Extract and format each part of the content.\nconst title = lines[0];\nconst weatherTip = lines[2].replace('天氣提醒: ', '');\nconst dressTip = lines[3].replace('建議穿著: ', '');\n\n// Get the health risk content and remove all asterisks.\nconst healthRisk = lines.slice(4).join('\\n');\nconst cleanedHealthRisk = healthRisk.replace(/\\*/g, ''); \n\n// Combine the parts into a clean Markdown-formatted message.\nconst formattedMessage = `${title}\\n\\n**天氣提醒：**\\n${weatherTip}\\n\\n**建議穿著：**\\n${dressTip}\\n\\n${cleanedHealthRisk}`;\n\n// Return a clean JSON object.\nreturn [\n  {\n    json: {\n      text: formattedMessage\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2832,
+        6992
+      ],
+      "id": "2b33dd3a-c149-46a1-99bb-c6ce7bf5ce6e",
+      "name": "整理&輸出文字9",
+      "retryOnFail": true,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "amount": 10
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        1504,
+        6592
+      ],
+      "id": "e6404abc-7a2d-4156-8d48-086bd7bd4034",
+      "name": "Wait10",
+      "webhookId": "d0c13fc6-e0e7-4a52-b220-2089b050b59b"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        1568,
+        7088
+      ],
+      "id": "392a2c7e-ca44-4ea6-8517-f92190eb43d5",
+      "name": "Wait11",
+      "webhookId": "d0c13fc6-e0e7-4a52-b220-2089b050b59b"
+    },
+    {
+      "parameters": {
+        "url": "https://alerts.ncdr.nat.gov.tw/JSONAtomFeed.ashx?AlertType=10",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -768,
+        6448
+      ],
+      "id": "716b2096-e198-4b0e-9cef-b7a0b0e3fe9b",
+      "name": "民生示警-取得目前特報降雨"
+    },
+    {
+      "parameters": {
+        "jsCode": "const data = $input.all()[0].json;\n\nif (!data.entry || !Array.isArray(data.entry)) {\n  throw new Error(\"找不到 entry 陣列\");\n}\n\nconst cwaItems = data.entry\n  .filter(item => item.id && item.id.toUpperCase().startsWith(\"CWA\"))\n  .map((item, index) => {\n    const text = item.summary && item.summary[\"#text\"] ? item.summary[\"#text\"] : \"\";\n    return {\n      json: {\n        index: index + 1,        // 順序編號\n        summary: text,\n        bulletPoint: `${index + 1}. ${text}`  // 列點格式文字\n      }\n    };\n  });\n\nreturn cwaItems;\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        464,
+        8496
+      ],
+      "id": "b798cc7d-de28-46d6-b9c3-5ea537540229",
+      "name": "Code4"
+    },
+    {
+      "parameters": {
+        "options": {
+          "reset": false
+        }
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        896,
+        8016
+      ],
+      "id": "2b26e613-e0e9-42dd-b4cd-96b58cbccfc2",
+      "name": "Loop Over Items4"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "name": "Replace Me4",
+      "typeVersion": 1,
+      "position": [
+        3632,
+        8944
+      ],
+      "id": "6397550b-b09e-4d98-acd2-70a954c9b80e"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=AIzaSyBN10RVLBCIPKYNb0KW12G9hT1iZ9VlL6I",
+        "sendBody": true,
+        "contentType": "raw",
+        "rawContentType": "application/json",
+        "body": "={{ $json.body }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1696,
+        7952
+      ],
+      "id": "453b98a8-2d56-45de-a08a-1448543a3058",
+      "name": "gemini產冷知識5"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=AIzaSyBN10RVLBCIPKYNb0KW12G9hT1iZ9VlL6I",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ $json }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2288,
+        7840
+      ],
+      "id": "99fba099-cfef-44a0-9eaa-9dca3d7675dd",
+      "name": "gemini產圖prompt5"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=AIzaSyBN10RVLBCIPKYNb0KW12G9hT1iZ9VlL6I",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ $json.body }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1712,
+        8400
+      ],
+      "id": "06e8a68e-a7a1-4ca2-af51-41402208364b",
+      "name": "gemini產建議穿著5"
+    },
+    {
+      "parameters": {
+        "jsCode": "return [\n  {\n    json: {\n      contents: [\n        {\n          parts: [\n            {\n              text: \n`你是台灣氣象新聞的內容企劃，請根據以下資訊輸出 JSON 格式：\n{\n  知識分享文字: ${$input.first().json.candidates[0].content.parts[0].text},\n   請將上述情境套用下方模板，最後須提供我填答完成的模板，並且背景需要有台灣元素\n    此為台灣強風特報\n    須強調${$input.first().json.candidates[0].content.parts[0].text}\n    模板：\n    畫面主題為【強風特報】下的情境：「請將知識分享文字的情境，以日系插畫風格描繪，並以1隻「可愛的小動物」作為畫面絕對的主體。小動物需要展現出豐富的情緒，並與天氣情境以及台灣在地元素產生生動的互動。」背景乾淨，以【推薦畫風】繪製。（圖中不得出現文字）      \n\n請著重以下產圖模板參數：\n- 推薦畫風：Q版卡通風格，線條清晰，色彩柔和飽滿，帶有溫暖手繪感，適合後續去背。\n- 格數描述：單格\n- 材質表現：\n- 細節呈現：\n- 鏡頭視角：\n- 表現手法：\n- 場景地點：\n- 主體人物設定：\n- 必備元素：\n- 尺寸固定為 1:1\n}\n`\n            }\n          ]\n        }\n      ]\n    }\n  }\n];\n\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2064,
+        7840
+      ],
+      "id": "edd2b2e9-8eae-470c-8dd6-a836f46af9c1",
+      "name": "產圖prompt先轉文字14"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=AIzaSyBN10RVLBCIPKYNb0KW12G9hT1iZ9VlL6I",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ $json.body }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1824,
+        8720
+      ],
+      "id": "0f31b806-27db-4056-98d6-94a01ec000b0",
+      "name": "gemini產健康風險5",
+      "retryOnFail": true,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        2208,
+        8432
+      ],
+      "id": "1662ea9c-294d-4d32-8149-b754d03e2ba6",
+      "name": "Merge10"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        2512,
+        8640
+      ],
+      "id": "652b06fc-618a-40b5-aed3-d4cc71192bba",
+      "name": "Merge11"
+    },
+    {
+      "parameters": {
+        "jsCode": "// 1. 讀取 Split In Batches 傳入的單筆資料\n//    $input.all() 會是一個包含單一物件的陣列\nconst item = $input.all()[0]; \n\nlet promptText = \"你是台灣氣象新聞小編，請根據以下警示資訊，不要廢話，只需輸出1句與此警示相關的有趣冷知識，須強化情境感受，15字內，符合 AI 搜尋與 SEO 最佳實踐，易於被檢索，語氣如圖卡宣導語，嚴格禁止使用任何 emoji 或特殊符號，嚴格禁止帶到任何縣市\\n\\n\";\n\n// 2. 直接使用 item.json 來存取資料\npromptText += `${item.json.index}. ${item.json.summary}\\n`;\n\nreturn [\n  {\n    json: {\n      prompt: promptText\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1216,
+        8016
+      ],
+      "id": "b193673a-81ea-4b4e-81cd-7f8bafb72c95",
+      "name": "下prompt組合12"
+    },
+    {
+      "parameters": {
+        "jsCode": "return {\n  body: JSON.stringify({\n    contents: [\n      {\n        parts: [\n          {\n            text: $input.first().json.prompt\n          }\n        ]\n      }\n    ]\n  })\n};\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1424,
+        8016
+      ],
+      "id": "cec70edb-bca1-47c3-83b9-9a09bfa0b2b7",
+      "name": "prompt轉格式12"
+    },
+    {
+      "parameters": {
+        "jsCode": "return [\n  {\n    json: {\n      contents: [\n        {\n          parts: [\n            {\n              text: \n`【強風特報】${$input.first().json.candidates[0].content.parts[0].text}\n`\n            }\n          ]\n        }\n      ]\n    }\n  }\n];\n\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2480,
+        7840
+      ],
+      "id": "16da6064-0cf3-46f7-83c9-bcd43693b72e",
+      "name": "產圖prompt先轉文字15"
+    },
+    {
+      "parameters": {
+        "jsCode": "const alertType =$input.first().json.contents[0].parts[0].text;\n\nreturn [{\n  filePath: 'D:\\AI test\\\\weather_coldfacts.csv', // 這裡改成你的路徑\n  content: `${alertType}\\n`\n}];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2736,
+        7952
+      ],
+      "id": "383df24f-0e9e-4b73-863d-91b3a9f3890e",
+      "name": "整理&輸出文字10"
+    },
+    {
+      "parameters": {
+        "chatId": "7802109813",
+        "text": "={{ $json.text }}\n",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        3296,
+        8656
+      ],
+      "id": "bc1ad2cf-3fb5-454e-a16d-e4a96a40646c",
+      "name": "天氣提醒4",
+      "webhookId": "b33113d9-28bc-4a47-bac6-21ce33b0d71d",
+      "credentials": {
+        "telegramApi": {
+          "id": "WBzuZLfipP7CJJSk",
+          "name": "Telegram account 3"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "amount": 10
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        3904,
+        8640
+      ],
+      "id": "eef3af8c-0ff1-42f7-a4d6-7c9220edf2d6",
+      "name": "Wait12",
+      "webhookId": "d0c13fc6-e0e7-4a52-b220-2089b050b59b"
+    },
+    {
+      "parameters": {
+        "jsCode": "// 1. 讀取 Split In Batches 傳入的單筆資料\n//    $input.all() 會是一個包含單一物件的陣列\nconst item = $input.all()[0]; \n\nlet promptText = \"你是台灣氣象新聞小編，請根據以下警示資訊，不要廢話，只需提供1個「建議穿著」，並依下述風格產出。\\n產出風格：AI Agent 可解析、Schema Friendly 風格文案，只需要提供包含全身穿搭(配件、上衣、下著)。請注意：\\n1.這Part需要提升我站內SEO 跟AAO-AI Agent Optimization\\n2.嚴格禁止超過15字\\n3.只需要提供包含全身穿搭(配件、上衣、下著)。\\n3.產品需要台灣人常用的。\\n4.嚴格禁止使用任何 emoji 或特殊符號，嚴格禁止帶到任何縣市\\n\\n\";\n\n// 2. 直接使用 item.json 來存取資料\npromptText += `${item.json.index}. ${item.json.summary}\\n`;\n\nreturn [\n  {\n    json: {\n      prompt: promptText\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1264,
+        8400
+      ],
+      "id": "33bcfe66-d267-465b-ad8e-61107d737f4d",
+      "name": "下prompt組合13"
+    },
+    {
+      "parameters": {
+        "jsCode": "return {\n  body: JSON.stringify({\n    contents: [\n      {\n        parts: [\n          {\n            text: $input.first().json.prompt\n          }\n        ]\n      }\n    ]\n  })\n};\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1440,
+        8400
+      ],
+      "id": "1ad2c312-ccb9-48bd-a239-1a497ff1ad49",
+      "name": "prompt轉格式13"
+    },
+    {
+      "parameters": {
+        "jsCode": "// 1. 讀取 Split In Batches 傳入的單筆資料\n//    $input.all() 會是一個包含單一物件的陣列\nconst item = $input.all()[0]; \n\nlet promptText = \"你你是嚴肅的台灣氣象新聞小編，請根據以下警示資訊，不要廢話，提供1個「健康風險」，並依下述風格產出。\\n產出風格：AI Agent 可解析、Schema Friendly 風格文案，只需要提供包含全身穿搭(配件、上衣、下著)。請注意：\\n1.這Part需要提升我站內SEO 跟AAO-AI Agent Optimization\\n2.嚴格禁止超過15字，嚴格禁止使用任何 emoji 或特殊符號，嚴格禁止帶到任何縣市\\n3.請審核語句完整性：生成後要確認句子是否包含主詞、動詞、賓語，語意是否完整通順。\\n4.用口語或日常用語重寫：模擬自然說話習慣，避免過於書面或機械。\\n5.請重點提示健康風險及預防行為，不能提到穿著。\\n\\n\";\n\n// 2. 直接使用 item.json 來存取資料\npromptText += `${item.json.index}. ${item.json.summary}\\n`;\n\nreturn [\n  {\n    json: {\n      prompt: promptText\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1296,
+        8736
+      ],
+      "id": "b9776e55-7971-4728-9867-799f3859a330",
+      "name": "下prompt組合14"
+    },
+    {
+      "parameters": {
+        "jsCode": "return {\n  body: JSON.stringify({\n    contents: [\n      {\n        parts: [\n          {\n            text: $input.first().json.prompt\n          }\n        ]\n      }\n    ]\n  })\n};\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1472,
+        8736
+      ],
+      "id": "f4e0479a-5907-457c-bd04-6d0c25c2d5d0",
+      "name": "prompt轉格式14"
+    },
+    {
+      "parameters": {
+        "jsCode": "// 安全取值函式，避免 AI 節點不是純文字時出錯\nfunction safeGetText(nodeName) {\n  const nodeData = $node[nodeName].json;\n\n  // Gemini / OpenAI 格式\n  if (nodeData?.candidates?.[0]?.content?.parts?.[0]?.text) {\n    return nodeData.candidates[0].content.parts[0].text.trim();\n  }\n\n  // 如果是直接回傳 text\n  if (typeof nodeData?.text === 'string') {\n    return nodeData.text.trim();\n  }\n\n  // 如果是直接回傳純字串\n  if (typeof nodeData === 'string') {\n    return nodeData.trim();\n  }\n\n  return '';\n}\n\n// 從三個 AI 節點抓資料\nconst coldFact = safeGetText(\"gemini產冷知識5\");\nconst clothingAdvice = safeGetText(\"gemini產建議穿著5\");\nconst healthRisk = safeGetText(\"gemini產健康風險5\");\n\n// 組成最終 Prompt\nconst promptText = `【強風特報】\n{\n  天氣提醒: ${coldFact},\n  建議穿著: ${clothingAdvice},\n  健康風險: ${healthRisk},\n}\n`;\n\n// 輸出給下一個節點（例如 AI 分析）\nreturn [\n  {\n    json: {\n      contents: [\n        {\n          parts: [\n            {\n              text: promptText\n            }\n          ]\n        }\n      ]\n    }\n  }\n];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2736,
+        8656
+      ],
+      "id": "042bc5ea-f4a3-4765-ac03-3ffe84947281",
+      "name": "產圖prompt先轉文字16"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Get the full content from the previous node.\nconst input = $input.first().json.contents[0].parts[0].text;\n\n// Split the content into an array of lines.\nconst lines = input.split('\\n');\n\n// Extract and format each part of the content.\nconst title = lines[0];\nconst weatherTip = lines[2].replace('天氣提醒: ', '');\nconst dressTip = lines[3].replace('建議穿著: ', '');\n\n// Get the health risk content and remove all asterisks.\nconst healthRisk = lines.slice(4).join('\\n');\nconst cleanedHealthRisk = healthRisk.replace(/\\*/g, ''); \n\n// Combine the parts into a clean Markdown-formatted message.\nconst formattedMessage = `${title}\\n\\n**天氣提醒：**\\n${weatherTip}\\n\\n**建議穿著：**\\n${dressTip}\\n\\n${cleanedHealthRisk}`;\n\n// Return a clean JSON object.\nreturn [\n  {\n    json: {\n      text: formattedMessage\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2912,
+        8656
+      ],
+      "id": "a26361b6-9a28-4a37-9b15-0a72ca13167d",
+      "name": "整理&輸出文字11",
+      "retryOnFail": true,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "amount": 10
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        1584,
+        8256
+      ],
+      "id": "f2599e3c-3353-4442-8ca1-b9ba4f763209",
+      "name": "Wait13",
+      "webhookId": "d0c13fc6-e0e7-4a52-b220-2089b050b59b"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        1648,
+        8752
+      ],
+      "id": "89ee96dd-9960-4111-9825-bf4bf088d276",
+      "name": "Wait14",
+      "webhookId": "d0c13fc6-e0e7-4a52-b220-2089b050b59b"
+    },
+    {
+      "parameters": {
+        "url": "https://alerts.ncdr.nat.gov.tw/JSONAtomFeed.ashx?AlertType=1061",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -688,
+        8112
+      ],
+      "id": "acd5e006-a4b3-4b7a-a5eb-fd2c607d228e",
+      "name": "民生示警-取得目前特報強風"
+    },
+    {
+      "parameters": {
+        "chatId": "7015502045",
+        "text": "={{ $json.content }}\n",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        6528,
+        6192
+      ],
+      "id": "da8d7694-5ff9-44ec-95a3-48a853b1f782",
+      "name": "製圖prompt_yana",
+      "webhookId": "b33113d9-28bc-4a47-bac6-21ce33b0d71d",
+      "credentials": {
+        "telegramApi": {
+          "id": "ADiZMdkyDmUbDLRw",
+          "name": "Telegram account 2"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "民生示警-取得特報細節": {
+      "main": [
+        [
+          {
+            "node": "gemini產健康風險",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "gemini產建議穿著",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "gemini產冷知識",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "gemini產冷知識": {
+      "main": [
+        [
+          {
+            "node": "產圖prompt先轉文字",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "整理&輸出文字": {
+      "main": [
+        [
+          {
+            "node": "Send a text message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "民生示警-取得目前特報雷雨",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "民生示警-取得目前特報(高溫)": {
+      "main": [
+        [
+          {
+            "node": "民生示警-取得特報細節",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "gemini產圖prompt": {
+      "main": [
+        [
+          {
+            "node": "整理&輸出文字",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "產圖prompt先轉文字": {
+      "main": [
+        [
+          {
+            "node": "gemini產圖prompt",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "gemini產建議穿著": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "gemini產健康風險": {
+      "main": [
+        [
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "SEO評分前merge": {
+      "main": [
+        [
+          {
+            "node": "gemini-SEO評分",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge1": {
+      "main": [
+        [
+          {
+            "node": "SEO評分前merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "gemini-SEO評分": {
+      "main": [
+        [
+          {
+            "node": "整理&輸出文字1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "整理&輸出文字1": {
+      "main": [
+        [
+          {
+            "node": "Send a text message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "民生示警-取得目前特報(高溫)1": {
+      "main": [
+        [
+          {
+            "node": "Code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [],
+        [
+          {
+            "node": "下prompt組合1",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "下prompt組合",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "下prompt組合2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Replace Me": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "gemini產冷知識1": {
+      "main": [
+        [
+          {
+            "node": "產圖prompt先轉文字1",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Merge2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "gemini產圖prompt1": {
+      "main": [
+        [
+          {
+            "node": "產圖prompt先轉文字2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "gemini產建議穿著1": {
+      "main": [
+        [
+          {
+            "node": "Merge2",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "產圖prompt先轉文字1": {
+      "main": [
+        [
+          {
+            "node": "gemini產圖prompt1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "gemini產健康風險1": {
+      "main": [
+        [
+          {
+            "node": "Merge3",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Merge2": {
+      "main": [
+        [
+          {
+            "node": "Merge3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge3": {
+      "main": [
+        [
+          {
+            "node": "產圖prompt先轉文字3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "下prompt組合1": {
+      "main": [
+        [
+          {
+            "node": "prompt轉格式",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "prompt轉格式": {
+      "main": [
+        [
+          {
+            "node": "gemini產冷知識1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "產圖prompt先轉文字2": {
+      "main": [
+        [
+          {
+            "node": "整理&輸出文字2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "整理&輸出文字2": {
+      "main": [
+        [
+          {
+            "node": "製圖prompt",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "製圖prompt_yana",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "製圖prompt": {
+      "main": [
+        [
+          {
+            "node": "Wait6",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "天氣提醒": {
+      "main": [
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait": {
+      "main": [
+        [
+          {
+            "node": "Replace Me",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "下prompt組合": {
+      "main": [
+        [
+          {
+            "node": "prompt轉格式1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "prompt轉格式1": {
+      "main": [
+        [
+          {
+            "node": "Wait1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "下prompt組合2": {
+      "main": [
+        [
+          {
+            "node": "prompt轉格式2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "prompt轉格式2": {
+      "main": [
+        [
+          {
+            "node": "Wait2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "產圖prompt先轉文字3": {
+      "main": [
+        [
+          {
+            "node": "產圖prompt先轉文字7",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait1": {
+      "main": [
+        [
+          {
+            "node": "gemini產建議穿著1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait2": {
+      "main": [
+        [
+          {
+            "node": "gemini產健康風險1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code1": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items1": {
+      "main": [
+        [],
+        [
+          {
+            "node": "下prompt組合3",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "下prompt組合4",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "下prompt組合5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Replace Me1": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "gemini產冷知識2": {
+      "main": [
+        [
+          {
+            "node": "產圖prompt先轉文字4",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Merge4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "gemini產圖prompt2": {
+      "main": [
+        [
+          {
+            "node": "產圖prompt先轉文字5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "gemini產建議穿著2": {
+      "main": [
+        [
+          {
+            "node": "Merge4",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "產圖prompt先轉文字4": {
+      "main": [
+        [
+          {
+            "node": "gemini產圖prompt2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "gemini產健康風險2": {
+      "main": [
+        [
+          {
+            "node": "Merge5",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Merge4": {
+      "main": [
+        [
+          {
+            "node": "Merge5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge5": {
+      "main": [
+        [
+          {
+            "node": "產圖prompt先轉文字6",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "下prompt組合3": {
+      "main": [
+        [
+          {
+            "node": "prompt轉格式3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "prompt轉格式3": {
+      "main": [
+        [
+          {
+            "node": "gemini產冷知識2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "產圖prompt先轉文字5": {
+      "main": [
+        [
+          {
+            "node": "整理&輸出文字3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "整理&輸出文字3": {
+      "main": [
+        [
+          {
+            "node": "製圖prompt",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "製圖prompt_yana",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "天氣提醒1": {
+      "main": [
+        [
+          {
+            "node": "Wait3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait3": {
+      "main": [
+        [
+          {
+            "node": "Replace Me1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "下prompt組合4": {
+      "main": [
+        [
+          {
+            "node": "prompt轉格式4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "prompt轉格式4": {
+      "main": [
+        [
+          {
+            "node": "Wait4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "下prompt組合5": {
+      "main": [
+        [
+          {
+            "node": "prompt轉格式5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "prompt轉格式5": {
+      "main": [
+        [
+          {
+            "node": "Wait5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "產圖prompt先轉文字6": {
+      "main": [
+        [
+          {
+            "node": "整理&輸出文字5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "整理&輸出文字5": {
+      "main": [
+        [
+          {
+            "node": "天氣提醒1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait4": {
+      "main": [
+        [
+          {
+            "node": "gemini產建議穿著2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait5": {
+      "main": [
+        [
+          {
+            "node": "gemini產健康風險2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "民生示警-取得目前特報(低溫)": {
+      "main": [
+        [
+          {
+            "node": "Code1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "產圖prompt先轉文字7": {
+      "main": [
+        [
+          {
+            "node": "天氣提醒",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code2": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items2": {
+      "main": [
+        [],
+        [
+          {
+            "node": "下prompt組合6",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Replace Me2": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "gemini產冷知識3": {
+      "main": [
+        [
+          {
+            "node": "產圖prompt先轉文字8",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "gemini產圖prompt3": {
+      "main": [
+        [
+          {
+            "node": "產圖prompt先轉文字9",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "gemini產建議穿著3": {
+      "main": [
+        [
+          {
+            "node": "Merge6",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "產圖prompt先轉文字8": {
+      "main": [
+        [
+          {
+            "node": "gemini產圖prompt3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "gemini產健康風險3": {
+      "main": [
+        [
+          {
+            "node": "Merge7",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Merge6": {
+      "main": [
+        [
+          {
+            "node": "Merge7",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge7": {
+      "main": [
+        [
+          {
+            "node": "產圖prompt先轉文字10",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "下prompt組合6": {
+      "main": [
+        [
+          {
+            "node": "prompt轉格式6",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "prompt轉格式6": {
+      "main": [
+        [
+          {
+            "node": "gemini產冷知識3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "產圖prompt先轉文字9": {
+      "main": [
+        [
+          {
+            "node": "整理&輸出文字6",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "天氣提醒2": {
+      "main": [
+        []
+      ]
+    },
+    "Wait6": {
+      "main": [
+        [
+          {
+            "node": "Replace Me2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "下prompt組合7": {
+      "main": [
+        [
+          {
+            "node": "prompt轉格式7",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "prompt轉格式7": {
+      "main": [
+        [
+          {
+            "node": "Wait7",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "下prompt組合8": {
+      "main": [
+        [
+          {
+            "node": "prompt轉格式8",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "prompt轉格式8": {
+      "main": [
+        [
+          {
+            "node": "Wait8",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "產圖prompt先轉文字10": {
+      "main": [
+        [
+          {
+            "node": "整理&輸出文字7",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "整理&輸出文字7": {
+      "main": [
+        [
+          {
+            "node": "天氣提醒2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait7": {
+      "main": [
+        [
+          {
+            "node": "gemini產建議穿著3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait8": {
+      "main": [
+        [
+          {
+            "node": "gemini產健康風險3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "民生示警-取得目前特報雷雨": {
+      "main": [
+        [
+          {
+            "node": "Code2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "整理&輸出文字6": {
+      "main": [
+        [
+          {
+            "node": "製圖prompt",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code3": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items3": {
+      "main": [
+        [],
+        [
+          {
+            "node": "下prompt組合9",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "下prompt組合10",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "下prompt組合11",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Replace Me3": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "gemini產冷知識4": {
+      "main": [
+        [
+          {
+            "node": "產圖prompt先轉文字11",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Merge8",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "gemini產圖prompt4": {
+      "main": [
+        [
+          {
+            "node": "產圖prompt先轉文字12",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "gemini產建議穿著4": {
+      "main": [
+        [
+          {
+            "node": "Merge8",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "產圖prompt先轉文字11": {
+      "main": [
+        [
+          {
+            "node": "gemini產圖prompt4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "gemini產健康風險4": {
+      "main": [
+        [
+          {
+            "node": "Merge9",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Merge8": {
+      "main": [
+        [
+          {
+            "node": "Merge9",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge9": {
+      "main": [
+        [
+          {
+            "node": "產圖prompt先轉文字13",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "下prompt組合9": {
+      "main": [
+        [
+          {
+            "node": "prompt轉格式9",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "prompt轉格式9": {
+      "main": [
+        [
+          {
+            "node": "gemini產冷知識4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "產圖prompt先轉文字12": {
+      "main": [
+        [
+          {
+            "node": "整理&輸出文字8",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "天氣提醒3": {
+      "main": [
+        [
+          {
+            "node": "Wait9",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait9": {
+      "main": [
+        [
+          {
+            "node": "Replace Me3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "下prompt組合10": {
+      "main": [
+        [
+          {
+            "node": "prompt轉格式10",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "prompt轉格式10": {
+      "main": [
+        [
+          {
+            "node": "Wait10",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "下prompt組合11": {
+      "main": [
+        [
+          {
+            "node": "prompt轉格式11",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "prompt轉格式11": {
+      "main": [
+        [
+          {
+            "node": "Wait11",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "產圖prompt先轉文字13": {
+      "main": [
+        [
+          {
+            "node": "整理&輸出文字9",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "整理&輸出文字9": {
+      "main": [
+        [
+          {
+            "node": "天氣提醒3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait10": {
+      "main": [
+        [
+          {
+            "node": "gemini產建議穿著4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait11": {
+      "main": [
+        [
+          {
+            "node": "gemini產健康風險4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "民生示警-取得目前特報降雨": {
+      "main": [
+        [
+          {
+            "node": "Code3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "整理&輸出文字8": {
+      "main": [
+        [
+          {
+            "node": "製圖prompt",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "製圖prompt_yana",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code4": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items4": {
+      "main": [
+        [],
+        [
+          {
+            "node": "下prompt組合12",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "下prompt組合13",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "下prompt組合14",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Replace Me4": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "gemini產冷知識5": {
+      "main": [
+        [
+          {
+            "node": "產圖prompt先轉文字14",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Merge10",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "gemini產圖prompt5": {
+      "main": [
+        [
+          {
+            "node": "產圖prompt先轉文字15",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "gemini產建議穿著5": {
+      "main": [
+        [
+          {
+            "node": "Merge10",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "產圖prompt先轉文字14": {
+      "main": [
+        [
+          {
+            "node": "gemini產圖prompt5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "gemini產健康風險5": {
+      "main": [
+        [
+          {
+            "node": "Merge11",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Merge10": {
+      "main": [
+        [
+          {
+            "node": "Merge11",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge11": {
+      "main": [
+        [
+          {
+            "node": "產圖prompt先轉文字16",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "下prompt組合12": {
+      "main": [
+        [
+          {
+            "node": "prompt轉格式12",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "prompt轉格式12": {
+      "main": [
+        [
+          {
+            "node": "gemini產冷知識5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "產圖prompt先轉文字15": {
+      "main": [
+        [
+          {
+            "node": "整理&輸出文字10",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "天氣提醒4": {
+      "main": [
+        [
+          {
+            "node": "Wait12",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait12": {
+      "main": [
+        [
+          {
+            "node": "Replace Me4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "下prompt組合13": {
+      "main": [
+        [
+          {
+            "node": "prompt轉格式13",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "prompt轉格式13": {
+      "main": [
+        [
+          {
+            "node": "Wait13",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "下prompt組合14": {
+      "main": [
+        [
+          {
+            "node": "prompt轉格式14",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "prompt轉格式14": {
+      "main": [
+        [
+          {
+            "node": "Wait14",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "產圖prompt先轉文字16": {
+      "main": [
+        [
+          {
+            "node": "整理&輸出文字11",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "整理&輸出文字11": {
+      "main": [
+        [
+          {
+            "node": "天氣提醒4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait13": {
+      "main": [
+        [
+          {
+            "node": "gemini產建議穿著5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait14": {
+      "main": [
+        [
+          {
+            "node": "gemini產健康風險5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "民生示警-取得目前特報強風": {
+      "main": [
+        [
+          {
+            "node": "Code4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "整理&輸出文字10": {
+      "main": [
+        [
+          {
+            "node": "製圖prompt",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "製圖prompt_yana",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": {
+    "node:Schedule Trigger": {
+      "recurrenceRules": []
+    }
+  },
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {
+    "民生示警-取得目前特報雷雨": [
+      {
+        "json": {
+          "id": "https://alerts.ncdr.nat.gov.tw/Json.aspx",
+          "title": "NCDR_CAP-即時防災資訊(Json)",
+          "updated": "2025-09-18T17:56:00+08:00",
+          "author": {
+            "name": "NCDR"
+          },
+          "rights": "Public Domain",
+          "link": {
+            "@rel": "self",
+            "@href": "https://alerts.ncdr.nat.gov.tw/JSONAtomFeed.ashx?AlertType=1051"
+          },
+          "entry": [
+            {
+              "id": "cwa.gov.tw_thunderstorm_20250912151412_000",
+              "title": "雷雨",
+              "updated": "2025-09-12T15:14:12+08:00",
+              "author": {
+                "name": "中央氣象署"
+              },
+              "link": {
+                "@rel": "alternate",
+                "@href": "https://alerts.ncdr.nat.gov.tw/Capstorage/CWA/2025/thunderstorm/cwa.gov.tw_thunderstorm_20250912151412_000.cap"
+              },
+              "summary": {
+                "@type": "html",
+                "#text": "114 年 9 月 12 日 15 時 13 分 氣象署發布大雷雨即時訊息，持續時間至 16 時 15 分；請慎防劇烈降雨、雷擊、冰雹，低窪地區慎防淹水，以及低能見度"
+              },
+              "category": {
+                "@term": "雷雨"
+              }
+            },
+            {
+              "id": "cwa.gov.tw_thunderstorm_20250912155722_000",
+              "title": "雷雨",
+              "updated": "2025-09-12T15:57:22+08:00",
+              "author": {
+                "name": "中央氣象署"
+              },
+              "link": {
+                "@rel": "alternate",
+                "@href": "https://alerts.ncdr.nat.gov.tw/Capstorage/CWA/2025/thunderstorm/cwa.gov.tw_thunderstorm_20250912155722_000.cap"
+              },
+              "summary": {
+                "@type": "html",
+                "#text": "114 年 9 月 12 日 15 時 56 分 氣象署發布大雷雨即時訊息，持續時間至 17 時 0 分；請慎防劇烈降雨、雷擊，溪(河)水暴漲，低窪地區慎防淹水，以及低能見度"
+              },
+              "category": {
+                "@term": "雷雨"
+              }
+            },
+            {
+              "id": "cwa.gov.tw_thunderstorm_20250912155600_000",
+              "title": "雷雨",
+              "updated": "2025-09-12T15:58:07+08:00",
+              "author": {
+                "name": "中央氣象署"
+              },
+              "link": {
+                "@rel": "alternate",
+                "@href": "https://alerts.ncdr.nat.gov.tw/Capstorage/CWA/2025/thunderstorm/cwa.gov.tw_thunderstorm_20250912155600_000.cap"
+              },
+              "summary": {
+                "@type": "html",
+                "#text": "氣象署針對新竹縣油羅溪(雞油樹下區域),桃園市宇內溪(宇內橋),桃園市霞雲溪(優霞雲瀑布區)發布災防告警，持續時間至17時56分；此區域已有暴雨或有暴雨發生的機率，留意溪水暴漲並儘速遠離。"
+              },
+              "category": {
+                "@term": "雷雨"
+              }
+            },
+            {
+              "id": "cwa.gov.tw_thunderstorm_20250912160950_000",
+              "title": "雷雨",
+              "updated": "2025-09-12T16:09:50+08:00",
+              "author": {
+                "name": "中央氣象署"
+              },
+              "link": {
+                "@rel": "alternate",
+                "@href": "https://alerts.ncdr.nat.gov.tw/Capstorage/CWA/2025/thunderstorm/cwa.gov.tw_thunderstorm_20250912160950_000.cap"
+              },
+              "summary": {
+                "@type": "html",
+                "#text": "114 年 9 月 12 日 16 時 8 分 氣象署發布大雷雨即時訊息，持續時間至 16 時 45 分；請慎防劇烈降雨、雷擊、9級以上強陣風、冰雹，低窪地區慎防淹水，以及低能見度"
+              },
+              "category": {
+                "@term": "雷雨"
+              }
+            },
+            {
+              "id": "cwa.gov.tw_thunderstorm_20250912164345_000",
+              "title": "雷雨",
+              "updated": "2025-09-12T16:43:45+08:00",
+              "author": {
+                "name": "中央氣象署"
+              },
+              "link": {
+                "@rel": "alternate",
+                "@href": "https://alerts.ncdr.nat.gov.tw/Capstorage/CWA/2025/thunderstorm/cwa.gov.tw_thunderstorm_20250912164345_000.cap"
+              },
+              "summary": {
+                "@type": "html",
+                "#text": "114 年 9 月 12 日 16 時 43 分 氣象署發布大雷雨即時訊息，持續時間至 17 時 45 分；請慎防劇烈降雨、雷擊、9級以上強陣風、冰雹，低窪地區慎防淹水，以及低能見度"
+              },
+              "category": {
+                "@term": "雷雨"
+              }
+            },
+            {
+              "id": "cwa.gov.tw_thunderstorm_20250912164300_000",
+              "title": "雷雨",
+              "updated": "2025-09-12T16:44:31+08:00",
+              "author": {
+                "name": "中央氣象署"
+              },
+              "link": {
+                "@rel": "alternate",
+                "@href": "https://alerts.ncdr.nat.gov.tw/Capstorage/CWA/2025/thunderstorm/cwa.gov.tw_thunderstorm_20250912164300_000.cap"
+              },
+              "summary": {
+                "@type": "html",
+                "#text": "氣象署針對屏東縣沙漠溪(海神宮),屏東縣隘寮北溪(飛龍瀑布群)發布災防告警，持續時間至18時43分；此區域已有暴雨或有暴雨發生的機率，留意溪水暴漲並儘速遠離。"
+              },
+              "category": {
+                "@term": "雷雨"
+              }
+            },
+            {
+              "id": "cwa.gov.tw_thunderstorm_20250912181858_000",
+              "title": "雷雨",
+              "updated": "2025-09-12T18:18:58+08:00",
+              "author": {
+                "name": "中央氣象署"
+              },
+              "link": {
+                "@rel": "alternate",
+                "@href": "https://alerts.ncdr.nat.gov.tw/Capstorage/CWA/2025/thunderstorm/cwa.gov.tw_thunderstorm_20250912181858_000.cap"
+              },
+              "summary": {
+                "@type": "html",
+                "#text": "114 年 9 月 12 日 18 時 18 分 氣象署發布大雷雨即時訊息，持續時間至 19 時 15 分；請慎防劇烈降雨、雷擊，低窪地區慎防淹水，以及低能見度"
+              },
+              "category": {
+                "@term": "雷雨"
+              }
+            },
+            {
+              "id": "cwa.gov.tw_thunderstorm_20250913144431_000",
+              "title": "雷雨",
+              "updated": "2025-09-13T14:44:31+08:00",
+              "author": {
+                "name": "中央氣象署"
+              },
+              "link": {
+                "@rel": "alternate",
+                "@href": "https://alerts.ncdr.nat.gov.tw/Capstorage/CWA/2025/thunderstorm/cwa.gov.tw_thunderstorm_20250913144431_000.cap"
+              },
+              "summary": {
+                "@type": "html",
+                "#text": "114 年 9 月 13 日 14 時 43 分 氣象署發布大雷雨即時訊息，持續時間至 15 時 45 分；請慎防劇烈降雨、雷擊、冰雹，溪(河)水暴漲，坍方、落石、土石流，低窪地區慎防淹水，以及低能見度"
+              },
+              "category": {
+                "@term": "雷雨"
+              }
+            },
+            {
+              "id": "cwa.gov.tw_thunderstorm_20250913151259_000",
+              "title": "雷雨",
+              "updated": "2025-09-13T15:12:59+08:00",
+              "author": {
+                "name": "中央氣象署"
+              },
+              "link": {
+                "@rel": "alternate",
+                "@href": "https://alerts.ncdr.nat.gov.tw/Capstorage/CWA/2025/thunderstorm/cwa.gov.tw_thunderstorm_20250913151259_000.cap"
+              },
+              "summary": {
+                "@type": "html",
+                "#text": "114 年 9 月 13 日 15 時 12 分 氣象署發布大雷雨即時訊息，持續時間至 16 時 15 分；請慎防劇烈降雨、雷擊，溪(河)水暴漲，坍方、落石、土石流，低窪地區慎防淹水，以及低能見度"
+              },
+              "category": {
+                "@term": "雷雨"
+              }
+            },
+            {
+              "id": "cwa.gov.tw_thunderstorm_20250913154153_000",
+              "title": "雷雨",
+              "updated": "2025-09-13T15:41:53+08:00",
+              "author": {
+                "name": "中央氣象署"
+              },
+              "link": {
+                "@rel": "alternate",
+                "@href": "https://alerts.ncdr.nat.gov.tw/Capstorage/CWA/2025/thunderstorm/cwa.gov.tw_thunderstorm_20250913154153_000.cap"
+              },
+              "summary": {
+                "@type": "html",
+                "#text": "114 年 9 月 13 日 15 時 41 分 氣象署發布大雷雨即時訊息，持續時間至 16 時 45 分；請慎防劇烈降雨、雷擊、冰雹，溪(河)水暴漲，坍方、落石、土石流，低窪地區慎防淹水，以及低能見度"
+              },
+              "category": {
+                "@term": "雷雨"
+              }
+            },
+            {
+              "id": "cwa.gov.tw_thunderstorm_20250914134424_000",
+              "title": "雷雨",
+              "updated": "2025-09-14T13:44:24+08:00",
+              "author": {
+                "name": "中央氣象署"
+              },
+              "link": {
+                "@rel": "alternate",
+                "@href": "https://alerts.ncdr.nat.gov.tw/Capstorage/CWA/2025/thunderstorm/cwa.gov.tw_thunderstorm_20250914134424_000.cap"
+              },
+              "summary": {
+                "@type": "html",
+                "#text": "114 年 9 月 14 日 13 時 44 分 氣象署發布大雷雨即時訊息，持續時間至 14 時 45 分；請慎防劇烈降雨、雷擊、冰雹，溪(河)水暴漲，低窪地區慎防淹水，以及低能見度"
+              },
+              "category": {
+                "@term": "雷雨"
+              }
+            },
+            {
+              "id": "cwa.gov.tw_thunderstorm_20250914140806_000",
+              "title": "雷雨",
+              "updated": "2025-09-14T14:08:06+08:00",
+              "author": {
+                "name": "中央氣象署"
+              },
+              "link": {
+                "@rel": "alternate",
+                "@href": "https://alerts.ncdr.nat.gov.tw/Capstorage/CWA/2025/thunderstorm/cwa.gov.tw_thunderstorm_20250914140806_000.cap"
+              },
+              "summary": {
+                "@type": "html",
+                "#text": "114 年 9 月 14 日 14 時 7 分 氣象署發布大雷雨即時訊息，持續時間至 15 時 0 分；請慎防劇烈降雨、雷擊、冰雹，溪(河)水暴漲，低窪地區慎防淹水，以及低能見度"
+              },
+              "category": {
+                "@term": "雷雨"
+              }
+            },
+            {
+              "id": "cwa.gov.tw_thunderstorm_20250914150248_000",
+              "title": "雷雨",
+              "updated": "2025-09-14T15:02:48+08:00",
+              "author": {
+                "name": "中央氣象署"
+              },
+              "link": {
+                "@rel": "alternate",
+                "@href": "https://alerts.ncdr.nat.gov.tw/Capstorage/CWA/2025/thunderstorm/cwa.gov.tw_thunderstorm_20250914150248_000.cap"
+              },
+              "summary": {
+                "@type": "html",
+                "#text": "114 年 9 月 14 日 15 時 2 分 氣象署發布大雷雨即時訊息，持續時間至 17 時 0 分；請慎防劇烈降雨、雷擊、冰雹，溪(河)水暴漲，低窪地區慎防淹水，以及低能見度"
+              },
+              "category": {
+                "@term": "雷雨"
+              }
+            },
+            {
+              "id": "cwa.gov.tw_thunderstorm_20250914150200_000",
+              "title": "雷雨",
+              "updated": "2025-09-14T15:03:34+08:00",
+              "author": {
+                "name": "中央氣象署"
+              },
+              "link": {
+                "@rel": "alternate",
+                "@href": "https://alerts.ncdr.nat.gov.tw/Capstorage/CWA/2025/thunderstorm/cwa.gov.tw_thunderstorm_20250914150200_000.cap"
+              },
+              "summary": {
+                "@type": "html",
+                "#text": "氣象署針對嘉義縣草山溪(葫蘆谷),臺南市後堀溪(千層岩瀑布)發布災防告警，持續時間至17時02分；此區域已有暴雨或有暴雨發生的機率，留意溪水暴漲並儘速遠離。"
+              },
+              "category": {
+                "@term": "雷雨"
+              }
+            },
+            {
+              "id": "cwa.gov.tw_thunderstorm_20250914154808_000",
+              "title": "雷雨",
+              "updated": "2025-09-14T15:48:08+08:00",
+              "author": {
+                "name": "中央氣象署"
+              },
+              "link": {
+                "@rel": "alternate",
+                "@href": "https://alerts.ncdr.nat.gov.tw/Capstorage/CWA/2025/thunderstorm/cwa.gov.tw_thunderstorm_20250914154808_000.cap"
+              },
+              "summary": {
+                "@type": "html",
+                "#text": "114 年 9 月 14 日 15 時 47 分 氣象署發布大雷雨即時訊息，持續時間至 16 時 45 分；請慎防劇烈降雨、雷擊、冰雹，溪(河)水暴漲，以及低能見度"
+              },
+              "category": {
+                "@term": "雷雨"
+              }
+            },
+            {
+              "id": "cwa.gov.tw_thunderstorm_20250914154700_000",
+              "title": "雷雨",
+              "updated": "2025-09-14T15:48:55+08:00",
+              "author": {
+                "name": "中央氣象署"
+              },
+              "link": {
+                "@rel": "alternate",
+                "@href": "https://alerts.ncdr.nat.gov.tw/Capstorage/CWA/2025/thunderstorm/cwa.gov.tw_thunderstorm_20250914154700_000.cap"
+              },
+              "summary": {
+                "@type": "html",
+                "#text": "氣象署針對屏東縣沙漠溪(海神宮),屏東縣牛角灣溪發布災防告警，持續時間至17時47分；此區域已有暴雨或有暴雨發生的機率，留意溪水暴漲並儘速遠離。"
+              },
+              "category": {
+                "@term": "雷雨"
+              }
+            },
+            {
+              "id": "cwa.gov.tw_thunderstorm_20250914165644_000",
+              "title": "雷雨",
+              "updated": "2025-09-14T16:56:44+08:00",
+              "author": {
+                "name": "中央氣象署"
+              },
+              "link": {
+                "@rel": "alternate",
+                "@href": "https://alerts.ncdr.nat.gov.tw/Capstorage/CWA/2025/thunderstorm/cwa.gov.tw_thunderstorm_20250914165644_000.cap"
+              },
+              "summary": {
+                "@type": "html",
+                "#text": "114 年 9 月 14 日 16 時 56 分 氣象署發布大雷雨即時訊息，持續時間至 18 時 0 分；請慎防劇烈降雨、雷擊、冰雹，溪(河)水暴漲，以及低能見度"
+              },
+              "category": {
+                "@term": "雷雨"
+              }
+            },
+            {
+              "id": "cwa.gov.tw_thunderstorm_20250915004520_000",
+              "title": "雷雨",
+              "updated": "2025-09-15T00:45:20+08:00",
+              "author": {
+                "name": "中央氣象署"
+              },
+              "link": {
+                "@rel": "alternate",
+                "@href": "https://alerts.ncdr.nat.gov.tw/Capstorage/CWA/2025/thunderstorm/cwa.gov.tw_thunderstorm_20250915004520_000.cap"
+              },
+              "summary": {
+                "@type": "html",
+                "#text": "114 年 9 月 15 日 0 時 44 分 氣象署發布大雷雨即時訊息，持續時間至 1 時 45 分；請慎防劇烈降雨、雷擊、9級以上強陣風，以及低能見度"
+              },
+              "category": {
+                "@term": "雷雨"
+              }
+            },
+            {
+              "id": "cwa.gov.tw_thunderstorm_20250915013417_000",
+              "title": "雷雨",
+              "updated": "2025-09-15T01:34:17+08:00",
+              "author": {
+                "name": "中央氣象署"
+              },
+              "link": {
+                "@rel": "alternate",
+                "@href": "https://alerts.ncdr.nat.gov.tw/Capstorage/CWA/2025/thunderstorm/cwa.gov.tw_thunderstorm_20250915013417_000.cap"
+              },
+              "summary": {
+                "@type": "html",
+                "#text": "114 年 9 月 15 日 1 時 34 分 氣象署發布大雷雨即時訊息，持續時間至 2 時 0 分；請慎防劇烈降雨、雷擊、9級以上強陣風，以及低能見度"
+              },
+              "category": {
+                "@term": "雷雨"
+              }
+            },
+            {
+              "id": "cwa.gov.tw_thunderstorm_20250915162311_000",
+              "title": "雷雨",
+              "updated": "2025-09-15T16:23:11+08:00",
+              "author": {
+                "name": "中央氣象署"
+              },
+              "link": {
+                "@rel": "alternate",
+                "@href": "https://alerts.ncdr.nat.gov.tw/Capstorage/CWA/2025/thunderstorm/cwa.gov.tw_thunderstorm_20250915162311_000.cap"
+              },
+              "summary": {
+                "@type": "html",
+                "#text": "114 年 9 月 15 日 16 時 22 分 氣象署發布大雷雨即時訊息，持續時間至 17 時 15 分；請慎防劇烈降雨、雷擊，溪(河)水暴漲，坍方、落石、土石流"
+              },
+              "category": {
+                "@term": "雷雨"
+              }
+            },
+            {
+              "id": "cwa.gov.tw_thunderstorm_20250915162200_000",
+              "title": "雷雨",
+              "updated": "2025-09-15T16:24:01+08:00",
+              "author": {
+                "name": "中央氣象署"
+              },
+              "link": {
+                "@rel": "alternate",
+                "@href": "https://alerts.ncdr.nat.gov.tw/Capstorage/CWA/2025/thunderstorm/cwa.gov.tw_thunderstorm_20250915162200_000.cap"
+              },
+              "summary": {
+                "@type": "html",
+                "#text": "氣象署針對嘉義縣草山溪(葫蘆谷)發布災防告警，持續時間至18時22分；此區域已有暴雨或有暴雨發生的機率，留意溪水暴漲並儘速遠離。"
+              },
+              "category": {
+                "@term": "雷雨"
+              }
+            },
+            {
+              "id": "cwa.gov.tw_thunderstorm_20250915164750_000",
+              "title": "雷雨",
+              "updated": "2025-09-15T16:47:50+08:00",
+              "author": {
+                "name": "中央氣象署"
+              },
+              "link": {
+                "@rel": "alternate",
+                "@href": "https://alerts.ncdr.nat.gov.tw/Capstorage/CWA/2025/thunderstorm/cwa.gov.tw_thunderstorm_20250915164750_000.cap"
+              },
+              "summary": {
+                "@type": "html",
+                "#text": "114 年 9 月 15 日 16 時 47 分 氣象署發布大雷雨即時訊息，持續時間至 17 時 45 分；請慎防劇烈降雨、雷擊，溪(河)水暴漲，坍方、落石、土石流"
+              },
+              "category": {
+                "@term": "雷雨"
+              }
+            },
+            {
+              "id": "cwa.gov.tw_thunderstorm_20250915165117_000",
+              "title": "雷雨",
+              "updated": "2025-09-15T16:51:17+08:00",
+              "author": {
+                "name": "中央氣象署"
+              },
+              "link": {
+                "@rel": "alternate",
+                "@href": "https://alerts.ncdr.nat.gov.tw/Capstorage/CWA/2025/thunderstorm/cwa.gov.tw_thunderstorm_20250915165117_000.cap"
+              },
+              "summary": {
+                "@type": "html",
+                "#text": "114 年 9 月 15 日 16 時 50 分 氣象署發布大雷雨即時訊息，持續時間至 17 時 45 分；請慎防劇烈降雨、雷擊、冰雹，溪(河)水暴漲，坍方、落石、土石流"
+              },
+              "category": {
+                "@term": "雷雨"
+              }
+            },
+            {
+              "id": "cwa.gov.tw_thunderstorm_20250915172805_000",
+              "title": "雷雨",
+              "updated": "2025-09-15T17:28:05+08:00",
+              "author": {
+                "name": "中央氣象署"
+              },
+              "link": {
+                "@rel": "alternate",
+                "@href": "https://alerts.ncdr.nat.gov.tw/Capstorage/CWA/2025/thunderstorm/cwa.gov.tw_thunderstorm_20250915172805_000.cap"
+              },
+              "summary": {
+                "@type": "html",
+                "#text": "114 年 9 月 15 日 17 時 27 分 氣象署發布大雷雨即時訊息，持續時間至 18 時 30 分；請慎防劇烈降雨、雷擊，溪(河)水暴漲，坍方、落石、土石流，以及低能見度"
+              },
+              "category": {
+                "@term": "雷雨"
+              }
+            },
+            {
+              "id": "cwa.gov.tw_thunderstorm_20250917151009_000",
+              "title": "雷雨",
+              "updated": "2025-09-17T15:10:09+08:00",
+              "author": {
+                "name": "中央氣象署"
+              },
+              "link": {
+                "@rel": "alternate",
+                "@href": "https://alerts.ncdr.nat.gov.tw/Capstorage/CWA/2025/thunderstorm/cwa.gov.tw_thunderstorm_20250917151009_000.cap"
+              },
+              "summary": {
+                "@type": "html",
+                "#text": "114 年 9 月 17 日 15 時 9 分 氣象署發布大雷雨即時訊息，持續時間至 16 時 15 分；請慎防劇烈降雨、雷擊、9級以上強陣風、冰雹，以及低能見度"
+              },
+              "category": {
+                "@term": "雷雨"
+              }
+            },
+            {
+              "id": "cwa.gov.tw_thunderstorm_20250917153407_000",
+              "title": "雷雨",
+              "updated": "2025-09-17T15:34:07+08:00",
+              "author": {
+                "name": "中央氣象署"
+              },
+              "link": {
+                "@rel": "alternate",
+                "@href": "https://alerts.ncdr.nat.gov.tw/Capstorage/CWA/2025/thunderstorm/cwa.gov.tw_thunderstorm_20250917153407_000.cap"
+              },
+              "summary": {
+                "@type": "html",
+                "#text": "114 年 9 月 17 日 15 時 33 分 氣象署發布大雷雨即時訊息，持續時間至 16 時 30 分；請慎防劇烈降雨、雷擊、9級以上強陣風、冰雹，以及低能見度"
+              },
+              "category": {
+                "@term": "雷雨"
+              }
+            },
+            {
+              "id": "cwa.gov.tw_thunderstorm_20250917171442_000",
+              "title": "雷雨",
+              "updated": "2025-09-17T17:14:42+08:00",
+              "author": {
+                "name": "中央氣象署"
+              },
+              "link": {
+                "@rel": "alternate",
+                "@href": "https://alerts.ncdr.nat.gov.tw/Capstorage/CWA/2025/thunderstorm/cwa.gov.tw_thunderstorm_20250917171442_000.cap"
+              },
+              "summary": {
+                "@type": "html",
+                "#text": "114 年 9 月 17 日 17 時 12 分 氣象署發布大雷雨即時訊息，持續時間至 18 時 15 分；請慎防劇烈降雨、雷擊，以及低能見度"
+              },
+              "category": {
+                "@term": "雷雨"
+              }
+            },
+            {
+              "id": "cwa.gov.tw_thunderstorm_20250917171934_000",
+              "title": "雷雨",
+              "updated": "2025-09-17T17:19:34+08:00",
+              "author": {
+                "name": "中央氣象署"
+              },
+              "link": {
+                "@rel": "alternate",
+                "@href": "https://alerts.ncdr.nat.gov.tw/Capstorage/CWA/2025/thunderstorm/cwa.gov.tw_thunderstorm_20250917171934_000.cap"
+              },
+              "summary": {
+                "@type": "html",
+                "#text": "114 年 9 月 17 日 17 時 18 分 氣象署發布大雷雨即時訊息，持續時間至 18 時 15 分；請慎防劇烈降雨、雷擊、9級以上強陣風、冰雹，溪(河)水暴漲，以及低能見度"
+              },
+              "category": {
+                "@term": "雷雨"
+              }
+            },
+            {
+              "id": "cwa.gov.tw_thunderstorm_20250917174753_000",
+              "title": "雷雨",
+              "updated": "2025-09-17T17:47:53+08:00",
+              "author": {
+                "name": "中央氣象署"
+              },
+              "link": {
+                "@rel": "alternate",
+                "@href": "https://alerts.ncdr.nat.gov.tw/Capstorage/CWA/2025/thunderstorm/cwa.gov.tw_thunderstorm_20250917174753_000.cap"
+              },
+              "summary": {
+                "@type": "html",
+                "#text": "114 年 9 月 17 日 17 時 47 分 氣象署發布大雷雨即時訊息，持續時間至 18 時 45 分；請慎防劇烈降雨、雷擊，溪(河)水暴漲，以及低能見度"
+              },
+              "category": {
+                "@term": "雷雨"
+              }
+            },
+            {
+              "id": "cwa.gov.tw_thunderstorm_20250917180410_000",
+              "title": "雷雨",
+              "updated": "2025-09-17T18:04:10+08:00",
+              "author": {
+                "name": "中央氣象署"
+              },
+              "link": {
+                "@rel": "alternate",
+                "@href": "https://alerts.ncdr.nat.gov.tw/Capstorage/CWA/2025/thunderstorm/cwa.gov.tw_thunderstorm_20250917180410_000.cap"
+              },
+              "summary": {
+                "@type": "html",
+                "#text": "114 年 9 月 17 日 18 時 3 分 氣象署發布大雷雨即時訊息，持續時間至 19 時 0 分；請慎防劇烈降雨、雷擊，溪(河)水暴漲，以及低能見度"
+              },
+              "category": {
+                "@term": "雷雨"
+              }
+            },
+            {
+              "id": "cwa.gov.tw_thunderstorm_20250918063914_000",
+              "title": "雷雨",
+              "updated": "2025-09-18T06:39:14+08:00",
+              "author": {
+                "name": "中央氣象署"
+              },
+              "link": {
+                "@rel": "alternate",
+                "@href": "https://alerts.ncdr.nat.gov.tw/Capstorage/CWA/2025/thunderstorm/cwa.gov.tw_thunderstorm_20250918063914_000.cap"
+              },
+              "summary": {
+                "@type": "html",
+                "#text": "114 年 9 月 18 日 6 時 39 分 氣象署發布大雷雨即時訊息，持續時間至 7 時 45 分；請慎防劇烈降雨、雷擊，溪(河)水暴漲，低窪地區慎防淹水"
+              },
+              "category": {
+                "@term": "雷雨"
+              }
+            },
+            {
+              "id": "cwa.gov.tw_thunderstorm_20250918145018_000",
+              "title": "雷雨",
+              "updated": "2025-09-18T14:50:18+08:00",
+              "author": {
+                "name": "中央氣象署"
+              },
+              "link": {
+                "@rel": "alternate",
+                "@href": "https://alerts.ncdr.nat.gov.tw/Capstorage/CWA/2025/thunderstorm/cwa.gov.tw_thunderstorm_20250918145018_000.cap"
+              },
+              "summary": {
+                "@type": "html",
+                "#text": "114 年 9 月 18 日 14 時 49 分 氣象署發布大雷雨即時訊息，持續時間至 15 時 45 分；請慎防劇烈降雨、雷擊，低窪地區慎防淹水，以及低能見度"
+              },
+              "category": {
+                "@term": "雷雨"
+              }
+            },
+            {
+              "id": "cwa.gov.tw_thunderstorm_20250918144900_000",
+              "title": "雷雨",
+              "updated": "2025-09-18T14:51:14+08:00",
+              "author": {
+                "name": "中央氣象署"
+              },
+              "link": {
+                "@rel": "alternate",
+                "@href": "https://alerts.ncdr.nat.gov.tw/Capstorage/CWA/2025/thunderstorm/cwa.gov.tw_thunderstorm_20250918144900_000.cap"
+              },
+              "summary": {
+                "@type": "html",
+                "#text": "氣象署針對臺中市頭汴坑溪(仙女瀑布至一江橋)發布災防告警，持續時間至16時49分；此區域已有暴雨或有暴雨發生的機率，留意溪水暴漲並儘速遠離。"
+              },
+              "category": {
+                "@term": "雷雨"
+              }
+            },
+            {
+              "id": "cwa.gov.tw_thunderstorm_20250918152144_000",
+              "title": "雷雨",
+              "updated": "2025-09-18T15:21:44+08:00",
+              "author": {
+                "name": "中央氣象署"
+              },
+              "link": {
+                "@rel": "alternate",
+                "@href": "https://alerts.ncdr.nat.gov.tw/Capstorage/CWA/2025/thunderstorm/cwa.gov.tw_thunderstorm_20250918152144_000.cap"
+              },
+              "summary": {
+                "@type": "html",
+                "#text": "114 年 9 月 18 日 15 時 21 分 氣象署發布大雷雨即時訊息，持續時間至 16 時 15 分；請慎防劇烈降雨、雷擊，低窪地區慎防淹水，以及低能見度"
+              },
+              "category": {
+                "@term": "雷雨"
+              }
+            },
+            {
+              "id": "cwa.gov.tw_thunderstorm_20250918160239_000",
+              "title": "雷雨",
+              "updated": "2025-09-18T16:02:39+08:00",
+              "author": {
+                "name": "中央氣象署"
+              },
+              "link": {
+                "@rel": "alternate",
+                "@href": "https://alerts.ncdr.nat.gov.tw/Capstorage/CWA/2025/thunderstorm/cwa.gov.tw_thunderstorm_20250918160239_000.cap"
+              },
+              "summary": {
+                "@type": "html",
+                "#text": "114 年 9 月 18 日 16 時 2 分 氣象署發布大雷雨即時訊息，持續時間至 17 時 0 分；請慎防劇烈降雨、雷擊、9級以上強陣風，溪(河)水暴漲，低窪地區慎防淹水，以及低能見度"
+              },
+              "category": {
+                "@term": "雷雨"
+              }
+            },
+            {
+              "id": "cwa.gov.tw_thunderstorm_20250918163526_000",
+              "title": "雷雨",
+              "updated": "2025-09-18T16:35:26+08:00",
+              "author": {
+                "name": "中央氣象署"
+              },
+              "link": {
+                "@rel": "alternate",
+                "@href": "https://alerts.ncdr.nat.gov.tw/Capstorage/CWA/2025/thunderstorm/cwa.gov.tw_thunderstorm_20250918163526_000.cap"
+              },
+              "summary": {
+                "@type": "html",
+                "#text": "114 年 9 月 18 日 16 時 35 分 氣象署發布大雷雨即時訊息，持續時間至 17 時 30 分；請慎防劇烈降雨、雷擊，低窪地區慎防淹水，以及低能見度"
+              },
+              "category": {
+                "@term": "雷雨"
+              }
+            },
+            {
+              "id": "cwa.gov.tw_thunderstorm_20250918165942_000",
+              "title": "雷雨",
+              "updated": "2025-09-18T16:59:42+08:00",
+              "author": {
+                "name": "中央氣象署"
+              },
+              "link": {
+                "@rel": "alternate",
+                "@href": "https://alerts.ncdr.nat.gov.tw/Capstorage/CWA/2025/thunderstorm/cwa.gov.tw_thunderstorm_20250918165942_000.cap"
+              },
+              "summary": {
+                "@type": "html",
+                "#text": "114 年 9 月 18 日 16 時 59 分 氣象署發布大雷雨即時訊息，持續時間至 18 時 0 分；請慎防劇烈降雨、雷擊，低窪地區慎防淹水，以及低能見度"
+              },
+              "category": {
+                "@term": "雷雨"
+              }
+            },
+            {
+              "id": "cwa.gov.tw_thunderstorm_20250918170621_000",
+              "title": "雷雨",
+              "updated": "2025-09-18T17:06:21+08:00",
+              "author": {
+                "name": "中央氣象署"
+              },
+              "link": {
+                "@rel": "alternate",
+                "@href": "https://alerts.ncdr.nat.gov.tw/Capstorage/CWA/2025/thunderstorm/cwa.gov.tw_thunderstorm_20250918170621_000.cap"
+              },
+              "summary": {
+                "@type": "html",
+                "#text": "114 年 9 月 18 日 17 時 6 分 氣象署發布大雷雨即時訊息，持續時間至 18 時 0 分；請慎防劇烈降雨、雷擊，低窪地區慎防淹水，以及低能見度"
+              },
+              "category": {
+                "@term": "雷雨"
+              }
+            },
+            {
+              "id": "cwa.gov.tw_thunderstorm_20250918175428_000",
+              "title": "雷雨",
+              "updated": "2025-09-18T17:54:28+08:00",
+              "author": {
+                "name": "中央氣象署"
+              },
+              "link": {
+                "@rel": "alternate",
+                "@href": "https://alerts.ncdr.nat.gov.tw/Capstorage/CWA/2025/thunderstorm/cwa.gov.tw_thunderstorm_20250918175428_000.cap"
+              },
+              "summary": {
+                "@type": "html",
+                "#text": "114 年 9 月 18 日 17 時 54 分 氣象署發布大雷雨即時訊息，持續時間至 19 時 0 分；請慎防劇烈降雨、雷擊，低窪地區慎防淹水，以及低能見度"
+              },
+              "category": {
+                "@term": "雷雨"
+              }
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "versionId": "f81796f1-2508-46cd-94ab-0cc03492de8d",
+  "triggerCount": 1,
+  "shared": [
+    {
+      "createdAt": "2025-08-06T03:14:54.258Z",
+      "updatedAt": "2025-08-06T03:14:54.258Z",
+      "role": "workflow:owner",
+      "workflowId": "qxXV0YFTbqnC75xr",
+      "projectId": "7goAssCGKgwfIAES",
+      "project": {
+        "createdAt": "2025-08-06T02:37:42.802Z",
+        "updatedAt": "2025-08-06T02:39:07.720Z",
+        "id": "7goAssCGKgwfIAES",
+        "name": "peggy lin <peggy.lin@wanin.tw>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "projectRelations": [
+          {
+            "createdAt": "2025-08-06T02:37:42.807Z",
+            "updatedAt": "2025-08-06T02:37:42.807Z",
+            "userId": "67944008-c997-4154-bbd0-26d022398054",
+            "projectId": "7goAssCGKgwfIAES",
+            "user": {
+              "createdAt": "2025-08-06T02:37:42.798Z",
+              "updatedAt": "2025-11-05T00:21:52.000Z",
+              "id": "67944008-c997-4154-bbd0-26d022398054",
+              "email": "peggy.lin@wanin.tw",
+              "firstName": "peggy",
+              "lastName": "lin",
+              "personalizationAnswers": {
+                "version": "v4",
+                "personalization_survey_submitted_at": "2025-08-06T02:41:04.705Z",
+                "personalization_survey_n8n_version": "1.102.0",
+                "companySize": "100-499",
+                "companyType": "saas",
+                "role": "data-science",
+                "reportedSource": "friend"
+              },
+              "settings": {
+                "firstSuccessfulWorkflowId": "qxXV0YFTbqnC75xr",
+                "userActivated": true,
+                "userActivatedAt": 1754532013419,
+                "easyAIWorkflowOnboarded": true,
+                "npsSurvey": {
+                  "responded": true,
+                  "lastShownAt": 1756796314100
+                }
+              },
+              "disabled": false,
+              "mfaEnabled": false,
+              "lastActiveAt": "2025-11-04",
+              "isPending": false
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "tags": []
+}

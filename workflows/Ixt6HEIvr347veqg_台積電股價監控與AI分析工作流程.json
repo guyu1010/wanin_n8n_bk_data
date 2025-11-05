@@ -1,0 +1,351 @@
+{
+  "createdAt": "2025-07-21T08:42:58.504Z",
+  "updatedAt": "2025-08-04T03:58:20.000Z",
+  "id": "Ixt6HEIvr347veqg",
+  "name": "台積電股價監控與AI分析工作流程",
+  "active": false,
+  "isArchived": true,
+  "nodes": [
+    {
+      "id": "cron-trigger",
+      "name": "每日早上7點觸發",
+      "type": "n8n-nodes-base.cron",
+      "position": [
+        260,
+        300
+      ],
+      "parameters": {
+        "mode": "everyDay",
+        "rule": {
+          "interval": [
+            {
+              "field": "hour",
+              "value": 7
+            },
+            {
+              "field": "minute",
+              "value": 0
+            }
+          ],
+          "timezone": "Asia/Taipei"
+        }
+      },
+      "typeVersion": 1
+    },
+    {
+      "id": "weekday-check",
+      "name": "檢查是否為平日",
+      "type": "n8n-nodes-base.if",
+      "position": [
+        480,
+        300
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "leftValue": "",
+            "caseSensitive": true,
+            "typeValidation": "strict"
+          },
+          "combinator": "and",
+          "conditions": [
+            {
+              "id": "weekday-gte",
+              "operator": {
+                "type": "number",
+                "operation": "gte"
+              },
+              "leftValue": "={{ new Date().getDay() }}",
+              "rightValue": 1
+            },
+            {
+              "id": "weekday-lte",
+              "operator": {
+                "type": "number",
+                "operation": "lte"
+              },
+              "leftValue": "={{ new Date().getDay() }}",
+              "rightValue": 5
+            }
+          ]
+        }
+      },
+      "typeVersion": 2.2
+    },
+    {
+      "id": "get-stock-price",
+      "name": "取得台積電股價",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        700,
+        300
+      ],
+      "parameters": {
+        "url": "https://mis.twse.com.tw/stock/api/getStockInfo.jsp?json=1&delay=0&ex_ch=tse_2330.tw",
+        "method": "GET",
+        "options": {
+          "retry": {
+            "enabled": false
+          },
+          "timeout": 10000,
+          "response": {
+            "response": {
+              "responseFormat": "json"
+            }
+          }
+        },
+        "sendBody": false,
+        "sendHeaders": false,
+        "authentication": "none"
+      },
+      "typeVersion": 4.2
+    },
+    {
+      "id": "format-data",
+      "name": "整理股價資料",
+      "type": "n8n-nodes-base.set",
+      "position": [
+        920,
+        300
+      ],
+      "parameters": {
+        "options": {},
+        "assignments": {
+          "assignments": [
+            {
+              "id": "stock-code",
+              "name": "股票代號",
+              "type": "string",
+              "value": "={{ $json.msgArray[0].c }}"
+            },
+            {
+              "id": "stock-name",
+              "name": "股票名稱",
+              "type": "string",
+              "value": "={{ $json.msgArray[0].n }}"
+            },
+            {
+              "id": "current-price",
+              "name": "現價",
+              "type": "string",
+              "value": "={{ $json.msgArray[0].z }}"
+            },
+            {
+              "id": "price-change",
+              "name": "漲跌",
+              "type": "string",
+              "value": "={{ $json.msgArray[0].pz }}"
+            },
+            {
+              "id": "price-change-percent",
+              "name": "漲跌幅",
+              "type": "string",
+              "value": "={{ $json.msgArray[0].p }}"
+            },
+            {
+              "id": "open-price",
+              "name": "開盤價",
+              "type": "string",
+              "value": "={{ $json.msgArray[0].o }}"
+            },
+            {
+              "id": "high-price",
+              "name": "最高價",
+              "type": "string",
+              "value": "={{ $json.msgArray[0].h }}"
+            },
+            {
+              "id": "low-price",
+              "name": "最低價",
+              "type": "string",
+              "value": "={{ $json.msgArray[0].l }}"
+            },
+            {
+              "id": "volume",
+              "name": "成交量",
+              "type": "string",
+              "value": "={{ $json.msgArray[0].v }}"
+            },
+            {
+              "id": "timestamp",
+              "name": "資料時間",
+              "type": "string",
+              "value": "={{ $json.msgArray[0].tlong }}"
+            }
+          ]
+        }
+      },
+      "typeVersion": 3.4
+    },
+    {
+      "id": "ai-analysis",
+      "name": "AI 股價分析",
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "position": [
+        1140,
+        300
+      ],
+      "parameters": {
+        "modelId": {
+          "mode": "list",
+          "value": "gpt-4o"
+        },
+        "onError": "continueRegularOutput",
+        "options": {
+          "maxTokens": 1000,
+          "temperature": 0.3
+        },
+        "messages": {
+          "values": [
+            {
+              "role": "user",
+              "content": "作為一位專業的股票分析師，請根據以下台積電(2330)的即時股價資料，提供今日的買賣建議：\n\n股票代號：{{ $('整理股價資料').item.json['股票代號'] }}\n股票名稱：{{ $('整理股價資料').item.json['股票名稱'] }}\n現價：{{ $('整理股價資料').item.json['現價'] }} 元\n漲跌：{{ $('整理股價資料').item.json['漲跌'] }} 元\n漲跌幅：{{ $('整理股價資料').item.json['漲跌幅'] }}%\n開盤價：{{ $('整理股價資料').item.json['開盤價'] }} 元\n最高價：{{ $('整理股價資料').item.json['最高價'] }} 元\n最低價：{{ $('整理股價資料').item.json['最低價'] }} 元\n成交量：{{ $('整理股價資料').item.json['成交量'] }} 張\n資料時間：{{ $('整理股價資料').item.json['資料時間'] }}\n\n請提供：\n1. 當前股價分析\n2. 技術面分析（基於開高低收和成交量）\n3. 今日操作建議（買進/賣出/觀望）\n4. 風險提醒\n5. 建議的進出場點位\n\n請以專業且簡潔的方式回覆，並用繁體中文撰寫。"
+            }
+          ]
+        },
+        "resource": "text",
+        "operation": "message"
+      },
+      "typeVersion": 1.8
+    },
+    {
+      "id": "send-email",
+      "name": "發送分析報告郵件",
+      "type": "n8n-nodes-base.emailSend",
+      "position": [
+        1360,
+        300
+      ],
+      "parameters": {
+        "message": "親愛的投資者，\n\n以下是今日台積電(2330)的股價分析報告：\n\n=== 股價資訊 ===\n股票代號：{{ $('整理股價資料').item.json['股票代號'] }}\n股票名稱：{{ $('整理股價資料').item.json['股票名稱'] }}\n現價：{{ $('整理股價資料').item.json['現價'] }} 元\n漲跌：{{ $('整理股價資料').item.json['漲跌'] }} 元\n漲跌幅：{{ $('整理股價資料').item.json['漲跌幅'] }}%\n開盤價：{{ $('整理股價資料').item.json['開盤價'] }} 元\n最高價：{{ $('整理股價資料').item.json['最高價'] }} 元\n最低價：{{ $('整理股價資料').item.json['最低價'] }} 元\n成交量：{{ $('整理股價資料').item.json['成交量'] }} 張\n資料時間：{{ $('整理股價資料').item.json['資料時間'] }}\n\n=== AI 分析建議 ===\n{{ $('AI 股價分析').item.json.choices[0].message.content }}\n\n※ 此報告僅供參考，投資有風險，請謹慎評估後再做決定。\n\n祝您投資順利！\n自動化系統",
+        "onError": "continueRegularOutput",
+        "subject": "台積電(2330)每日股價分析報告 - {{ $now.format('yyyy-MM-dd') }}",
+        "toEmail": "ye801010@gmail.com",
+        "resource": "email",
+        "fromEmail": "n8n-automation@yourdomain.com",
+        "operation": "send"
+      },
+      "typeVersion": 2.1
+    }
+  ],
+  "connections": {
+    "AI 股價分析": {
+      "main": [
+        [
+          {
+            "node": "發送分析報告郵件",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "整理股價資料": {
+      "main": [
+        [
+          {
+            "node": "AI 股價分析",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "取得台積電股價": {
+      "main": [
+        [
+          {
+            "node": "整理股價資料",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "檢查是否為平日": {
+      "main": [
+        [
+          {
+            "node": "取得台積電股價",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        []
+      ]
+    },
+    "每日早上7點觸發": {
+      "main": [
+        [
+          {
+            "node": "檢查是否為平日",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "timezone": "Asia/Taipei",
+    "executionOrder": "v1",
+    "saveDataErrorExecution": "all",
+    "saveDataSuccessExecution": "all",
+    "saveManualExecutions": true
+  },
+  "staticData": null,
+  "meta": null,
+  "pinData": null,
+  "versionId": "47f8e25d-5004-4acc-a6e5-34c718a06cda",
+  "triggerCount": 0,
+  "shared": [
+    {
+      "createdAt": "2025-07-21T08:42:58.512Z",
+      "updatedAt": "2025-07-21T08:42:58.512Z",
+      "role": "workflow:owner",
+      "workflowId": "Ixt6HEIvr347veqg",
+      "projectId": "7zEhqNTzyMiFsXF6",
+      "project": {
+        "createdAt": "2025-07-09T03:38:25.411Z",
+        "updatedAt": "2025-07-09T03:39:14.390Z",
+        "id": "7zEhqNTzyMiFsXF6",
+        "name": "jun yeh <jungu.ye@wanin.tw>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "projectRelations": [
+          {
+            "createdAt": "2025-07-09T03:38:25.416Z",
+            "updatedAt": "2025-07-09T03:38:25.416Z",
+            "userId": "d1b2f434-11f0-4091-b631-2379b0470044",
+            "projectId": "7zEhqNTzyMiFsXF6",
+            "user": {
+              "createdAt": "2025-07-09T03:38:25.408Z",
+              "updatedAt": "2025-10-31T09:17:04.851Z",
+              "id": "d1b2f434-11f0-4091-b631-2379b0470044",
+              "email": "jungu.ye@wanin.tw",
+              "firstName": "jun",
+              "lastName": "yeh",
+              "personalizationAnswers": {
+                "version": "v4",
+                "personalization_survey_submitted_at": "2025-07-09T03:39:17.136Z",
+                "personalization_survey_n8n_version": "1.102.0"
+              },
+              "settings": {
+                "easyAIWorkflowOnboarded": true,
+                "firstSuccessfulWorkflowId": "YAUQSrZhZ8qeZ9DB",
+                "userActivated": true,
+                "userActivatedAt": 1761902117305
+              },
+              "disabled": false,
+              "mfaEnabled": false,
+              "lastActiveAt": "2025-10-31",
+              "isPending": false
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "tags": []
+}

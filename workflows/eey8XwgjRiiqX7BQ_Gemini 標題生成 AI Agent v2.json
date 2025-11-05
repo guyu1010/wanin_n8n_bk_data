@@ -1,0 +1,240 @@
+{
+  "createdAt": "2025-07-31T10:21:12.539Z",
+  "updatedAt": "2025-08-04T03:31:13.000Z",
+  "id": "eey8XwgjRiiqX7BQ",
+  "name": "Gemini 標題生成 AI Agent v2",
+  "active": false,
+  "isArchived": true,
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "generate-titles-v2",
+        "options": {}
+      },
+      "id": "webhook-trigger",
+      "name": "接收內容",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        32,
+        304
+      ],
+      "webhookId": "86214492-a1ae-4c6b-8070-68e40b30cc57"
+    },
+    {
+      "parameters": {
+        "fields": {
+          "values": [
+            {
+              "name": "prompt",
+              "stringValue": "=請為以下內容生成3個吸引人的標題：  {{ $json.body.content }}  要求： - 標題要簡潔有力，不超過60字元 - 符合SEO優化原則 - 吸引目標受眾點擊 - 使用繁體中文 - 每個標題用數字編號  請直接列出3個標題，不需要額外說明。"
+            },
+            {
+              "name": "original_content",
+              "stringValue": "={{ $json.body.content }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "prepare-prompt",
+      "name": "準備 AI Prompt",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.2,
+      "position": [
+        240,
+        304
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "***REMOVED***",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"contents\": [\n    {\n      \"parts\": [\n        {\n          \"text\": \"{{ $json.prompt }}\"\n        }\n      ]\n    }\n  ]\n}",
+        "options": {}
+      },
+      "id": "gemini-api",
+      "name": "呼叫 Gemini API",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        464,
+        304
+      ],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "9TlCSEkFfpxQKUXt",
+          "name": "Gemini API Key"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// 解析 Gemini API 回應\nconst response = $input.all()[0].json;\nconst prompt = $input.all()[0].json.prompt;\nconst originalContent = $input.all()[0].json.original_content;\n\ntry {\n  // 提取生成的文字\n  const generatedText = response.candidates[0].content.parts[0].text;\n  \n  // 解析標題（假設每行是一個標題）\n  const titles = generatedText\n    .split('\\n')\n    .map(line => line.trim())\n    .filter(line => line.length > 0)\n    .map(line => {\n      // 清理數字編號和特殊符號\n      return line.replace(/^\\d+\\.\\s*/, '').replace(/^[-*]\\s*/, '').trim();\n    })\n    .filter(title => title.length > 0);\n\n  return {\n    success: true,\n    original_content: originalContent,\n    generated_titles: titles,\n    raw_response: generatedText,\n    timestamp: new Date().toISOString(),\n    title_count: titles.length\n  };\n  \n} catch (error) {\n  return {\n    success: false,\n    error: error.message,\n    original_content: originalContent,\n    raw_response: response,\n    timestamp: new Date().toISOString()\n  };\n}"
+      },
+      "id": "process-response",
+      "name": "處理 AI 回應",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        688,
+        304
+      ]
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "format-output",
+      "name": "格式化輸出",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.2,
+      "position": [
+        912,
+        304
+      ]
+    }
+  ],
+  "connections": {
+    "接收內容": {
+      "main": [
+        [
+          {
+            "node": "準備 AI Prompt",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "準備 AI Prompt": {
+      "main": [
+        [
+          {
+            "node": "呼叫 Gemini API",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "呼叫 Gemini API": {
+      "main": [
+        [
+          {
+            "node": "處理 AI 回應",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "處理 AI 回應": {
+      "main": [
+        [
+          {
+            "node": "格式化輸出",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "Asia/Taipei",
+    "saveDataErrorExecution": "all",
+    "saveDataSuccessExecution": "all",
+    "saveManualExecutions": false,
+    "saveExecutionProgress": false
+  },
+  "staticData": null,
+  "meta": null,
+  "pinData": {
+    "接收內容": [
+      {
+        "json": {
+          "body": {
+            "content": "王世堅喊罷免撤案！王義川、林楚茵轟：吃裡扒外、不服命令的滾啦！ | 王世堅喊罷免撤案！許美華：切心！大立委有請藍白不要撕裂台灣嗎？ | 超大豪雨狂炸台中！9小時破300毫米致淹水災情　大樓地下停車場躲不過 | 女公關慘遭前男友割喉震驚全台！網友湧入IG悼念「一路好走」 |  不斷更新》中南部豪雨成災！台中4國小宣布放假 7/31停班停課一覽 "
+          }
+        }
+      }
+    ]
+  },
+  "versionId": "85865cbf-dcc5-4b9f-a4bf-125d7d82c7f9",
+  "triggerCount": 1,
+  "shared": [
+    {
+      "createdAt": "2025-07-31T10:21:12.546Z",
+      "updatedAt": "2025-07-31T10:21:12.546Z",
+      "role": "workflow:owner",
+      "workflowId": "eey8XwgjRiiqX7BQ",
+      "projectId": "cSCIDan8gJxZ0cWD",
+      "project": {
+        "createdAt": "2025-07-11T06:18:02.598Z",
+        "updatedAt": "2025-07-11T06:24:23.467Z",
+        "id": "cSCIDan8gJxZ0cWD",
+        "name": "玟誼 李 <elly.li@wanin.tw>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "projectRelations": [
+          {
+            "createdAt": "2025-07-11T06:18:02.613Z",
+            "updatedAt": "2025-07-11T06:18:02.613Z",
+            "userId": "568ba390-eb32-41ab-88b9-7769cb094f4f",
+            "projectId": "cSCIDan8gJxZ0cWD",
+            "user": {
+              "createdAt": "2025-07-11T06:18:02.591Z",
+              "updatedAt": "2025-11-03T03:20:08.000Z",
+              "id": "568ba390-eb32-41ab-88b9-7769cb094f4f",
+              "email": "elly.li@wanin.tw",
+              "firstName": "玟誼",
+              "lastName": "李",
+              "personalizationAnswers": {
+                "version": "v4",
+                "personalization_survey_submitted_at": "2025-07-11T06:25:17.807Z",
+                "personalization_survey_n8n_version": "1.102.0",
+                "companySize": "20-99",
+                "companyType": "digital-agency",
+                "role": "data-science",
+                "reportedSource": "friend"
+              },
+              "settings": {
+                "easyAIWorkflowOnboarded": true,
+                "firstSuccessfulWorkflowId": "WonDjzXioRrXqYad",
+                "userActivated": true,
+                "userActivatedAt": 1754366405376,
+                "npsSurvey": {
+                  "waitingForResponse": true,
+                  "ignoredCount": 1,
+                  "lastShownAt": 1754989668491
+                }
+              },
+              "disabled": false,
+              "mfaEnabled": false,
+              "lastActiveAt": "2025-11-02",
+              "isPending": false
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "tags": []
+}

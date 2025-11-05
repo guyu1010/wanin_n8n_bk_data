@@ -1,0 +1,483 @@
+{
+  "createdAt": "2025-09-02T06:58:33.122Z",
+  "updatedAt": "2025-09-04T04:00:24.000Z",
+  "id": "cyvSQnYhlJkbMC7q",
+  "name": "旅遊-自動產文_無資料來源",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "jsCode": "const titleGatekeeperPrompt = `\n你是一位嚴謹、專注於事實查核的旅遊記者。你的任務是撰寫一篇關於「2025 年 9 月台中最新人氣景點與美食」的報導。\n\n請嚴格遵循以下步驟來產出文章內容，確保真實性為最高原則：\n\n1.  **資訊搜尋與鎖定：**\n    * **搜尋範圍：** 你的搜尋範圍必須嚴格鎖定在 2025 年 9 月 1 日至 2025 年 9 月 30 日期間，於社群媒體（如 Instagram、Dcard、Threads）上發布的貼文。\n    * **關鍵字篩選：** 使用組合關鍵字進行搜索：「台中 新景點」、「台中 新開幕 美食」、「台中 9月 旅遊 推薦」。\n\n2.  **多重驗證（核心步驟）：**\n    * 針對每個搜尋到的景點或美食，你必須立即進行**兩階段的真實性核查**：\n        * **核查第一階段：** 在**Google Map**上搜尋該地點，確認其地圖上確實有標註，並檢視用戶評論數量與星級。\n        * **核查第二階段：** 在**官方網站**（若有）或**該地點的社群媒體官方帳號**上，再次確認其營業狀態、地址與聯絡資訊。\n    * **篩選規則：** 如果該地點在 Google Map 上找不到明確標註，或其官方社群帳號資訊與搜尋結果不符，則**直接將該地點排除，不可列入報導**。\n\n3.  **撰寫文章：**\n    * **標題：** 必須明確且不誇大，例如：「台中 9月 最新人氣景點與美食：實地查核推薦」。\n    * **開頭：** 簡潔有力地說明這份名單是經過**多方查證**的真實推薦，強調文章的可靠性。\n    * **景點與美食介紹：** 針對每個通過驗證的地點，以條列式撰寫，內容必須包含：\n        * **地點名稱**、**類型**、**Google Map 評分**、**地址**。\n        * **【爆紅原因分析】**：簡要歸納其在社群上的高人氣原因。\n        * **【真實性驗證】**：在介紹後明確加上一行，例如「**Google Map 驗證存在**」或「**官方粉絲頁確認營業中**」。\n4.  **寫作風格：** 嚴謹、客觀，帶有數據與事實支撐。\n\n`;\n\nreturn [\n  {\n    json: {\n      prompt: titleGatekeeperPrompt,\n    },\n  },\n];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        288,
+        16
+      ],
+      "id": "2fe1a905-9e53-449a-8993-b10e455e767d",
+      "name": "標題prompt1"
+    },
+    {
+      "parameters": {
+        "jsCode": "// 取得 mergedContent\nlet mergedContent = $input.first().json.prompt || \"\";\n\n// 轉成單行（移除換行符）\nmergedContent = mergedContent.replace(/\\r?\\n/g, ' ');\n\n// 回傳正確格式\nreturn {\n  body: JSON.stringify({\n    contents: [\n      {\n        role: \"user\", // 建議加上 role\n        parts: [\n          {\n            text: mergedContent\n          }\n        ]\n      }\n    ]\n  })\n};\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        480,
+        16
+      ],
+      "id": "ba146b7e-a14e-47a0-a285-87f342d1ec9e",
+      "name": "標題傳入gemini 格式整理1"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=AIzaSyDWYPxo5cRRlKburvrBsck5FDsEVrd46ZI",
+        "sendBody": true,
+        "contentType": "raw",
+        "rawContentType": "application/json",
+        "body": "={{ $json.body }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        704,
+        16
+      ],
+      "id": "c5afed03-bdb8-4b06-9bf8-6280175d7dae",
+      "name": "Gemini(peggylin)-產文章_gemini-2.0-flash",
+      "executeOnce": false,
+      "retryOnFail": false,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "// 前一步 Gemini 的輸出\nconst input = items[0].json;\n\n// 把 prompt 抓進來（從 workflow 上一步）\nlet rawPrompt = $('標題傳入gemini 格式整理1').first().json.body || \"\";\n\n// 嘗試解析 JSON 並清洗成純文字\nlet promptText = \"\";\ntry {\n  const parsed = JSON.parse(rawPrompt);\n\n  // 解析出每個 part 的文字，合併成單一字串\n  promptText = parsed.contents\n    ?.map(c => c.parts?.map(p => p.text).join(\" \"))\n    .join(\" \")\n    .trim() || \"\";\n} catch (e) {\n  // parse 失敗，保留原始字串\n  promptText = rawPrompt;\n}\n\n// 取出 Gemini 的 text\nconst rawText = input.candidates?.[0]?.content?.parts?.[0]?.text || \"\";\n\n// 清洗文章內容\nlet cleaned = rawText\n  .replace(/^##\\s*/gm, \"\")\n  .replace(/\\*\\*/g, \"\")\n  .trim();\n\n// 分拆標題（第一行）\nlet title = cleaned.split(\"\\n\")[0] || \"\";\n\n// 輸出給下一步 Supabase\nreturn [\n  {\n    json: {\n      title,\n      content: cleaned,\n      prompt: promptText,   // ← 已清洗的可讀文字\n      source: \"gemini\",\n      created_at: new Date().toISOString()\n    }\n  }\n];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        992,
+        0
+      ],
+      "id": "b763c2ac-bacd-4da7-9530-49532a0b0119",
+      "name": "AI回傳轉json",
+      "retryOnFail": true,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "minutes",
+              "minutesInterval": 20
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        48,
+        16
+      ],
+      "id": "49447e70-eea8-4d23-876c-ac739db6f6b7",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-image-preview:generateContent?key=AIzaSyDWYPxo5cRRlKburvrBsck5FDsEVrd46ZI",
+        "sendBody": true,
+        "contentType": "raw",
+        "rawContentType": "application/json",
+        "body": "={{ $json.body }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2128,
+        272
+      ],
+      "id": "c1fd8155-2ec2-4b45-aa25-c681362b50b3",
+      "name": "Gemini(peggylin)-產圖片_gemini-2.5-flash-image-preview",
+      "executeOnce": false,
+      "retryOnFail": false,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "// 取前一步 content\nconst content = $input.first().json.content || \"\";\n\n// 建立圖片生成 prompt\nconst titleGatekeeperPrompt = `\n請你依照內容，生成圖片\n內容=${content}\n`.trim(); // trim 可移除多餘換行\n\nreturn [\n  {\n    json: {\n      prompt: titleGatekeeperPrompt,\n    },\n  },\n];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1664,
+        272
+      ],
+      "id": "66e3d4a5-1838-490a-9364-1bfe1eb802a5",
+      "name": "標題prompt"
+    },
+    {
+      "parameters": {
+        "jsCode": "// 取得 mergedContent\nlet mergedContent = $input.first().json.prompt || \"\";\n\n// 轉成單行（移除換行符）\nmergedContent = mergedContent.replace(/\\r?\\n/g, ' ');\n\n// 回傳正確格式\nreturn {\n  body: JSON.stringify({\n    contents: [\n      {\n        role: \"user\", // 建議加上 role\n        parts: [\n          {\n            text: mergedContent\n          }\n        ]\n      }\n    ]\n  })\n};\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1856,
+        272
+      ],
+      "id": "ce3106d0-8102-4d04-af54-55c8e47f10ce",
+      "name": "標題傳入gemini 格式整理"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://jowavcwbtrjlolfuetqa.supabase.co/storage/v1/object/images/{{ $('圖片名稱唯一值').item.json.filename }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Impvd2F2Y3didHJqbG9sZnVldHFhIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1NDU2OTU3OCwiZXhwIjoyMDcwMTQ1NTc4fQ.k72EwZkGF7lwivsokWu9joGvBvBGA2cbUDEN_t-n8hk"
+            },
+            {
+              "name": "Content-Type",
+              "value": "image/png"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "binaryData",
+        "inputDataFieldName": "data",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2976,
+        272
+      ],
+      "id": "5000bec3-583b-4f8b-b7f7-c5d3796d4f8b",
+      "name": "存到supabase",
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "operation": "toBinary",
+        "sourceProperty": "imageBase64",
+        "options": {}
+      },
+      "id": "1dcf9224-016b-47a7-8c18-b8750f597243",
+      "name": "Convert to File1",
+      "type": "n8n-nodes-base.convertToFile",
+      "position": [
+        2752,
+        272
+      ],
+      "typeVersion": 1.1
+    },
+    {
+      "parameters": {
+        "jsCode": "const timestamp = Date.now();\nconst randomSuffix = Math.floor(Math.random() * 10000); // 0~9999隨機數\n\nconst filename = `geminiaitest_${timestamp}_${randomSuffix}.jpg`;\n\n// 回傳檔名\nreturn [\n  {\n    json: {\n      filename,\n      // 其他你要傳的資料...\n      imageBase64: $input.first().json.candidates[0].content.parts[1].inlineData.data,\n    },\n  },\n];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2544,
+        272
+      ],
+      "id": "edb00fb3-2580-4dc6-b6d9-632b4eba3e58",
+      "name": "圖片名稱唯一值"
+    },
+    {
+      "parameters": {
+        "tableId": "travel_test",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "title",
+              "fieldValue": "={{ $json.title }}"
+            },
+            {
+              "fieldId": "content",
+              "fieldValue": "={{ $json.content }}"
+            },
+            {
+              "fieldId": "source",
+              "fieldValue": "={{ $json.source }}"
+            },
+            {
+              "fieldId": "created_at",
+              "fieldValue": "={{ $json.created_at }}"
+            },
+            {
+              "fieldId": "prompt",
+              "fieldValue": "={{ $json.prompt }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        1648,
+        -16
+      ],
+      "id": "e3d178e7-dd58-4dac-8a73-d071c3440ace",
+      "name": "寫入supabase DB",
+      "credentials": {
+        "supabaseApi": {
+          "id": "fPPNqZ5ZGXEc0sc1",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "7802109813",
+        "text": "={{ $json.text }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1648,
+        -256
+      ],
+      "id": "3f9fdcb6-18c7-4aba-8cac-ec20381649d0",
+      "name": "旅遊",
+      "webhookId": "b33113d9-28bc-4a47-bac6-21ce33b0d71d",
+      "credentials": {
+        "telegramApi": {
+          "id": "ADiZMdkyDmUbDLRw",
+          "name": "Telegram account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "function escapeMarkdown(text) {\n  return text\n    .replace(/_/g, \"\\\\_\")\n    .replace(/\\*/g, \"\\\\*\")\n    .replace(/\\[/g, \"\\\\[\")\n    .replace(/\\]/g, \"\\\\]\")\n    .replace(/\\(/g, \"\\\\(\")\n    .replace(/\\)/g, \"\\\\)\")\n    .replace(/~/g, \"\\\\~\")\n    .replace(/`/g, \"\\\\`\")\n    .replace(/>/g, \"\\\\>\")\n    .replace(/#/g, \"\\\\#\")\n    .replace(/\\+/g, \"\\\\+\")\n    .replace(/-/g, \"\\\\-\")\n    .replace(/=/g, \"\\\\=\")\n    .replace(/\\|/g, \"\\\\|\")\n    .replace(/\\{/g, \"\\\\{\")\n    .replace(/\\}/g, \"\\\\}\")\n    .replace(/\\./g, \"\\\\.\")\n    .replace(/!/g, \"\\\\!\");\n}\n\n// 取前一步 content\nconst item = items[0].json;\nconst escapedContent = escapeMarkdown(item.content || \"\");\n\n// 建立 Telegram 訊息\nconst telegramMessage = `\n${item.title}\n\n${escapedContent}\n\n⚡ 來源: ${item.source}\n🕒 生成時間: ${item.created_at}\n`.trim();\n\nreturn [\n  {\n    json: {\n      text: telegramMessage,\n      parse_mode: \"MarkdownV2\" // 注意要改 MarkdownV2\n    }\n  }\n];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1264,
+        -208
+      ],
+      "id": "a85423a9-7006-40ec-bf22-5b94306d3753",
+      "name": "傳入telegram前清洗"
+    }
+  ],
+  "connections": {
+    "標題prompt1": {
+      "main": [
+        [
+          {
+            "node": "標題傳入gemini 格式整理1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "標題傳入gemini 格式整理1": {
+      "main": [
+        [
+          {
+            "node": "Gemini(peggylin)-產文章_gemini-2.0-flash",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gemini(peggylin)-產文章_gemini-2.0-flash": {
+      "main": [
+        [
+          {
+            "node": "AI回傳轉json",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI回傳轉json": {
+      "main": [
+        [
+          {
+            "node": "寫入supabase DB",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "標題prompt",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "傳入telegram前清洗",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "標題prompt1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "標題prompt": {
+      "main": [
+        [
+          {
+            "node": "標題傳入gemini 格式整理",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "標題傳入gemini 格式整理": {
+      "main": [
+        [
+          {
+            "node": "Gemini(peggylin)-產圖片_gemini-2.5-flash-image-preview",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Convert to File1": {
+      "main": [
+        [
+          {
+            "node": "存到supabase",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "圖片名稱唯一值": {
+      "main": [
+        [
+          {
+            "node": "Convert to File1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gemini(peggylin)-產圖片_gemini-2.5-flash-image-preview": {
+      "main": [
+        [
+          {
+            "node": "圖片名稱唯一值",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        []
+      ]
+    },
+    "傳入telegram前清洗": {
+      "main": [
+        [
+          {
+            "node": "旅遊",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": {
+    "node:Schedule Trigger": {
+      "recurrenceRules": []
+    }
+  },
+  "meta": null,
+  "pinData": {},
+  "versionId": "ce3d24bf-983f-4cdc-b4d7-0d97e0ada515",
+  "triggerCount": 1,
+  "shared": [
+    {
+      "createdAt": "2025-09-02T06:58:33.134Z",
+      "updatedAt": "2025-09-02T06:58:33.134Z",
+      "role": "workflow:owner",
+      "workflowId": "cyvSQnYhlJkbMC7q",
+      "projectId": "7goAssCGKgwfIAES",
+      "project": {
+        "createdAt": "2025-08-06T02:37:42.802Z",
+        "updatedAt": "2025-08-06T02:39:07.720Z",
+        "id": "7goAssCGKgwfIAES",
+        "name": "peggy lin <peggy.lin@wanin.tw>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "projectRelations": [
+          {
+            "createdAt": "2025-08-06T02:37:42.807Z",
+            "updatedAt": "2025-08-06T02:37:42.807Z",
+            "userId": "67944008-c997-4154-bbd0-26d022398054",
+            "projectId": "7goAssCGKgwfIAES",
+            "user": {
+              "createdAt": "2025-08-06T02:37:42.798Z",
+              "updatedAt": "2025-11-05T00:21:52.000Z",
+              "id": "67944008-c997-4154-bbd0-26d022398054",
+              "email": "peggy.lin@wanin.tw",
+              "firstName": "peggy",
+              "lastName": "lin",
+              "personalizationAnswers": {
+                "version": "v4",
+                "personalization_survey_submitted_at": "2025-08-06T02:41:04.705Z",
+                "personalization_survey_n8n_version": "1.102.0",
+                "companySize": "100-499",
+                "companyType": "saas",
+                "role": "data-science",
+                "reportedSource": "friend"
+              },
+              "settings": {
+                "firstSuccessfulWorkflowId": "qxXV0YFTbqnC75xr",
+                "userActivated": true,
+                "userActivatedAt": 1754532013419,
+                "easyAIWorkflowOnboarded": true,
+                "npsSurvey": {
+                  "responded": true,
+                  "lastShownAt": 1756796314100
+                }
+              },
+              "disabled": false,
+              "mfaEnabled": false,
+              "lastActiveAt": "2025-11-04",
+              "isPending": false
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "tags": []
+}
