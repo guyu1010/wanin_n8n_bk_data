@@ -1,6 +1,6 @@
 {
   "createdAt": "2025-10-27T05:57:53.778Z",
-  "updatedAt": "2025-11-06T07:56:35.000Z",
+  "updatedAt": "2025-11-06T08:23:48.000Z",
   "id": "3miwV9wdKjrx8Gmr",
   "name": "AI新聞擷取&翻譯工作流",
   "active": true,
@@ -142,9 +142,11 @@
     {
       "parameters": {
         "promptType": "define",
-        "text": "=你是一位台灣國際新聞翻譯專員，請執行以下兩個任務\n1. 使用台灣用語翻譯以下內容\n2. 從內容精選3~7個適合的新聞關鍵字(tags)\n3. 翻譯摘要\n\n標題：{{ $json.output.title }}\n內容：{{ $json.output.content }}\n摘要：{{ $('Get row(s)').item.json.description }}\n\n## 翻譯對照表\n\n### 政治人物音譯\n- Vladimir Putin -> 普丁\n- Donald Trump -> 川普\n- Viktor Orbán -> 歐爾班\n- Marco Rubio -> 盧比歐\n- Benjamin Netanyahu -> 納坦雅胡\n- Volodymyr Zelenskyy -> 澤連斯基\n- Pete Hegseth -> 海格塞斯\n- John F. Kennedy -> 甘迺迪\n- Ronald Reagan -> 雷根\n- Jake Sullivan -> 蘇利文\n- Olaf Scholz -> 蕭茲\n- Justin Trudeau -> 杜魯道\n- Marcos (菲律賓) -> 馬可仕\n\n### 地名音譯\n- North Korea/朝鮮 -> 北韓\n- Gaza -> 加薩\n- Sydney -> 雪梨\n- Munich -> 慕尼黑\n- New Zealand -> 紐西蘭\n- Saudi Arabia -> 沙烏地阿拉伯\n- Dubai -> 杜拜\n- Yemen -> 葉門\n\n### 交通與運輸\n- 出租車/的士 -> 計程車\n- 集裝箱 -> 貨櫃\n- 空客 -> 空巴\n\n### 科技與網路用語\n- 視頻 -> 影片\n- 互聯網/網絡 -> 網路\n- 軟件 -> 軟體\n- 硬件 -> 硬體\n- 計算機 -> 電腦\n- 內存 -> 記憶體\n- 激光 -> 雷射\n- 光伏 -> 光電/太陽能\n- 程序 -> 程式\n- 帖子 -> 貼文\n- 樓主 -> 原發文者\n- 硅 -> 矽\n- 芯片 -> 晶片\n- 黑客 -> 駭客\n- 屏幕 -> 螢幕\n- 高清 -> 高畫質\n- 攝像頭 -> 監視器\n- 短信 -> 簡訊\n\n### 軍事與政府\n- 台防務部門 -> 國防部\n- 五角大樓 -> 五角大廈\n- 宙斯盾 -> 神盾系統\n- 空間站 -> 太空站\n- 黑匣子 -> 黑盒子\n\n### 教育與職業\n- 高校 -> 大學\n- 幼兒園 -> 幼稚園\n- 程序員 -> 工程師\n- 寫字樓 -> 辦公大樓\n- 下崗 -> 沒工作\n\n### 商業與法律用語\n- 合同 -> 合約\n- 渠道 -> 管道\n- 反饋 -> 回饋\n- 靠譜 -> 可靠\n\n### 日常用語\n- 萬億 -> 兆\n- 水平 -> 水準\n- 小區 -> 社區\n- 套路 -> 圈套\n- 給力 -> 厲害\n- 土豆 -> 馬鈴薯\n- 獼猴桃 -> 奇異果\n- 西紅柿 -> 番茄\n- 獻血 -> 捐血\n- 方便麵 -> 泡麵\n- 立馬 -> 立刻\n- 通過 -> 經由\n\n### 品牌與專有名詞\n- 奔馳 -> 賓士\n- 新聞發布會 -> 記者會\n- 宇航員 -> 太空人\n- 發動機 -> 引擎\n- 國際象棋 -> 西洋棋\n\n### 特殊用語\n- 導火索 -> 導火線\n- 河蟹 -> 掩蓋\n- 可卡因 -> 古柯鹼\n\n## 輸出要求\n- 回傳 JSON 格式\n- 照著原意翻譯\n- 可微調段落格式符合中文新聞\n- 避免使用簡體中文用詞\n- 不用分 section\n- content 段落使用 <p></p>\n\n## 翻譯原則\n- 人名第一次出現時保留英文原名，例如：「美國國務卿布林肯（Antony Blinken）」\n- 數字使用阿拉伯數字，金額加上單位（例如：100萬美元、50億元）\n- 引述內容使用「」（全形引號）\n- 日期格式：2025年10月28日\n\n## 務必確認\n- 用詞為台灣慣用字\n- 標點符號使用全形(，。！？)\n- tags 需為文中有提及的字詞\n- 避免過度口語化",
+        "text": "=你是一位台灣國際新聞翻譯專員，請執行以下三個任務\n1. 使用台灣用語翻譯以下內容\n2. 從內容精選3~7個適合的新聞關鍵字(tags)\n3. 翻譯摘要\n\n標題：{{ $json.output.title }}\n內容：{{ $json.output.content }}\n摘要：{{ $('Get row(s)').item.json.description }}\n\n## 翻譯對照表\n\n### 政治人物音譯\n- Vladimir Putin -> 普丁\n- Donald Trump -> 川普\n- Viktor Orbán -> 歐爾班\n- Marco Rubio -> 盧比歐\n- Benjamin Netanyahu -> 納坦雅胡\n- Volodymyr Zelenskyy -> 澤連斯基\n- Pete Hegseth -> 海格塞斯\n- John F. Kennedy -> 甘迺迪\n- Ronald Reagan -> 雷根\n- Jake Sullivan -> 蘇利文\n- Olaf Scholz -> 蕭茲\n- Justin Trudeau -> 杜魯道\n- Marcos (菲律賓) -> 馬可仕\n\n### 地名音譯\n- North Korea/朝鮮 -> 北韓\n- Gaza -> 加薩\n- Sydney -> 雪梨\n- Munich -> 慕尼黑\n- New Zealand -> 紐西蘭\n- Saudi Arabia -> 沙烏地阿拉伯\n- Dubai -> 杜拜\n- Yemen -> 葉門\n\n### 交通與運輸\n- 出租車/的士 -> 計程車\n- 集裝箱 -> 貨櫃\n- 空客 -> 空巴\n\n### 科技與網路用語\n- 視頻 -> 影片\n- 互聯網/網絡 -> 網路\n- 軟件 -> 軟體\n- 硬件 -> 硬體\n- 計算機 -> 電腦\n- 內存 -> 記憶體\n- 激光 -> 雷射\n- 光伏 -> 光電/太陽能\n- 程序 -> 程式\n- 帖子 -> 貼文\n- 樓主 -> 原發文者\n- 硅 -> 矽\n- 芯片 -> 晶片\n- 黑客 -> 駭客\n- 屏幕 -> 螢幕\n- 高清 -> 高畫質\n- 攝像頭 -> 監視器\n- 短信 -> 簡訊\n\n### 軍事與政府\n- 台防務部門 -> 國防部\n- 五角大樓 -> 五角大廈\n- 宙斯盾 -> 神盾系統\n- 空間站 -> 太空站\n- 黑匣子 -> 黑盒子\n\n### 教育與職業\n- 高校 -> 大學\n- 幼兒園 -> 幼稚園\n- 程序員 -> 工程師\n- 寫字樓 -> 辦公大樓\n- 下崗 -> 沒工作\n\n### 商業與法律用語\n- 合同 -> 合約\n- 渠道 -> 管道\n- 反饋 -> 回饋\n- 靠譜 -> 可靠\n\n### 日常用語\n- 萬億 -> 兆\n- 水平 -> 水準\n- 小區 -> 社區\n- 套路 -> 圈套\n- 給力 -> 厲害\n- 土豆 -> 馬鈴薯\n- 獼猴桃 -> 奇異果\n- 西紅柿 -> 番茄\n- 獻血 -> 捐血\n- 方便麵 -> 泡麵\n- 立馬 -> 立刻\n- 通過 -> 經由\n\n### 品牌與專有名詞\n- 奔馳 -> 賓士\n- 新聞發布會 -> 記者會\n- 宇航員 -> 太空人\n- 發動機 -> 引擎\n- 國際象棋 -> 西洋棋\n\n### 特殊用語\n- 導火索 -> 導火線\n- 河蟹 -> 掩蓋\n- 可卡因 -> 古柯鹼\n\n## 輸出要求\n- 回傳 JSON 格式\n- 照著原意翻譯\n- 可微調段落格式符合中文新聞\n- 避免使用簡體中文用詞\n- 不用分 section\n- content 段落使用 <p></p> \\n\n\n## 翻譯原則\n- 人名第一次出現時保留英文原名，例如：「美國國務卿布林肯（Antony Blinken）」\n- 數字使用阿拉伯數字，金額加上單位（例如：100萬美元、50億元）\n- 引述內容使用「」（全形引號）\n- 日期格式：2025年10月28日\n\n## 務必確認\n- 用詞為台灣慣用字\n- 標點符號使用全形(，。！？)\n- tags 需為文中有提及的字詞\n- 避免過度口語化",
         "hasOutputParser": true,
-        "options": {}
+        "options": {
+          "systemMessage": "你是一位台灣國際新聞翻譯專員，請執行以下兩個任務\n1. 使用台灣用語翻譯以下內容\n2. 從內容精選3~7個適合的新聞關鍵字(tags)\n3. 翻譯摘要\n\n## 輸出要求\n- 回傳 JSON 格式\n- 照著原意翻譯\n- 可微調段落格式符合中文新聞\n- 避免使用簡體中文用詞\n- 不用分 section\n- content 段落使用 <p></p>\n\n**重要**\n- content不能出現\\n"
+        }
       },
       "type": "@n8n/n8n-nodes-langchain.agent",
       "typeVersion": 2.2,
@@ -1041,8 +1043,26 @@
   "meta": {
     "templateCredsSetupCompleted": true
   },
-  "pinData": {},
-  "versionId": "f3c403b3-825c-4ca0-8724-0d84d817d036",
+  "pinData": {
+    "Schedule Trigger": [
+      {
+        "json": {
+          "timestamp": "2025-11-06T03:15:29.018-05:00",
+          "Readable date": "November 6th 2025, 3:15:29 am",
+          "Readable time": "3:15:29 am",
+          "Day of week": "Thursday",
+          "Year": "2025",
+          "Month": "November",
+          "Day of month": "06",
+          "Hour": "03",
+          "Minute": "15",
+          "Second": "29",
+          "Timezone": "America/New_York (UTC-05:00)"
+        }
+      }
+    ]
+  },
+  "versionId": "17ec26bc-dc5f-449f-853b-3a4abb5df076",
   "triggerCount": 1,
   "shared": [
     {
