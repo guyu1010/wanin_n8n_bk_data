@@ -1,0 +1,1375 @@
+{
+  "createdAt": "2025-11-06T05:12:06.617Z",
+  "updatedAt": "2025-11-06T05:23:40.000Z",
+  "id": "iJmpDdcrwaG6ib3A",
+  "name": "知識機器人",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{$json}}",
+        "options": {
+          "responseHeaders": {
+            "entries": [
+              {
+                "name": "Content-Type",
+                "value": "application/json"
+              }
+            ]
+          }
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.2,
+      "position": [
+        2416,
+        592
+      ],
+      "id": "e0a9ab3d-0e43-493f-8ab7-ff4c69401080",
+      "name": "Respond to Webhook"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "/chat/completions",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -208,
+        368
+      ],
+      "id": "a52264a7-6a1e-4ca3-951e-2ea3186fa27f",
+      "name": "Webhook completions",
+      "webhookId": "e82fc09d-67b5-4e1e-9c1c-a45c2be310bf"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=以下是使用者與 AI 的完整對話，請參考所有上下文，但請優先針對最後一個使用者問題進行回覆。\n---\n{{$json[\"dialogue\"] }}\n---\n請根據最後一個使用者問題「{{$json[\"lastUserMessage\"]}}」進行最佳回應。\n\nYou must output ONLY the following JSON format, and nothing else.\n{\n  \"found\": boolean,\n  \"answer\": string\n}",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "你是一個專業的系統規則查詢助手，負責從知識庫中查找並整合最準確的答案：\n- **Qdrant Vector Store**：核心知識庫\n\n## 輸出格式規範\n**必須且只能輸出以下JSON格式，不得有任何其他內容：**\n{\n\"found\": boolean,\n\"answer\": string\n}\n\n### 格式規則\n- 找到相關規則時：`found = true`，`answer = 詳細解答內容`\n- 未找到相關規則時：`found = false`，`answer = \"目前沒有相關規則\"`\n- **重要**：當 `answer` 為 \"目前沒有相關規則\" 時，`found` 必須為 `false`\n- 不得輸出JSON以外的任何文字、符號或程式碼區塊\n- 直接輸出純JSON，無需markdown包裝\n\n### 輸出範例\n成功找到：\n`{\"found\": true, \"answer\": \"根據聊天室基本功能規則，每位客服最多可傳送 10 則離線訊息。此規則適用於所有遊戲版本。來源：https://www.notion.so/ellyli/1f9a4d5e98df80fa9a47da0707afc6f9\"}`\n\n未找到：\n`{\"found\": false, \"answer\": \"目前沒有相關規則\"}`\n\n## 查詢流程\n\n### 1. 關鍵詞萃取\n- 從使用者問題中提取核心關鍵詞（遊戲名、功能名、規則類型等）\n- 避免使用完整句子或包含情緒性詞彙的查詢\n- 範例：「為什麼中文版的聊天室功能壞了？」→ 萃取「中文版 聊天室」\n\n### 2. 查詢策略\n\n#### 第一層：Qdrant Vector Store（最優先、最主要的查詢工具）\n- 使用萃取的關鍵詞進行向量搜尋\n- 注意內容以「---」分隔不同區塊，需識別相關段落\n\n## 特殊情況處理\n\n### 規則衝突處理\n當發現多條規則存在衝突時：\n1. 明確列出每條規則的來源連結\n2. 簡述各規則的核心內容\n3. 清楚標示衝突點\n4. 建議使用者回報以協助修正\n\n### 無結果處理\n當知識庫都無相關資訊時：\n- 確認已使用不同關鍵詞組合查詢\n- 回傳標準無結果回應\n\n## 回答品質要求\n\n### 語言規範\n- 主要使用繁體中文\n- 必要時可補充英文術語\n- 保持專業但親切的語氣\n\n### 內容要求\n- 答案必須準確、完整、易懂\n- 避免過於生硬的單句回覆\n- 必須包含資料來源連結\n- 適當使用輔助說明增進理解\n\n### 資訊安全\n- 不得暴露系統內部參數\n- 不得提供可能危害系統安全的技術細節\n- 將技術資訊轉換為使用者層級的說明"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.9,
+      "position": [
+        800,
+        576
+      ],
+      "id": "34e904a8-ee23-4abf-b39d-f8a579b5da88",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "$node[\"Webhook completions\"].json[\"headers\"][\"x-openwebui-chat-id\"]",
+        "sessionTTL": 600
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryRedisChat",
+      "typeVersion": 1.5,
+      "position": [
+        576,
+        976
+      ],
+      "id": "8af3fae1-c5e7-49ec-8a88-f5d10b908b25",
+      "name": "Redis Chat Memory",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "9301dd0c-5231-49a3-9b96-2b712f8485e0",
+              "leftValue": "={{ $json.output.found }}",
+              "rightValue": "目前沒有相關規則",
+              "operator": {
+                "type": "boolean",
+                "operation": "false",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1632,
+        576
+      ],
+      "id": "0e08ba38-a560-4e0c-a4a1-3ee113b1fe7d",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "=\n{\n  \"id\": \"{{'chatcmpl-' + Math.random().toString(36).slice(2, 10)}}\",\n  \"object\": \"chat.completion\",\n  \"created\": {{Math.floor(Date.now() / 1000)}},\n  \"model\": \"n8n-agent\",\n  \"choices\": [\n    {\n      \"index\": 0,\n      \"message\": {\n        \"role\": \"assistant\",\n        \"content\": \"{{$node[\"AI Agent3\"].json[\"output\"]}}\"\n      },\n      \"finish_reason\": \"stop\"\n    }\n  ]\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.2,
+      "position": [
+        2416,
+        144
+      ],
+      "id": "80d36390-d45a-4fe1-9601-ed5af8d88726",
+      "name": "Respond to Webhook2"
+    },
+    {
+      "parameters": {
+        "jsCode": "const data = items[0].json.body;\nconst messages = data.messages || [];\n\nlet systemPrompt = '';\nconst userAssistantPairs = [];\nlet lastUserMessage = '';\nlet tempPair = [];\n\n// 先找 system prompt\nfor (const msg of messages) {\n  if (msg.role === 'system' && !systemPrompt) {\n    systemPrompt = msg.content;\n  }\n}\n\n// 收集 user/assistant 成對的對話\nfor (const msg of messages) {\n  if (msg.role === 'user') {\n    // 如果上一組只有 user，沒有 assistant，先存起來\n    if (tempPair.length > 0) {\n      userAssistantPairs.push(tempPair);\n    }\n    tempPair = [`使用者：${msg.content}`];\n    lastUserMessage = msg.content;\n  } else if (msg.role === 'assistant') {\n    tempPair.push(`AI：${msg.content}`);\n    userAssistantPairs.push(tempPair);\n    tempPair = [];\n  }\n}\n// 如果最後一組只有 user 沒有 assistant\nif (tempPair.length > 0) {\n  userAssistantPairs.push(tempPair);\n}\n\n// 只取最近 5 組\nconst last5Pairs = userAssistantPairs.slice(-5);\nconst dialogue = last5Pairs.flat().join('\\n');\n\n// 解析請求目的\nlet ReqPurpose = 'query'; // 預設為一般查詢\n\nif (lastUserMessage.trim().startsWith('###')) {\n  if (lastUserMessage.includes('Generate a concise, 3-5 word title')) {\n    ReqPurpose = 'title';\n  } else if (lastUserMessage.includes('Generate 1-3 broad tags')) {\n    ReqPurpose = 'tags';\n  } else if (\n    lastUserMessage.includes('Suggest 3-5 relevant follow-up questions') ||\n    lastUserMessage.includes('\"follow_ups\"')\n  ) {\n    ReqPurpose = 'follow_ups';\n  }\n}\n\nreturn [\n  {\n    json: {\n      systemPrompt,\n      dialogue,\n      lastUserMessage,\n      allMessages: messages,\n      ReqPurpose // 這個給 IF 節點判斷\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        224,
+        384
+      ],
+      "id": "a1910d69-ad5d-4650-a1a5-f2c282c1bce1",
+      "name": "Code"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=使用者問題：{{ $items(\"Code\")[0].json.lastUserMessage }}\n\n- 僅將「使用者真實問題」作為 WriteNotionQA 的內容，不要回寫「目前沒有相關規則」或任何系統提示字串。\n- 你可以選擇「原封不動記錄使用者問題」或「進行簡單重述、優化使其更清楚易讀」再記錄，但不得改變原意。",
+        "options": {
+          "systemMessage": "你是一個客服系統的輔助機器人，負責在找不到既有規則時協助兩件事：\n\n---\n\n【 主要任務 】\n1️⃣ 使用 WriteNotionQA 工具 ➜ 回寫使用者的問題到 Notion QA 資料表，以利日後人工補充。\n\n✅ 請注意：\n- 僅將「使用者真實問題」作為 WriteNotionQA 的內容，不要回寫「目前沒有相關規則」或任何系統提示字串。\n- 你可以選擇「原封不動記錄使用者問題」或「進行簡單重述、優化使其更清楚易讀」再記錄，但不得改變原意。\n\n---\n\n【 回覆範例（僅供參考，可自由變換）】\n以下是不同風格的範例句子，請學習其多樣性並自行變化：\n- 「關於您提到的『黑名單上限為何』，目前我查無相關規則，已幫您記錄回報📌，感謝您的耐心與提問！」\n- 「感謝您詢問『黑名單上限為何』，目前暫時沒有相關規則資訊，我們已經將此問題備註回報，會儘快補充！🫠」\n- 「針對您提出的『黑名單上限為何』，目前尚無查詢到相關規則，已為您登記回報✅，謝謝您的理解與協助！」\n- 「目前找不到關於『黑名單上限為何』的規則，我已協助您回報以利後續補充，謝謝您提醒我們這個問題❤️」\n\n✅ 生成時請自由變化上述範例格式\n✅ 必須包含：\n- 使用者問題內容\n- 說明目前沒有相關規則\n- 告知已回報\n- 表達安撫、感謝、溫暖語氣\n- 可適度加入 emoji\n\n---\n\n【 重要規範 】\n- WriteNotionQA 工具的輸入必須是「使用者的問題」本身，禁止輸入「目前沒有相關規則」。\n- 允許對問題內容進行簡短潤飾、優化、去除贅詞，以利日後人工編輯。\n- 回覆使用者時務必要引用他們的問題，並傳達出被關心和重視的語氣。\n\n---\n\n【 語言 】\n- 以繁體中文為主，可適度加 emoji 表現溫度。"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.9,
+      "position": [
+        2032,
+        144
+      ],
+      "id": "bdf808e6-c409-43d2-814d-f13c41fc19cf",
+      "name": "AI Agent3",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "CsQuery18",
+        "sessionTTL": 60
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryRedisChat",
+      "typeVersion": 1.5,
+      "position": [
+        2496,
+        352
+      ],
+      "id": "05dc2d39-7c06-4adb-a923-842ffca2a800",
+      "name": "Redis Chat Memory1",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "resource": "databasePage",
+        "databaseId": {
+          "__rl": true,
+          "value": "1f9a4d5e-98df-8031-a477-d519037f24d1",
+          "mode": "list",
+          "cachedResultName": "Q&A",
+          "cachedResultUrl": "https://www.notion.so/1f9a4d5e98df8031a477d519037f24d1"
+        },
+        "title": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Title', ``, 'string') }}",
+        "simple": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Simplify', ``, 'boolean') }}",
+        "propertiesUi": {
+          "propertyValues": [
+            {
+              "key": "問題|title",
+              "title": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('propertyValues0_Title', ``, 'string') }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.notionTool",
+      "typeVersion": 2.2,
+      "position": [
+        2288,
+        352
+      ],
+      "id": "e3e96082-9292-47d1-bcb6-18cf55f16637",
+      "name": "WriteNotionQA"
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "{\n\t\"found\": true,\n\t\"answer\": \"客服可以從後台選擇圖片後上傳，單一檔案上限5MB，檔案格式支援png、jpg\"\n}",
+        "autoFix": true
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.2,
+      "position": [
+        1216,
+        800
+      ],
+      "id": "1ad4347d-a955-4238-8342-c54b02c1f20b",
+      "name": "Structured Output Parser"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "4abd030f-1cb6-47dc-b90b-098009445209",
+                    "leftValue": "={{$json[\"ReqPurpose\"]}}",
+                    "rightValue": "title",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "title"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "3c9f308d-c90e-46d7-b70c-c704c8977513",
+                    "leftValue": "={{$json[\"ReqPurpose\"]}}",
+                    "rightValue": "tags",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "tags"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "091d8c6b-7bd1-4ec8-bc4c-2f81eb2afe4a",
+                    "leftValue": "={{$json[\"ReqPurpose\"]}}",
+                    "rightValue": "follow_ups",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "follow_ups"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{$json[\"ReqPurpose\"]}}",
+                    "rightValue": "query",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "d0643ac9-eb57-4454-872b-cc31638645d8"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "query"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        512,
+        352
+      ],
+      "id": "0248c9a9-2702-4ad6-9180-504044e9aff9",
+      "name": "Switch"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={ \"title\": \"🍪 Perfect Chocolate Chip Recipe\" }",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.2,
+      "position": [
+        1152,
+        96
+      ],
+      "id": "b2a78540-df2b-4784-9d4f-a5f578fcc2bb",
+      "name": "Res Title"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={ \"tags\": [\"客服工具\", \"小幫手\"] }",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.2,
+      "position": [
+        1152,
+        256
+      ],
+      "id": "04dd83d3-64e2-48fb-bd73-bfe637868e0a",
+      "name": "Res Tags"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={ \"follow_ups\": [\n  \"??\"\n]}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.2,
+      "position": [
+        1152,
+        400
+      ],
+      "id": "57ab50d1-31f3-4dc6-b851-491f58dfe3dd",
+      "name": "Res Follow_ups"
+    },
+    {
+      "parameters": {
+        "path": "models",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        48,
+        64
+      ],
+      "id": "41a26441-76cd-4a84-bcbd-219aba29479e",
+      "name": "Webhook model",
+      "webhookId": "0c7f0fd5-e081-4978-b85c-893d7f8bb99c"
+    },
+    {
+      "parameters": {
+        "jsCode": "const models = {\n  object: \"list\",\n  data: [\n    {\n      id: \"知識機器人\",\n      object: \"model\",\n      created: 1686935000,\n      owned_by: \"jun\"\n    }\n  ]\n};\n\nreturn [\n  {\n    json: models\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        272,
+        64
+      ],
+      "id": "fe053abb-3ea9-4bf7-b57f-66b991b5ae3d",
+      "name": "create data"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{$json}}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.2,
+      "position": [
+        464,
+        64
+      ],
+      "id": "89d67da3-f381-476c-a408-a7aa3023d0b8",
+      "name": "Response Webhook model"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        1184,
+        1408
+      ],
+      "id": "1b9478d8-aa07-458f-94e2-d410a66bf377",
+      "name": "Loop Over Items"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "name": "Replace Me",
+      "typeVersion": 1,
+      "position": [
+        2720,
+        1424
+      ],
+      "id": "49a104a5-e4f9-4535-8184-708013bc9540"
+    },
+    {
+      "parameters": {
+        "resource": "databasePage",
+        "operation": "getAll",
+        "databaseId": {
+          "__rl": true,
+          "value": "1f5a4d5e-98df-80a6-b88e-f501c36b069b",
+          "mode": "list",
+          "cachedResultName": "規則表",
+          "cachedResultUrl": "https://www.notion.so/1f5a4d5e98df80a6b88ef501c36b069b"
+        },
+        "returnAll": true,
+        "simple": false,
+        "filterType": "manual",
+        "matchType": "allFilters",
+        "filters": {
+          "conditions": [
+            {
+              "key": "上次編輯時間|last_edited_time",
+              "condition": "after",
+              "lastEditedTime": "={{ \n  new Date(\n    new Date().getTime() + 8*60*60*1000 - 14*24*60*60*1000\n  ).toISOString() \n}}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.notion",
+      "typeVersion": 2.2,
+      "position": [
+        560,
+        1408
+      ],
+      "id": "f5747806-ad0e-4deb-a8c8-c54e14bf3cd0",
+      "name": "Notion DB"
+    },
+    {
+      "parameters": {
+        "resource": "block",
+        "operation": "getAll",
+        "blockId": {
+          "__rl": true,
+          "value": "={{ $json.url }}",
+          "mode": "url"
+        },
+        "returnAll": true,
+        "fetchNestedBlocks": true,
+        "simplifyOutput": false
+      },
+      "type": "n8n-nodes-base.notion",
+      "typeVersion": 2.2,
+      "position": [
+        1472,
+        1424
+      ],
+      "id": "bb4532e9-9717-4b05-abc2-b4e23bcd76c1",
+      "name": "Notion Page"
+    },
+    {
+      "parameters": {
+        "mode": "retrieve-as-tool",
+        "toolDescription": "是一個知識工具，可以用來查詢規則或知識。會返回 pageContent 與 metadata 資料",
+        "qdrantCollection": {
+          "__rl": true,
+          "value": "resume",
+          "mode": "list",
+          "cachedResultName": "resume"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.vectorStoreQdrant",
+      "typeVersion": 1.3,
+      "position": [
+        912,
+        800
+      ],
+      "id": "1ff917b7-9553-4cc5-ac27-e1e6641b8baa",
+      "name": "Qdrant Vector Store",
+      "credentials": {
+        "qdrantApi": {
+          "id": "bBM1xZbp8MLVQ5BC",
+          "name": "QdrantApi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "description": "查詢人工補充的客服QA資料庫，此工具可作為向量資料庫的補充資料。",
+        "workflowId": {
+          "__rl": true,
+          "value": "xVswRFarAXhgsxJa",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/xVswRFarAXhgsxJa",
+          "cachedResultName": "Get Notion Tool"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "query": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('query', ``, 'string') }}"
+          },
+          "matchingColumns": [
+            "query"
+          ],
+          "schema": [
+            {
+              "id": "query",
+              "displayName": "query",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 2.2,
+      "position": [
+        752,
+        800
+      ],
+      "id": "2565abd2-4497-4d49-a4d1-3dc2829abef8",
+      "name": "SearchQADatabase",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-embedding-001"
+      },
+      "type": "@n8n/n8n-nodes-langchain.embeddingsGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        912,
+        944
+      ],
+      "id": "e732fa1b-225f-4311-b89f-e5d16be46b57",
+      "name": "Embeddings Google Gemini1",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "TcbdbxzebK9gSKPI",
+          "name": "Google Gemini(PaLM) Api account 6"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// 複雜 Notion 頁面內容整理\nlet content = '';\nlet pageTitle = $('Loop Over Items').first()?.json?.title ?? \"\";\nlet keywords = $('Loop Over Items').first()?.json?.Keywords ?? [];\nif (!Array.isArray(keywords)) {\n  keywords = [];\n}\nlet gameServer = $('Loop Over Items').first()?.json?.GameServer ?? [];\nif (!Array.isArray(gameServer)) {\n  gameServer = [];\n}\nlet system = $('Loop Over Items').first()?.json?.system ?? [];\nif (!Array.isArray(system)) {\n  system = [];\n}\n\nlet sections = [];\nlet currentSection = '';\n\n// 處理每個 block\nfor (const block of items) {\n  const type = block.json.type;\n  const data = block.json[type];\n  \n  // 1. 標題型區塊（遇到標題就開始新區塊）\n  const textArr = data?.text || data?.rich_text || [];\n  if (['heading_1', 'heading_2', 'heading_3'].includes(type)) {\n    // 先把現有內容收進 sections\n    if (currentSection.trim()) {\n      sections.push(currentSection.trim());\n      currentSection = '';\n    }\n    const text = textArr.map(rt => rt.plain_text).join('').trim();\n    if (text) {\n      currentSection += `【${text}】\\n`;\n    }\n    continue;\n  }\n\n  // 2. 一般段落、條列、任務清單、引用\n  if (\n    [\n      'paragraph', 'bulleted_list_item', 'numbered_list_item', 'to_do', 'quote'\n    ].includes(type)\n  ) {\n    const text = textArr.map(rt => rt.plain_text).join('').trim();\n    if (text) {\n      if (type.endsWith('list_item')) {\n        currentSection += `・${text}\\n`;\n      } else {\n        currentSection += text + '\\n';\n      }\n    }\n    continue;\n  }\n\n  // 3. code 區塊\n  if (type === 'code') {\n    const codeText = textArr.map(rt => rt.plain_text).join('').trim();\n    if (codeText) {\n      currentSection += `\\`\\`\\`\\n${codeText}\\n\\`\\`\\`\\n`;\n    }\n    continue;\n  }\n\n  // 4. table row\n  if (type === 'table_row') {\n    const rowCells = data.cells || [];\n    const rowText = rowCells.map(\n      cell => cell.map(rt => rt.plain_text).join('')\n    ).join(' | ').trim();\n    if (rowText) {\n      currentSection += rowText + '\\n';\n    }\n    continue;\n  }\n\n  // 5. image 區塊\n  if (type === 'image') {\n    const caption = (data.caption || []).map(rt => rt.plain_text).join('').trim();\n    if (caption) {\n      currentSection += `[圖片說明：${caption}]\\n`;\n    } else {\n      currentSection += `[圖片]\\n`;\n    }\n    continue;\n  }\n\n  // 6. link_preview 區塊\n  if (type === 'link_preview') {\n    const url = data.url || '';\n    if (url) {\n      currentSection += `連結：${url}\\n`;\n    }\n    continue;\n  }\n}\n\n// 收尾，最後一區也要加進 sections\nif (currentSection.trim()) {\n  sections.push(currentSection.trim());\n}\n\n// 用 --- 分區\ncontent = sections.join('\\n---\\n');\n\n// 準備 keywords 和 tags 的文字表示（用於搜尋）\nconst keywordText = keywords.length > 0 ? `關鍵字：${keywords.join(', ')}` : '';\nconst gameServerText = gameServer.length > 0 ? `遊戲伺服器：${gameServer.join(', ')}` : '';\nconst systemText = system.length > 0 ? `系統：${system.join(', ')}` : '';\n\n// 組合 pageContent（給 embedding 使用的完整文字）\nlet pageContent = `標題：${pageTitle}\\n`;\nif (keywordText) pageContent += keywordText + '\\n';\nif (gameServerText) pageContent += gameServerText + '\\n';\nif (systemText) pageContent += systemText + '\\n';\npageContent += `\\n內容：\\n${content}`;\n\n// 取得頁面ID\nconst pageId = items[0]?.json.parent?.page_id || items[0]?.json.id;\n\n// 回傳 Qdrant Vector Store 需要的格式\nreturn [\n  {\n    json: {\n      // pageContent 是用於向量化的完整文字\n      pageContent: pageContent,\n      \n      // metadata 包含所有結構化資料\n      metadata: {\n        id: pageId,\n        title: pageTitle,\n        pageId: pageId,\n        keywords: keywords,\n        gameServer: gameServer,\n        system: system,\n        content: content,\n        sections: sections, // 保留分段資訊\n        sectionCount: sections.length,\n        contentLength: content.length,\n        source: \"notion\",\n        contentType: \"knowledge_base\",\n        indexed_at: new Date().toISOString(),\n        // 搜尋友善的標籤\n        searchTags: [...keywords, ...gameServer, ...system].filter(tag => tag && tag.trim()),\n        // 是否包含程式碼\n        hasCode: content.includes('```'),\n        // 是否包含表格\n        hasTable: content.includes('|'),\n        // 是否包含圖片\n        hasImage: content.includes('[圖片')\n      }\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1744,
+        1424
+      ],
+      "id": "51580cac-bf28-42ae-8e1c-7fa9e78d9bd6",
+      "name": "整理單一頁面"
+    },
+    {
+      "parameters": {
+        "jsCode": "// items 是 n8n 標準的輸入，每一筆就是一個規則頁\n\nreturn items.map(item => {\n  // 頁面 id\n  const pageId = item.json.id;\n\n  // 頁面標題（title 欄位是個陣列）\n  let title = '';\n  const titleArr = item.json.properties?.項目?.title || [];\n  if (titleArr.length > 0) {\n    title = titleArr.map(t => t.plain_text).join('');\n  }\n\n  // Notion 頁面網址（你已經有 url 欄位）\n  const url = item.json.url;\n\n  const system = (item.json.properties?.系統?.multi_select || []).map(s => s.name);\n  const lastEditedTime = item.json.last_edited_time;\n\n  return {\n    json: {\n      pageId,\n      title,\n      url,\n      system,\n      lastEditedTime\n    }\n  };\n});"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        864,
+        1408
+      ],
+      "id": "48fe0469-c601-46c0-bf03-1f8a0bbda61a",
+      "name": "整理批次頁面"
+    },
+    {
+      "parameters": {
+        "jsCode": "const embeddingResult = $input.first().json;\nconst processedData = $('整理單一頁面').first().json;\nconst vector = embeddingResult.embedding.values;\n\nconsole.log('=== Building Qdrant Point ===');\nconsole.log('Page ID:', processedData.metadata.id);\nconsole.log('Content:', processedData.pageContent.substring(0, 100));\n\nreturn [{\n    json: {\n        points: [\n            {\n                id: processedData.metadata.id,\n                vector: vector,\n                payload: {\n                    content: processedData.pageContent,\n                    metadata: {\n                        title: processedData.metadata.title,\n                        pageId: processedData.metadata.pageId,\n                        keywords: processedData.metadata.keywords,\n                        system: processedData.metadata.system,\n                        source: processedData.metadata.source,\n                        contentType: processedData.metadata.contentType,\n                        contentLength: processedData.metadata.contentLength,\n                        sectionCount: processedData.metadata.sectionCount,\n                        searchTags: processedData.metadata.searchTags,\n                        indexed_at: new Date().toISOString()\n                    }\n                }\n            }\n        ]\n    }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2224,
+        1424
+      ],
+      "id": "69ec6206-f3df-4444-804b-b8171fba2634",
+      "name": "轉成儲存格式"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-embedding-001:embedContent",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "key",
+              "value": "AIzaSyAz-L2vN9CbP57YYNH4VHeFXfrUQgDlw1w"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "content.parts[0].text",
+              "value": "={{ $json.pageContent }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2000,
+        1424
+      ],
+      "id": "6bdec7cf-daaa-4814-a9ec-eeb9251fef0b",
+      "name": "HTTP Request 向量計算"
+    },
+    {
+      "parameters": {
+        "method": "PUT",
+        "url": "https://junqdrant.zeabur.app/collections/resume/points",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "api-key",
+              "value": "rU6geVAj98WqOYi0ho3yPfu1Fa527Mx4"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ $json }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2496,
+        1424
+      ],
+      "id": "50651b01-16ea-46bc-a4c3-81e053785250",
+      "name": "HTTP Request 儲存向量"
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 19,
+              "triggerAtMinute": 30
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        256,
+        1408
+      ],
+      "id": "4fc01e83-bb86-4176-b972-179e898556de",
+      "name": "Schedule"
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.5-flash-lite",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        1216,
+        944
+      ],
+      "id": "2ef429cb-f7d4-4d08-a581-1ce1fa79eb28",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "TcbdbxzebK9gSKPI",
+          "name": "Google Gemini(PaLM) Api account 6"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        400,
+        800
+      ],
+      "id": "ab29bbb0-c409-4991-afbb-a606ab5cad29",
+      "name": "Google Gemini Chat Model1",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "TcbdbxzebK9gSKPI",
+          "name": "Google Gemini(PaLM) Api account 6"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        1952,
+        352
+      ],
+      "id": "ad3611a7-902f-4099-b73a-58884be9e258",
+      "name": "Google Gemini Chat Model2",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "TcbdbxzebK9gSKPI",
+          "name": "Google Gemini(PaLM) Api account 6"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const answer = $json[\"output\"];\nconst now = Math.floor(Date.now() / 1000);\n\nreturn [{\n  json: {\n    id: \"chatcmpl-\" + now,\n    object: \"chat.completion\",\n    created: now,\n    model: \"知識機器人\",\n    stream: false,\n    choices: [\n      {\n        index: 0,\n        message: {\n          role: \"assistant\",\n          content: $input.first().json.output.answer\n        },\n        finish_reason: \"stop\"\n      }\n    ],\n    usage: {\n      prompt_tokens: 50,\n      completion_tokens: 100,\n      total_tokens: 150\n    }\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2064,
+        592
+      ],
+      "id": "51d869c7-7e01-4d9d-8433-df81f9224160",
+      "name": "回應格式"
+    },
+    {
+      "parameters": {
+        "content": "定時拉取notion轉向量",
+        "height": 224,
+        "width": 544
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        192,
+        1360
+      ],
+      "id": "b163bffa-1632-4752-9ae5-35c1822f20fd",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "content": "機器人問答入口",
+        "height": 256,
+        "width": 656,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        0,
+        320
+      ],
+      "id": "1e7e344c-5f25-4487-9a43-9c6be03e2f6f",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "content": "機器人查詢模型",
+        "height": 256,
+        "width": 656
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "600bfe1d-8100-433f-b4cd-4faa434ae583",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "content": "查不到資料時的回報+回應",
+        "height": 400,
+        "width": 1200,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1568,
+        112
+      ],
+      "id": "4e07dcbf-28de-4c5d-8bc0-ed57e38b8bdd",
+      "name": "Sticky Note3"
+    },
+    {
+      "parameters": {
+        "content": "提供機器人額外資訊",
+        "height": 496,
+        "width": 288
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1088,
+        48
+      ],
+      "id": "a77acb72-51a9-4997-bdad-02978715c081",
+      "name": "Sticky Note4"
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "$node[\"Webhook completions\"].json[\"headers\"][\"x-openwebui-chat-id\"]"
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        576,
+        800
+      ],
+      "id": "e17c9e33-68b1-4dd7-9391-a512928a41de",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "Query"
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        2128,
+        352
+      ],
+      "id": "29df35f1-258a-4950-9104-e5ecfb777391",
+      "name": "Simple Memory1"
+    },
+    {
+      "parameters": {
+        "jsCode": "// n8n 的 ChatMessage 格式通常在 $input.all() 中\nconst chatMessages = $input.all();\n\nlet systemPrompt = '';\nconst userAssistantPairs = [];\nlet lastUserMessage = '';\nlet tempPair = [];\nconst allMessages = [];\n\n// 遍歷所有輸入的 chat message\nfor (const item of chatMessages) {\n  const message = item.json;\n  \n  // 將訊息加入 allMessages\n  allMessages.push({\n    role: message.role || 'user',\n    content: message.message || message.content || ''\n  });\n  \n  const role = message.role || 'user';\n  const content = message.message || message.content || '';\n  \n  // 先找 system prompt\n  if (role === 'system' && !systemPrompt) {\n    systemPrompt = content;\n    continue;\n  }\n  \n  // 收集 user/assistant 成對的對話\n  if (role === 'user') {\n    // 如果上一組只有 user,沒有 assistant,先存起來\n    if (tempPair.length > 0) {\n      userAssistantPairs.push(tempPair);\n    }\n    tempPair = [`使用者:${content}`];\n    lastUserMessage = content;\n  } else if (role === 'assistant') {\n    tempPair.push(`AI:${content}`);\n    userAssistantPairs.push(tempPair);\n    tempPair = [];\n  }\n}\n\n// 如果最後一組只有 user 沒有 assistant\nif (tempPair.length > 0) {\n  userAssistantPairs.push(tempPair);\n}\n\n// 只取最近 5 組\nconst last5Pairs = userAssistantPairs.slice(-5);\nconst dialogue = last5Pairs.flat().join('\\n');\n\n// 解析請求目的\nlet ReqPurpose = 'query'; // 預設為一般查詢\nif (lastUserMessage.trim().startsWith('###')) {\n  if (lastUserMessage.includes('Generate a concise, 3-5 word title')) {\n    ReqPurpose = 'title';\n  } else if (lastUserMessage.includes('Generate 1-3 broad tags')) {\n    ReqPurpose = 'tags';\n  } else if (\n    lastUserMessage.includes('Suggest 3-5 relevant follow-up questions') ||\n    lastUserMessage.includes('\"follow_ups\"')\n  ) {\n    ReqPurpose = 'follow_ups';\n  }\n}\n\nreturn [\n  {\n    json: {\n      systemPrompt,\n      dialogue,\n      lastUserMessage,\n      allMessages,\n      ReqPurpose // 這個給 IF 節點判斷\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        192,
+        608
+      ],
+      "id": "10d030f0-76f7-4e1f-952f-4e0a238aeb09",
+      "name": "接收n8n聊天"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        -192,
+        608
+      ],
+      "id": "c54c6be8-c34b-4df6-acf4-1ae4ce51fd90",
+      "name": "When chat message received",
+      "webhookId": "f7403e9e-9ab6-4263-860c-b9254176a797"
+    }
+  ],
+  "connections": {
+    "Webhook completions": {
+      "main": [
+        [
+          {
+            "node": "Code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Redis Chat Memory": {
+      "ai_memory": [
+        []
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "AI Agent3",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "回應格式",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent3": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Redis Chat Memory1": {
+      "ai_memory": [
+        []
+      ]
+    },
+    "WriteNotionQA": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent3",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "Res Title",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Res Tags",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Res Follow_ups",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook model": {
+      "main": [
+        [
+          {
+            "node": "create data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "create data": {
+      "main": [
+        [
+          {
+            "node": "Response Webhook model",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Notion Page",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Replace Me": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Notion DB": {
+      "main": [
+        [
+          {
+            "node": "整理批次頁面",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Notion Page": {
+      "main": [
+        [
+          {
+            "node": "整理單一頁面",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Qdrant Vector Store": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "SearchQADatabase": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Embeddings Google Gemini1": {
+      "ai_embedding": [
+        [
+          {
+            "node": "Qdrant Vector Store",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "整理單一頁面": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request 向量計算",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "整理批次頁面": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "轉成儲存格式": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request 儲存向量",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request 向量計算": {
+      "main": [
+        [
+          {
+            "node": "轉成儲存格式",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request 儲存向量": {
+      "main": [
+        [
+          {
+            "node": "Replace Me",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule": {
+      "main": [
+        [
+          {
+            "node": "Notion DB",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Structured Output Parser",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model2": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent3",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "回應格式": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory1": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent3",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "接收n8n聊天",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "接收n8n聊天": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": null,
+  "pinData": {},
+  "versionId": "b1c63774-7d16-4718-abe9-2e11be1faa6c",
+  "triggerCount": 0,
+  "shared": [
+    {
+      "createdAt": "2025-11-06T05:12:06.624Z",
+      "updatedAt": "2025-11-06T05:12:06.624Z",
+      "role": "workflow:owner",
+      "workflowId": "iJmpDdcrwaG6ib3A",
+      "projectId": "iZydbwsMPJYYjvth",
+      "project": {
+        "createdAt": "2025-09-16T02:39:54.633Z",
+        "updatedAt": "2025-09-16T02:43:19.908Z",
+        "id": "iZydbwsMPJYYjvth",
+        "name": "common web <web@wanin.tw>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "projectRelations": [
+          {
+            "createdAt": "2025-09-16T02:39:54.639Z",
+            "updatedAt": "2025-09-16T02:39:54.639Z",
+            "userId": "55f25be3-69cb-4a61-849e-09b3e6328043",
+            "projectId": "iZydbwsMPJYYjvth",
+            "user": {
+              "createdAt": "2025-09-16T02:39:54.628Z",
+              "updatedAt": "2025-11-06T01:55:21.000Z",
+              "id": "55f25be3-69cb-4a61-849e-09b3e6328043",
+              "email": "web@wanin.tw",
+              "firstName": "common",
+              "lastName": "web",
+              "personalizationAnswers": {
+                "version": "v4",
+                "personalization_survey_submitted_at": "2025-09-16T02:43:24.324Z",
+                "personalization_survey_n8n_version": "1.108.1"
+              },
+              "settings": {
+                "easyAIWorkflowOnboarded": true,
+                "firstSuccessfulWorkflowId": "XN79dmNc8yPVm6XU",
+                "userActivated": true,
+                "userActivatedAt": 1758096117396,
+                "npsSurvey": {
+                  "responded": true,
+                  "lastShownAt": 1761544952978
+                }
+              },
+              "disabled": false,
+              "mfaEnabled": false,
+              "lastActiveAt": "2025-11-05",
+              "isPending": false
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "tags": [
+    {
+      "createdAt": "2025-11-06T05:09:00.923Z",
+      "updatedAt": "2025-11-06T05:09:00.923Z",
+      "id": "fWvzL0SF48zLxGja",
+      "name": "客服工具知識庫"
+    }
+  ]
+}
