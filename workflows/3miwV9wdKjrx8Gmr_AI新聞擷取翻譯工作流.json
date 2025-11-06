@@ -1,6 +1,6 @@
 {
   "createdAt": "2025-10-27T05:57:53.778Z",
-  "updatedAt": "2025-11-06T09:55:59.000Z",
+  "updatedAt": "2025-11-06T10:26:40.000Z",
   "id": "3miwV9wdKjrx8Gmr",
   "name": "AI新聞擷取&翻譯工作流",
   "active": true,
@@ -347,7 +347,7 @@
         "url": "https://dev88.newtalk.tw/newsapi/insertNews",
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "={\n    \"token\": \"61af9f535f694a56912a7ea660b01a7e8369b74cfac3199667dc82946f5d1e5c\",\n    \"datas\": [\n        {\n            \"title\": \"{{ $('翻譯').item.json.output.title }}\",\n            \"content\": \"{{ $('翻譯').item.json.output.content }}\",\n            \"categoryId\": {{ $json.output.categoryId }},\n            \"publishTime\": \"{{ $('Limit').item.json.publishTime }}\",\n            \"tags\": \"{{ $('翻譯').item.json.output.tags }}\",\n            \"description\":\"{{ $('翻譯').item.json.output.summary }}\",\n            \"newsSourceId\": 7,\n            \"source\": \"{{ $('Limit').item.json.source }}\",\n            \"sourceUrl\": \"{{ $('Limit').item.json.sourceUrl }}\",\n            \"originTitle\": \"{{ $json.output.title }}\",\n            \"originContent\": \"{{ $json.output.content }}\"\n        }\n    ]\n}",
+        "jsonBody": "={\n    \"token\": \"61af9f535f694a56912a7ea660b01a7e8369b74cfac3199667dc82946f5d1e5c\",\n    \"datas\": [\n        {\n            \"title\": \"{{ $('翻譯').item.json.output.title }}\",\n            \"content\": \"{{ $('翻譯').item.json.output.content }}\",\n            \"categoryId\": {{ $json.output.categoryId }},\n            \"publishTime\": \"{{ DateTime.fromISO($('Limit').item.json.publishTime).setZone('Asia/Taipei').toFormat('yyyy-MM-dd HH:mm:ss') }}\",\n            \"tags\": \"{{ $('翻譯').item.json.output.tags }}\",\n            \"description\":\"{{ $('翻譯').item.json.output.summary }}\",\n            \"newsSourceId\": 7,\n            \"source\": \"{{ $('Limit').item.json.source }}\",\n            \"sourceUrl\": \"{{ $('Limit').item.json.sourceUrl }}\",\n            \"originTitle\": \"{{ $json.output.title }}\",\n            \"originContent\": \"{{ $json.output.content }}\"\n        }\n    ]\n}",
         "options": {
           "allowUnauthorizedCerts": true,
           "response": {
@@ -1044,7 +1044,7 @@
     "templateCredsSetupCompleted": true
   },
   "pinData": {},
-  "versionId": "f89739f7-180d-4dc1-9435-787fe66ba453",
+  "versionId": "41fc2ec2-4f96-4561-8634-12cfaf09e6da",
   "triggerCount": 1,
   "shared": [
     {

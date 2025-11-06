@@ -1,6 +1,6 @@
 {
   "createdAt": "2025-10-31T03:58:43.404Z",
-  "updatedAt": "2025-11-06T09:38:35.000Z",
+  "updatedAt": "2025-11-06T10:10:24.000Z",
   "id": "Q1WhRKXv3imxJzmy",
   "name": "RSS.app",
   "active": true,
@@ -92,7 +92,8 @@
             "sourceUrl": "={{ $json.output.sourceUrl }}",
             "publishTime": "={{ $json.output.publishTime }}",
             "category": "={{ $json.output.category }}",
-            "description": "={{ $json.output.originContent }}"
+            "description": "={{ $json.output.originContent }}",
+            "publishTimeDate": "={{ $json.output.publishTime }}"
           },
           "matchingColumns": [],
           "schema": [
@@ -167,16 +168,6 @@
               "removed": false
             },
             {
-              "id": "publishTime",
-              "displayName": "publishTime",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "dateTime",
-              "readOnly": false,
-              "removed": false
-            },
-            {
               "id": "category",
               "displayName": "category",
               "required": false,
@@ -203,6 +194,26 @@
               "defaultMatch": false,
               "display": true,
               "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "publishTime",
+              "displayName": "publishTime",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "publishTimeDate",
+              "displayName": "publishTimeDate",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
               "readOnly": false,
               "removed": false
             }
@@ -455,7 +466,7 @@
     "templateCredsSetupCompleted": true
   },
   "pinData": {},
-  "versionId": "452ec950-a36d-4717-8f1b-d6b3d815bd9d",
+  "versionId": "439ce894-8bf5-460c-a5db-aff94792cc5c",
   "triggerCount": 1,
   "shared": [
     {
