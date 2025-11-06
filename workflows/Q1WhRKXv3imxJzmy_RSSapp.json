@@ -460,7 +460,7 @@
   "staticData": {
     "node:Schedule Trigger_Reuters": {
       "recurrenceRules": [
-        8
+        16
       ]
     }
   },
