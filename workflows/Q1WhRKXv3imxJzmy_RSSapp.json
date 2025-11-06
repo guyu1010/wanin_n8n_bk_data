@@ -1,6 +1,6 @@
 {
   "createdAt": "2025-10-31T03:58:43.404Z",
-  "updatedAt": "2025-11-06T07:53:21.000Z",
+  "updatedAt": "2025-11-06T09:38:35.000Z",
   "id": "Q1WhRKXv3imxJzmy",
   "name": "RSS.app",
   "active": true,
@@ -38,7 +38,7 @@
           "interval": [
             {
               "field": "hours",
-              "hoursInterval": 50
+              "hoursInterval": 8
             }
           ]
         }
@@ -455,7 +455,7 @@
     "templateCredsSetupCompleted": true
   },
   "pinData": {},
-  "versionId": "4fbe1512-4672-4d68-8004-ac16de4add37",
+  "versionId": "452ec950-a36d-4717-8f1b-d6b3d815bd9d",
   "triggerCount": 1,
   "shared": [
     {

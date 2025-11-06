@@ -1,6 +1,6 @@
 {
   "createdAt": "2025-10-27T05:57:53.778Z",
-  "updatedAt": "2025-11-06T08:23:48.000Z",
+  "updatedAt": "2025-11-06T09:55:59.000Z",
   "id": "3miwV9wdKjrx8Gmr",
   "name": "AI新聞擷取&翻譯工作流",
   "active": true,
@@ -1043,26 +1043,8 @@
   "meta": {
     "templateCredsSetupCompleted": true
   },
-  "pinData": {
-    "Schedule Trigger": [
-      {
-        "json": {
-          "timestamp": "2025-11-06T03:15:29.018-05:00",
-          "Readable date": "November 6th 2025, 3:15:29 am",
-          "Readable time": "3:15:29 am",
-          "Day of week": "Thursday",
-          "Year": "2025",
-          "Month": "November",
-          "Day of month": "06",
-          "Hour": "03",
-          "Minute": "15",
-          "Second": "29",
-          "Timezone": "America/New_York (UTC-05:00)"
-        }
-      }
-    ]
-  },
-  "versionId": "17ec26bc-dc5f-449f-853b-3a4abb5df076",
+  "pinData": {},
+  "versionId": "f89739f7-180d-4dc1-9435-787fe66ba453",
   "triggerCount": 1,
   "shared": [
     {
