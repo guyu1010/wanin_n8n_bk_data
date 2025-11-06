@@ -1,10 +1,10 @@
 {
   "createdAt": "2025-11-06T05:58:51.916Z",
-  "updatedAt": "2025-11-06T05:58:51.916Z",
+  "updatedAt": "2025-11-06T06:00:47.000Z",
   "id": "6Evz1qbjXERLfOn5",
   "name": "知識庫",
   "active": false,
-  "isArchived": false,
+  "isArchived": true,
   "nodes": [
     {
       "parameters": {
@@ -1326,7 +1326,7 @@
   "staticData": null,
   "meta": null,
   "pinData": {},
-  "versionId": "c61e0390-b889-45bf-a558-cc5f6fc84637",
+  "versionId": "15416ea4-7ff5-4607-8665-10cd0e3d5700",
   "triggerCount": 0,
   "shared": [
     {

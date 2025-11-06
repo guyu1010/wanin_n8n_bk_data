@@ -1,6 +1,6 @@
 {
   "createdAt": "2025-10-27T05:57:53.778Z",
-  "updatedAt": "2025-11-05T10:18:35.000Z",
+  "updatedAt": "2025-11-06T06:26:32.000Z",
   "id": "3miwV9wdKjrx8Gmr",
   "name": "AI新聞擷取&翻譯工作流",
   "active": false,
@@ -15,8 +15,8 @@
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        -80,
-        -176
+        -384,
+        -192
       ],
       "id": "651e5c1b-d5ba-4d88-87a1-2b5df8fa1313",
       "name": "Sticky Note"
@@ -255,132 +255,120 @@
     },
     {
       "parameters": {
-        "operation": "upsert",
-        "dataTableId": {
-          "__rl": true,
-          "value": "YXirKj0P2e9KaEiM",
-          "mode": "list",
-          "cachedResultName": "RSS",
-          "cachedResultUrl": "/projects/3fNsHtHtWTyyLFlF/datatables/YXirKj0P2e9KaEiM"
-        },
-        "filters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
           "conditions": [
             {
-              "keyValue": "={{ $('Limit').item.json.id }}"
-            }
-          ]
-        },
-        "columns": {
-          "mappingMode": "defineBelow",
-          "value": {
-            "content": "={{ $json.output.content }}",
-            "translated_title": "={{ $json.output.title }}"
-          },
-          "matchingColumns": [],
-          "schema": [
-            {
-              "id": "title",
-              "displayName": "title",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "readOnly": false,
-              "removed": true
+              "id": "960b3936-c2ea-4130-a503-5dfe96d35bd2",
+              "leftValue": "={{ $json.category }}",
+              "rightValue": "政治",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
             },
             {
-              "id": "source_id",
-              "displayName": "source_id",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "number",
-              "readOnly": false,
-              "removed": true
+              "id": "fa370378-3771-4044-9fcf-78f034f2b09a",
+              "leftValue": "={{ $json.category }}",
+              "rightValue": "財經",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
             },
             {
-              "id": "description",
-              "displayName": "description",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "readOnly": false,
-              "removed": true
-            },
-            {
-              "id": "link",
-              "displayName": "link",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "readOnly": false,
-              "removed": true
-            },
-            {
-              "id": "content",
-              "displayName": "content",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "readOnly": false,
-              "removed": false
-            },
-            {
-              "id": "tags",
-              "displayName": "tags",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "readOnly": false,
-              "removed": true
-            },
-            {
-              "id": "category",
-              "displayName": "category",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "readOnly": false,
-              "removed": true
-            },
-            {
-              "id": "pub_date",
-              "displayName": "pub_date",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "dateTime",
-              "readOnly": false,
-              "removed": true
-            },
-            {
-              "id": "translated_title",
-              "displayName": "translated_title",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "readOnly": false,
-              "removed": false
+              "id": "b8f90ec0-802a-41b3-af8f-b857fd6f557d",
+              "leftValue": "={{ $json.category }}",
+              "rightValue": "科技",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
             }
           ],
-          "attemptToConvertTypes": false,
-          "convertFieldsToString": false
-        }
+          "combinator": "or"
+        },
+        "options": {}
       },
-      "type": "n8n-nodes-base.dataTable",
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.2,
+      "position": [
+        -32,
+        368
+      ],
+      "id": "1e416c28-2616-4470-bd9b-3da8cb1fa8f0",
+      "name": "Filter"
+    },
+    {
+      "parameters": {
+        "content": "## 取得RSS資料",
+        "height": 304,
+        "width": 224
+      },
+      "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        2592,
+        -400,
+        192
+      ],
+      "id": "b4ce83c5-426d-43d9-987a-ed9123779a1f",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "content": "## 篩選特定類別\n- 政治\n- 財經\n- 科技",
+        "height": 304,
+        "width": 224
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -96,
+        192
+      ],
+      "id": "271c5ceb-7b8e-4341-9b61-874c7470b2dd",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://dev88.newtalk.tw/newsapi/insertNews",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n    \"token\": \"61af9f535f694a56912a7ea660b01a7e8369b74cfac3199667dc82946f5d1e5c\",\n    \"datas\": [\n        {\n            \"title\": \"{{ $('翻譯').item.json.output.title }}\",\n            \"content\": \"{{ $('翻譯').item.json.output.content }}\",\n            \"categoryId\": 2,\n            \"publishTime\": \"{{ $('Limit').item.json.publishTime }}\",\n            \"tags\": \"{{ $('翻譯').item.json.output.tags }}\",\n            \"newsSourceId\": 7,\n            \"source\": \"{{ $('Limit').item.json.source }}\",\n            \"sourceUrl\": \"{{ $('Limit').item.json.sourceUrl }}\",\n            \"originTitle\": \"{{ $json.output.title }}\",\n            \"originContent\": \"{{ $json.output.content }}\"\n        }\n    ]\n}",
+        "options": {
+          "allowUnauthorizedCerts": true
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2336,
         352
       ],
-      "id": "f3417b72-18f1-4dec-b408-170e92ad356a",
-      "name": "Upsert row(s)1"
+      "id": "4fc59280-e6cf-421b-b7f4-02a0ce9cec6a",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "jsCode": "// 取得 claude解析 節點的輸出資料\nconst claudeData = $('claude解析').item.json;\n\n// 處理 output 物件,將所有雙引號替換為單引號\nconst output = claudeData.output;\n\nreturn {\n  json: {\n    output: {\n      title: output.title ? output.title.replaceAll('\"', \"'\") : output.title,\n      content: output.content ? output.content.replaceAll('\"', \"'\") : output.content,\n      // 如果有 tags 也一併處理\n      tags: output.tags ? output.tags.replaceAll('\"', \"'\") : output.tags\n    }\n  }\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2016,
+        352
+      ],
+      "id": "72aefec0-9bed-4a19-91a0-b07872f23ec7",
+      "name": "引號置換"
     },
     {
       "parameters": {
@@ -401,7 +389,321 @@
         },
         "columns": {
           "mappingMode": "defineBelow",
-          "value": {},
+          "value": {
+            "isTranslate": true,
+            "title": "={{ $('翻譯').item.json.output.title }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "originTitle",
+              "displayName": "originTitle",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "originContent",
+              "displayName": "originContent",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "source",
+              "displayName": "source",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "title",
+              "displayName": "title",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "content",
+              "displayName": "content",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "categoryId",
+              "displayName": "categoryId",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "sourceUrl",
+              "displayName": "sourceUrl",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "publishTime",
+              "displayName": "publishTime",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "category",
+              "displayName": "category",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "isTranslate",
+              "displayName": "isTranslate",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "boolean",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        }
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1,
+      "position": [
+        2816,
+        288
+      ],
+      "id": "f3417b72-18f1-4dec-b408-170e92ad356a",
+      "name": "翻譯成功"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "3f2f786e-7d3f-48e2-85cc-8f66cd30ad99",
+              "leftValue": "={{ $json.isSuccess }}",
+              "rightValue": "true",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        2544,
+        352
+      ],
+      "id": "91f4615f-709f-4b97-81a2-6b4142cf72e8",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "operation": "upsert",
+        "dataTableId": {
+          "__rl": true,
+          "value": "ytHc5KKgyhAvAwaX",
+          "mode": "list",
+          "cachedResultName": "world_news",
+          "cachedResultUrl": "/projects/iZydbwsMPJYYjvth/datatables/ytHc5KKgyhAvAwaX"
+        },
+        "filters": {
+          "conditions": [
+            {
+              "keyValue": "={{ $('Limit').item.json.id }}"
+            }
+          ]
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "isTranslate": false,
+            "title": "={{ $('翻譯').item.json.output.title }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "originTitle",
+              "displayName": "originTitle",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "originContent",
+              "displayName": "originContent",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "source",
+              "displayName": "source",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "title",
+              "displayName": "title",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "content",
+              "displayName": "content",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "categoryId",
+              "displayName": "categoryId",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "sourceUrl",
+              "displayName": "sourceUrl",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "publishTime",
+              "displayName": "publishTime",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "category",
+              "displayName": "category",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "isTranslate",
+              "displayName": "isTranslate",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "boolean",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        }
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1,
+      "position": [
+        2816,
+        480
+      ],
+      "id": "1f0d3da0-e864-4a11-8cf6-88890975796c",
+      "name": "翻譯失敗"
+    },
+    {
+      "parameters": {
+        "operation": "upsert",
+        "dataTableId": {
+          "__rl": true,
+          "value": "ytHc5KKgyhAvAwaX",
+          "mode": "list",
+          "cachedResultName": "world_news",
+          "cachedResultUrl": "/projects/iZydbwsMPJYYjvth/datatables/ytHc5KKgyhAvAwaX"
+        },
+        "filters": {
+          "conditions": [
+            {
+              "keyValue": "={{ $('Limit').item.json.id }}"
+            }
+          ]
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "isTranslate": false
+          },
           "matchingColumns": [],
           "schema": [
             {
@@ -493,6 +795,16 @@
               "type": "string",
               "readOnly": false,
               "removed": true
+            },
+            {
+              "id": "isTranslate",
+              "displayName": "isTranslate",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "boolean",
+              "readOnly": false,
+              "removed": false
             }
           ],
           "attemptToConvertTypes": false,
@@ -502,126 +814,11 @@
       "type": "n8n-nodes-base.dataTable",
       "typeVersion": 1,
       "position": [
-        1408,
-        528
+        1392,
+        560
       ],
-      "id": "10267ad4-e0a7-41eb-b0f6-703fcffc6b23",
-      "name": "Upsert row(s)"
-    },
-    {
-      "parameters": {
-        "conditions": {
-          "options": {
-            "caseSensitive": true,
-            "leftValue": "",
-            "typeValidation": "strict",
-            "version": 2
-          },
-          "conditions": [
-            {
-              "id": "960b3936-c2ea-4130-a503-5dfe96d35bd2",
-              "leftValue": "={{ $json.category }}",
-              "rightValue": "政治",
-              "operator": {
-                "type": "string",
-                "operation": "equals",
-                "name": "filter.operator.equals"
-              }
-            },
-            {
-              "id": "fa370378-3771-4044-9fcf-78f034f2b09a",
-              "leftValue": "={{ $json.category }}",
-              "rightValue": "財經",
-              "operator": {
-                "type": "string",
-                "operation": "equals",
-                "name": "filter.operator.equals"
-              }
-            },
-            {
-              "id": "b8f90ec0-802a-41b3-af8f-b857fd6f557d",
-              "leftValue": "={{ $json.category }}",
-              "rightValue": "科技",
-              "operator": {
-                "type": "string",
-                "operation": "equals",
-                "name": "filter.operator.equals"
-              }
-            }
-          ],
-          "combinator": "or"
-        },
-        "options": {}
-      },
-      "type": "n8n-nodes-base.filter",
-      "typeVersion": 2.2,
-      "position": [
-        -32,
-        368
-      ],
-      "id": "1e416c28-2616-4470-bd9b-3da8cb1fa8f0",
-      "name": "Filter"
-    },
-    {
-      "parameters": {
-        "content": "## 取得RSS資料",
-        "height": 304,
-        "width": 224
-      },
-      "type": "n8n-nodes-base.stickyNote",
-      "typeVersion": 1,
-      "position": [
-        -400,
-        192
-      ],
-      "id": "b4ce83c5-426d-43d9-987a-ed9123779a1f",
-      "name": "Sticky Note1"
-    },
-    {
-      "parameters": {
-        "content": "## 篩選特定類別\n- 政治\n- 財經\n- 科技",
-        "height": 304,
-        "width": 224
-      },
-      "type": "n8n-nodes-base.stickyNote",
-      "typeVersion": 1,
-      "position": [
-        -96,
-        192
-      ],
-      "id": "271c5ceb-7b8e-4341-9b61-874c7470b2dd",
-      "name": "Sticky Note2"
-    },
-    {
-      "parameters": {
-        "method": "POST",
-        "url": "https://dev88.newtalk.tw/newsapi/insertNews",
-        "sendBody": true,
-        "specifyBody": "json",
-        "jsonBody": "={\n    \"token\": \"61af9f535f694a56912a7ea660b01a7e8369b74cfac3199667dc82946f5d1e5c\",\n    \"datas\": [\n        {\n            \"title\": \"{{ $('翻譯').item.json.output.title }}\",\n            \"content\": \"{{ $('翻譯').item.json.output.content }}\",\n            \"categoryId\": 2,\n            \"publishTime\": \"{{ $('Limit').item.json.publishTime }}\",\n            \"tags\": \"{{ $('翻譯').item.json.output.tags }}\",\n            \"newsSourceId\": 7,\n            \"source\": \"{{ $('Limit').item.json.source }}\",\n            \"sourceUrl\": \"{{ $('Limit').item.json.sourceUrl }}\",\n            \"originTitle\": \"{{ $json.output.title }}\",\n            \"originContent\": \"{{ $json.output.content }}\"\n        }\n    ]\n}",
-        "options": {}
-      },
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4.2,
-      "position": [
-        2336,
-        352
-      ],
-      "id": "4fc59280-e6cf-421b-b7f4-02a0ce9cec6a",
-      "name": "HTTP Request"
-    },
-    {
-      "parameters": {
-        "jsCode": "// 取得 claude解析 節點的輸出資料\nconst claudeData = $('claude解析').item.json;\n\n// 處理 output 物件,將所有雙引號替換為單引號\nconst output = claudeData.output;\n\nreturn {\n  json: {\n    output: {\n      title: output.title ? output.title.replaceAll('\"', \"'\") : output.title,\n      content: output.content ? output.content.replaceAll('\"', \"'\") : output.content,\n      // 如果有 tags 也一併處理\n      tags: output.tags ? output.tags.replaceAll('\"', \"'\") : output.tags\n    }\n  }\n};"
-      },
-      "type": "n8n-nodes-base.code",
-      "typeVersion": 2,
-      "position": [
-        2016,
-        352
-      ],
-      "id": "72aefec0-9bed-4a19-91a0-b07872f23ec7",
-      "name": "引號置換"
+      "id": "27cd7f60-430d-4bd5-bb91-55bd5b83db7c",
+      "name": "解析失敗"
     }
   ],
   "connections": {
@@ -746,7 +943,7 @@
         ],
         [
           {
-            "node": "Upsert row(s)",
+            "node": "解析失敗",
             "type": "main",
             "index": 0
           }
@@ -779,11 +976,12 @@
       "main": [
         [
           {
-            "node": "Upsert row(s)1",
+            "node": "If",
             "type": "main",
             "index": 0
           }
-        ]
+        ],
+        []
       ]
     },
     "引號置換": {
@@ -791,6 +989,24 @@
         [
           {
             "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "翻譯成功",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "翻譯失敗",
             "type": "main",
             "index": 0
           }
@@ -805,8 +1021,26 @@
   "meta": {
     "templateCredsSetupCompleted": true
   },
-  "pinData": {},
-  "versionId": "0376199a-f65a-4a50-a719-9ed912ba41dc",
+  "pinData": {
+    "Schedule Trigger": [
+      {
+        "json": {
+          "timestamp": "2025-11-06T01:19:17.026-05:00",
+          "Readable date": "November 6th 2025, 1:19:17 am",
+          "Readable time": "1:19:17 am",
+          "Day of week": "Thursday",
+          "Year": "2025",
+          "Month": "November",
+          "Day of month": "06",
+          "Hour": "01",
+          "Minute": "19",
+          "Second": "17",
+          "Timezone": "America/New_York (UTC-05:00)"
+        }
+      }
+    ]
+  },
+  "versionId": "3699866b-9135-45a2-8209-3b15781161e5",
   "triggerCount": 0,
   "shared": [
     {
