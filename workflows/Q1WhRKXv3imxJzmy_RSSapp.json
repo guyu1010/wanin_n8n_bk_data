@@ -459,7 +459,9 @@
   },
   "staticData": {
     "node:Schedule Trigger_Reuters": {
-      "recurrenceRules": []
+      "recurrenceRules": [
+        8
+      ]
     }
   },
   "meta": {
