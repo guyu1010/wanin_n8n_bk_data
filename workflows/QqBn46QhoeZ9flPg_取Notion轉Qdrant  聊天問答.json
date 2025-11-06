@@ -1,6 +1,6 @@
 {
   "createdAt": "2025-11-06T05:49:20.463Z",
-  "updatedAt": "2025-11-06T06:35:44.000Z",
+  "updatedAt": "2025-11-06T10:51:45.000Z",
   "id": "QqBn46QhoeZ9flPg",
   "name": "取Notion轉Qdrant + 聊天問答",
   "active": false,
@@ -24,11 +24,12 @@
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1.2,
       "position": [
-        1296,
-        480
+        240,
+        448
       ],
       "id": "ef43f0e7-2375-49e1-a4ca-8eff3bd564ce",
-      "name": "Respond to Webhook"
+      "name": "Respond to Webhook",
+      "disabled": true
     },
     {
       "parameters": {
@@ -40,8 +41,8 @@
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 2,
       "position": [
-        176,
-        448
+        -944,
+        400
       ],
       "id": "44576959-fffd-4bc9-9a91-1ee909193d89",
       "name": "Webhook completions",
@@ -75,8 +76,8 @@
       "type": "@n8n/n8n-nodes-langchain.memoryRedisChat",
       "typeVersion": 1.5,
       "position": [
-        1408,
-        112
+        288,
+        64
       ],
       "id": "eb2dc269-101c-4a22-82ac-926b5e82c3b7",
       "name": "Redis Chat Memory",
@@ -125,11 +126,12 @@
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1.2,
       "position": [
-        1296,
-        336
+        240,
+        272
       ],
       "id": "f4ca22c4-08cf-4df0-b034-f53c427a1cca",
-      "name": "Respond to Webhook2"
+      "name": "Respond to Webhook2",
+      "disabled": true
     },
     {
       "parameters": {
@@ -138,60 +140,11 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        400,
-        448
+        -720,
+        400
       ],
       "id": "6cf4a40d-52ec-42e3-9ec7-9bba95e2f6f6",
       "name": "Code"
-    },
-    {
-      "parameters": {
-        "promptType": "define",
-        "text": "=使用者問題：{{ $items(\"Code\")[0].json.lastUserMessage }}\n\n- 僅將「使用者真實問題」作為 WriteNotionQA 的內容，不要回寫「目前沒有相關規則」或任何系統提示字串。\n- 你可以選擇「原封不動記錄使用者問題」或「進行簡單重述、優化使其更清楚易讀」再記錄，但不得改變原意。",
-        "options": {
-          "systemMessage": "你是一個客服系統的輔助機器人，負責在找不到既有規則時協助兩件事：\n\n---\n\n【 主要任務 】\n1️⃣ 使用 WriteNotionQA 工具 ➜ 回寫使用者的問題到 Notion QA 資料表，以利日後人工補充。\n\n✅ 請注意：\n- 僅將「使用者真實問題」作為 WriteNotionQA 的內容，不要回寫「目前沒有相關規則」或任何系統提示字串。\n- 你可以選擇「原封不動記錄使用者問題」或「進行簡單重述、優化使其更清楚易讀」再記錄，但不得改變原意。\n\n---\n\n【 回覆範例（僅供參考，可自由變換）】\n以下是不同風格的範例句子，請學習其多樣性並自行變化：\n- 「關於您提到的『黑名單上限為何』，目前我查無相關規則，已幫您記錄回報📌，感謝您的耐心與提問！」\n- 「感謝您詢問『黑名單上限為何』，目前暫時沒有相關規則資訊，我們已經將此問題備註回報，會儘快補充！🫠」\n- 「針對您提出的『黑名單上限為何』，目前尚無查詢到相關規則，已為您登記回報✅，謝謝您的理解與協助！」\n- 「目前找不到關於『黑名單上限為何』的規則，我已協助您回報以利後續補充，謝謝您提醒我們這個問題❤️」\n\n✅ 生成時請自由變化上述範例格式\n✅ 必須包含：\n- 使用者問題內容\n- 說明目前沒有相關規則\n- 告知已回報\n- 表達安撫、感謝、溫暖語氣\n- 可適度加入 emoji\n\n---\n\n【 重要規範 】\n- WriteNotionQA 工具的輸入必須是「使用者的問題」本身，禁止輸入「目前沒有相關規則」。\n- 允許對問題內容進行簡短潤飾、優化、去除贅詞，以利日後人工編輯。\n- 回覆使用者時務必要引用他們的問題，並傳達出被關心和重視的語氣。\n\n---\n\n【 語言 】\n- 以繁體中文為主，可適度加 emoji 表現溫度。"
-        }
-      },
-      "type": "@n8n/n8n-nodes-langchain.agent",
-      "typeVersion": 1.9,
-      "position": [
-        2240,
-        304
-      ],
-      "id": "8b212524-f86b-4289-a170-e3379c97e6b5",
-      "name": "AI Agent3",
-      "disabled": true
-    },
-    {
-      "parameters": {
-        "resource": "databasePage",
-        "databaseId": {
-          "__rl": true,
-          "value": "1f9a4d5e-98df-8031-a477-d519037f24d1",
-          "mode": "list",
-          "cachedResultName": "Q&A",
-          "cachedResultUrl": "https://www.notion.so/1f9a4d5e98df8031a477d519037f24d1"
-        },
-        "title": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Title', ``, 'string') }}",
-        "simple": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Simplify', ``, 'boolean') }}",
-        "propertiesUi": {
-          "propertyValues": [
-            {
-              "key": "問題|title",
-              "title": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('propertyValues0_Title', ``, 'string') }}"
-            }
-          ]
-        },
-        "options": {}
-      },
-      "type": "n8n-nodes-base.notionTool",
-      "typeVersion": 2.2,
-      "position": [
-        2480,
-        512
-      ],
-      "id": "7ae5c5a0-8abe-4270-aa91-2ebb3578b5ab",
-      "name": "WriteNotionQA"
     },
     {
       "parameters": {
@@ -317,8 +270,8 @@
       "type": "n8n-nodes-base.switch",
       "typeVersion": 3.2,
       "position": [
-        608,
-        416
+        -512,
+        368
       ],
       "id": "3a57c88a-768b-458c-85ea-71a3f74f67c8",
       "name": "Switch"
@@ -332,8 +285,8 @@
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1.2,
       "position": [
-        1040,
-        128
+        -80,
+        80
       ],
       "id": "e5d2003d-21e6-41d9-90cc-c7a66df5a54c",
       "name": "Res Title"
@@ -347,8 +300,8 @@
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1.2,
       "position": [
-        1040,
-        288
+        -80,
+        240
       ],
       "id": "bb8e145c-d05d-4716-a49c-d02b9738f305",
       "name": "Res Tags"
@@ -362,8 +315,8 @@
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1.2,
       "position": [
-        1040,
-        432
+        -80,
+        384
       ],
       "id": "a0dde7dc-9cd0-4ae0-8ea9-6f082a7980dc",
       "name": "Res Follow_ups"
@@ -377,12 +330,13 @@
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 2,
       "position": [
-        144,
-        128
+        -960,
+        80
       ],
       "id": "9a79793e-af3e-47c7-9426-1e6f236147a7",
       "name": "Webhook model",
-      "webhookId": "0c7f0fd5-e081-4978-b85c-893d7f8bb99c"
+      "webhookId": "0c7f0fd5-e081-4978-b85c-893d7f8bb99c",
+      "disabled": true
     },
     {
       "parameters": {
@@ -391,8 +345,8 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        368,
-        128
+        -752,
+        80
       ],
       "id": "3669f4cf-e5fe-474c-99a9-de3bbf7965fa",
       "name": "create data"
@@ -406,8 +360,8 @@
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1.2,
       "position": [
-        560,
-        128
+        -560,
+        80
       ],
       "id": "1412ae32-2a63-4004-86e7-a8b41055a7d0",
       "name": "Response Webhook model"
@@ -502,7 +456,7 @@
     {
       "parameters": {
         "mode": "retrieve-as-tool",
-        "toolDescription": "是一個知識工具，可以用來查詢規則或知識。",
+        "toolDescription": "這是一個向量知識查詢工具，可以用來查詢規則或知識。",
         "qdrantCollection": {
           "__rl": true,
           "value": "resume",
@@ -703,7 +657,7 @@
       "typeVersion": 1.2,
       "position": [
         176,
-        1488
+        1584
       ],
       "id": "82123a91-f4ec-4203-811f-10dbf94d9157",
       "name": "Schedule"
@@ -736,29 +690,10 @@
       "typeVersion": 1,
       "position": [
         608,
-        960
+        976
       ],
       "id": "10cd1c95-6401-460f-bd5c-ee2fc2785b3d",
       "name": "Google Gemini Chat Model1",
-      "credentials": {
-        "googlePalmApi": {
-          "id": "TcbdbxzebK9gSKPI",
-          "name": "Google Gemini(PaLM) Api account 6"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "options": {}
-      },
-      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
-      "typeVersion": 1,
-      "position": [
-        2160,
-        512
-      ],
-      "id": "059f15ac-5a06-42a3-9f8a-4a5283efe263",
-      "name": "Google Gemini Chat Model2",
       "credentials": {
         "googlePalmApi": {
           "id": "TcbdbxzebK9gSKPI",
@@ -782,14 +717,14 @@
     {
       "parameters": {
         "content": "定時拉取notion轉向量",
-        "height": 320,
+        "height": 384,
         "width": 2720
       },
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        128,
-        1408
+        112,
+        1376
       ],
       "id": "7e943351-3ab0-4b7f-9d67-5744e02d5208",
       "name": "Sticky Note"
@@ -804,8 +739,8 @@
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        96,
-        384
+        -1008,
+        336
       ],
       "id": "f855ecc1-fc39-4744-b680-9c060f5a5f68",
       "name": "Sticky Note1"
@@ -819,27 +754,11 @@
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        96,
-        64
+        -1024,
+        16
       ],
       "id": "ce71d33b-b30b-4e14-9acd-ed62772bfca9",
       "name": "Sticky Note2"
-    },
-    {
-      "parameters": {
-        "content": "查不到資料時的回報+回應",
-        "height": 400,
-        "width": 912,
-        "color": 3
-      },
-      "type": "n8n-nodes-base.stickyNote",
-      "typeVersion": 1,
-      "position": [
-        1984,
-        256
-      ],
-      "id": "9377b242-80b6-472b-a2ac-a2a8cd8c61c2",
-      "name": "Sticky Note3"
     },
     {
       "parameters": {
@@ -850,20 +769,20 @@
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        960,
-        96
+        -160,
+        48
       ],
       "id": "a931e45a-f01e-40e4-9b6d-5db3064c7770",
       "name": "Sticky Note4"
     },
     {
       "parameters": {
-        "jsCode": "// 取得當前的 chat 輸入\nconst currentInput = $input.first().json;\nconst chatInput = currentInput.chatInput || '';\nconst sessionId = currentInput.sessionId || '';\n\n// 嘗試取得對話歷史 (如果有接 Memory 節點)\nlet chatHistory = [];\ntry {\n  // 如果你有接 Window Buffer Memory 或其他 Memory 節點,改成對應的節點名稱\n  chatHistory = $('Window Buffer Memory').all();\n} catch (e) {\n  // 沒有 Memory 節點也沒關係\n  console.log('沒有找到 Memory 節點,使用空歷史');\n}\n\nlet systemPrompt = '';\nconst userAssistantPairs = [];\nlet lastUserMessage = chatInput;\nlet tempPair = [];\nconst allMessages = [];\n\n// 處理歷史訊息\nif (chatHistory && chatHistory.length > 0) {\n  for (const item of chatHistory) {\n    const message = item.json;\n    \n    // Memory 節點的格式可能是 type: 'human'/'ai' 或 role: 'user'/'assistant'\n    const role = message.type === 'human' ? 'user' \n                : message.type === 'ai' ? 'assistant' \n                : message.role || 'user';\n    const content = message.text || message.content || message.message || '';\n    \n    if (!content) continue;\n    \n    allMessages.push({ role, content });\n    \n    if (role === 'system' && !systemPrompt) {\n      systemPrompt = content;\n      continue;\n    }\n    \n    if (role === 'user') {\n      if (tempPair.length > 0) {\n        userAssistantPairs.push(tempPair);\n      }\n      tempPair = [`使用者:${content}`];\n    } else if (role === 'assistant') {\n      tempPair.push(`AI:${content}`);\n      userAssistantPairs.push(tempPair);\n      tempPair = [];\n    }\n  }\n}\n\n// 加入當前使用者訊息\nif (lastUserMessage) {\n  allMessages.push({ role: 'user', content: lastUserMessage });\n  \n  // 如果前面有未完成的 pair,先存起來\n  if (tempPair.length > 0) {\n    userAssistantPairs.push(tempPair);\n  }\n  // 加入當前使用者訊息\n  userAssistantPairs.push([`使用者:${lastUserMessage}`]);\n}\n\n// 只取最近 5 組\nconst last5Pairs = userAssistantPairs.slice(-5);\nconst dialogue = last5Pairs.flat().join('\\n');\n\n// 解析請求目的\nlet ReqPurpose = 'query';\nif (lastUserMessage.trim().startsWith('###')) {\n  if (lastUserMessage.includes('Generate a concise, 3-5 word title')) {\n    ReqPurpose = 'title';\n  } else if (lastUserMessage.includes('Generate 1-3 broad tags')) {\n    ReqPurpose = 'tags';\n  } else if (\n    lastUserMessage.includes('Suggest 3-5 relevant follow-up questions') ||\n    lastUserMessage.includes('\"follow_ups\"')\n  ) {\n    ReqPurpose = 'follow_ups';\n  }\n}\n\n// 輸出結果\nreturn {\n  json: {\n    sessionId,           // 保留 sessionId 給後續節點使用\n    systemPrompt,\n    dialogue,\n    lastUserMessage,\n    allMessages,\n    ReqPurpose,\n    chatInput            // 保留原始 chatInput\n  }\n};"
+        "jsCode": "// 取得當前的 chat 輸入\nconst currentInput = $input.first().json;\nconst chatInput = currentInput.chatInput || '';\nconst sessionId = currentInput.sessionId || '';\n\n// 嘗試取得對話歷史 (如果有接 Memory 節點)\nlet chatHistory = [];\ntry {\n  chatHistory = $('Window Buffer Memory').all();\n} catch (e) {\n  // 沒有 Memory 節點也沒關係\n  console.log('沒有找到 Memory 節點,使用空歷史');\n}\n\nlet systemPrompt = '';\nconst userAssistantPairs = [];\nlet lastUserMessage = chatInput;\nlet tempPair = [];\nconst allMessages = [];\n\n// 處理歷史訊息\nif (chatHistory && chatHistory.length > 0) {\n  for (const item of chatHistory) {\n    const message = item.json;\n    \n    // Memory 節點的格式可能是 type: 'human'/'ai' 或 role: 'user'/'assistant'\n    const role = message.type === 'human' ? 'user' \n                : message.type === 'ai' ? 'assistant' \n                : message.role || 'user';\n    const content = message.text || message.content || message.message || '';\n    \n    if (!content) continue;\n    \n    allMessages.push({ role, content });\n    \n    if (role === 'system' && !systemPrompt) {\n      systemPrompt = content;\n      continue;\n    }\n    \n    if (role === 'user') {\n      if (tempPair.length > 0) {\n        userAssistantPairs.push(tempPair);\n      }\n      tempPair = [`使用者:${content}`];\n    } else if (role === 'assistant') {\n      tempPair.push(`AI:${content}`);\n      userAssistantPairs.push(tempPair);\n      tempPair = [];\n    }\n  }\n}\n\n// 加入當前使用者訊息\nif (lastUserMessage) {\n  allMessages.push({ role: 'user', content: lastUserMessage });\n  \n  // 如果前面有未完成的 pair,先存起來\n  if (tempPair.length > 0) {\n    userAssistantPairs.push(tempPair);\n  }\n  // 加入當前使用者訊息\n  userAssistantPairs.push([`使用者:${lastUserMessage}`]);\n}\n\n// 只取最近 5 組\nconst last5Pairs = userAssistantPairs.slice(-5);\nconst dialogue = last5Pairs.flat().join('\\n');\n\n// 解析請求目的\nlet ReqPurpose = 'query';\nif (lastUserMessage.trim().startsWith('###')) {\n  if (lastUserMessage.includes('Generate a concise, 3-5 word title')) {\n    ReqPurpose = 'title';\n  } else if (lastUserMessage.includes('Generate 1-3 broad tags')) {\n    ReqPurpose = 'tags';\n  } else if (\n    lastUserMessage.includes('Suggest 3-5 relevant follow-up questions') ||\n    lastUserMessage.includes('\"follow_ups\"')\n  ) {\n    ReqPurpose = 'follow_ups';\n  }\n}\n\n// 輸出結果\nreturn {\n  json: {\n    sessionId,           // 保留 sessionId 給後續節點使用\n    systemPrompt,\n    dialogue,\n    lastUserMessage,\n    allMessages,\n    ReqPurpose,\n    chatInput            // 保留原始 chatInput\n  }\n};"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        464,
+        544,
         768
       ],
       "id": "0a78b8c0-89ea-4565-aa44-288e5ddb0f28",
@@ -872,6 +791,7 @@
     {
       "parameters": {
         "public": true,
+        "initialMessages": "嗨",
         "options": {
           "responseMode": "responseNodes"
         }
@@ -879,7 +799,7 @@
       "type": "@n8n/n8n-nodes-langchain.chatTrigger",
       "typeVersion": 1.3,
       "position": [
-        176,
+        256,
         768
       ],
       "id": "012f2202-819c-488c-9cfa-fd5f9b749cf4",
@@ -888,37 +808,7 @@
     },
     {
       "parameters": {
-        "message": "={{$node[\"AI Agent3\"].json[\"output\"]}}",
-        "waitUserReply": false,
-        "options": {}
-      },
-      "type": "@n8n/n8n-nodes-langchain.chat",
-      "typeVersion": 1,
-      "position": [
-        2672,
-        304
-      ],
-      "id": "516b2bf1-2ffe-4566-8bf1-017fe439e010",
-      "name": "Respond to Chat"
-    },
-    {
-      "parameters": {
-        "message": "={{ $json.choices[0].message.content }}",
-        "waitUserReply": false,
-        "options": {}
-      },
-      "type": "@n8n/n8n-nodes-langchain.chat",
-      "typeVersion": 1,
-      "position": [
-        2560,
-        784
-      ],
-      "id": "f03e6273-73d5-4e51-9a82-c91bf2a3e184",
-      "name": "Respond to Chat1"
-    },
-    {
-      "parameters": {
-        "content": "機器人",
+        "content": "機器人 - 先不用看",
         "height": 672,
         "width": 1536,
         "color": 4
@@ -926,8 +816,8 @@
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        0,
-        0
+        -1072,
+        -48
       ],
       "id": "684dac65-1096-46da-9e84-0490243aabef",
       "name": "Sticky Note5"
@@ -947,18 +837,45 @@
       "name": "Simple Memory"
     },
     {
-      "parameters": {
-        "sessionIdType": "customKey",
-        "sessionKey": "query"
-      },
-      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
-      "typeVersion": 1.3,
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
       "position": [
-        2336,
-        512
+        176,
+        1424
       ],
-      "id": "313b4f27-2421-4f6d-af5e-a1b3e211d84b",
-      "name": "Simple Memory1"
+      "id": "3a735dcf-b681-4b93-a341-2c4b5e85ada0",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "message": "=找不到資料",
+        "waitUserReply": false,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chat",
+      "typeVersion": 1,
+      "position": [
+        2560,
+        560
+      ],
+      "id": "516b2bf1-2ffe-4566-8bf1-017fe439e010",
+      "name": "找不到的回應"
+    },
+    {
+      "parameters": {
+        "message": "={{ $json.choices[0].message.content }}",
+        "waitUserReply": false,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chat",
+      "typeVersion": 1,
+      "position": [
+        2560,
+        784
+      ],
+      "id": "f03e6273-73d5-4e51-9a82-c91bf2a3e184",
+      "name": "Respond to Chat"
     }
   ],
   "connections": {
@@ -993,7 +910,7 @@
       "main": [
         [
           {
-            "node": "AI Agent3",
+            "node": "找不到的回應",
             "type": "main",
             "index": 0
           }
@@ -1013,28 +930,6 @@
           {
             "node": "Switch",
             "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "AI Agent3": {
-      "main": [
-        [
-          {
-            "node": "Respond to Chat",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "WriteNotionQA": {
-      "ai_tool": [
-        [
-          {
-            "node": "AI Agent3",
-            "type": "ai_tool",
             "index": 0
           }
         ]
@@ -1264,22 +1159,11 @@
         ]
       ]
     },
-    "Google Gemini Chat Model2": {
-      "ai_languageModel": [
-        [
-          {
-            "node": "AI Agent3",
-            "type": "ai_languageModel",
-            "index": 0
-          }
-        ]
-      ]
-    },
     "回應格式": {
       "main": [
         [
           {
-            "node": "Respond to Chat1",
+            "node": "Respond to Chat",
             "type": "main",
             "index": 0
           }
@@ -1319,12 +1203,12 @@
         ]
       ]
     },
-    "Simple Memory1": {
-      "ai_memory": [
+    "When clicking ‘Execute workflow’": {
+      "main": [
         [
           {
-            "node": "AI Agent3",
-            "type": "ai_memory",
+            "node": "Notion DB",
+            "type": "main",
             "index": 0
           }
         ]
@@ -1337,7 +1221,7 @@
   "staticData": null,
   "meta": null,
   "pinData": {},
-  "versionId": "ab33e6ba-92ef-443a-be69-2e3622c7ff79",
+  "versionId": "9c33d270-bec1-4eaf-8250-6c0dea8afdeb",
   "triggerCount": 0,
   "shared": [
     {
