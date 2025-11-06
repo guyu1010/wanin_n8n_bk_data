@@ -1,6 +1,6 @@
 {
   "createdAt": "2025-10-27T05:57:53.778Z",
-  "updatedAt": "2025-11-06T06:26:32.000Z",
+  "updatedAt": "2025-11-06T06:46:06.000Z",
   "id": "3miwV9wdKjrx8Gmr",
   "name": "AI新聞擷取&翻譯工作流",
   "active": false,
@@ -343,7 +343,7 @@
         "url": "https://dev88.newtalk.tw/newsapi/insertNews",
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "={\n    \"token\": \"61af9f535f694a56912a7ea660b01a7e8369b74cfac3199667dc82946f5d1e5c\",\n    \"datas\": [\n        {\n            \"title\": \"{{ $('翻譯').item.json.output.title }}\",\n            \"content\": \"{{ $('翻譯').item.json.output.content }}\",\n            \"categoryId\": 2,\n            \"publishTime\": \"{{ $('Limit').item.json.publishTime }}\",\n            \"tags\": \"{{ $('翻譯').item.json.output.tags }}\",\n            \"newsSourceId\": 7,\n            \"source\": \"{{ $('Limit').item.json.source }}\",\n            \"sourceUrl\": \"{{ $('Limit').item.json.sourceUrl }}\",\n            \"originTitle\": \"{{ $json.output.title }}\",\n            \"originContent\": \"{{ $json.output.content }}\"\n        }\n    ]\n}",
+        "jsonBody": "={\n    \"token\": \"61af9f535f694a56912a7ea660b01a7e8369b74cfac3199667dc82946f5d1e5c\",\n    \"datas\": [\n        {\n            \"title\": \"{{ $('翻譯').item.json.output.title }}\",\n            \"content\": \"{{ $('翻譯').item.json.output.content }}\",\n            \"categoryId\": {{ $json.output.categoryId }},\n            \"publishTime\": \"{{ $('Limit').item.json.publishTime }}\",\n            \"tags\": \"{{ $('翻譯').item.json.output.tags }}\",\n            \"newsSourceId\": 7,\n            \"source\": \"{{ $('Limit').item.json.source }}\",\n            \"sourceUrl\": \"{{ $('Limit').item.json.sourceUrl }}\",\n            \"originTitle\": \"{{ $json.output.title }}\",\n            \"originContent\": \"{{ $json.output.content }}\"\n        }\n    ]\n}",
         "options": {
           "allowUnauthorizedCerts": true
         }
@@ -359,7 +359,7 @@
     },
     {
       "parameters": {
-        "jsCode": "// 取得 claude解析 節點的輸出資料\nconst claudeData = $('claude解析').item.json;\n\n// 處理 output 物件,將所有雙引號替換為單引號\nconst output = claudeData.output;\n\nreturn {\n  json: {\n    output: {\n      title: output.title ? output.title.replaceAll('\"', \"'\") : output.title,\n      content: output.content ? output.content.replaceAll('\"', \"'\") : output.content,\n      // 如果有 tags 也一併處理\n      tags: output.tags ? output.tags.replaceAll('\"', \"'\") : output.tags\n    }\n  }\n};"
+        "jsCode": "// 取得 claude解析 節點的輸出資料\nconst claudeData = $('claude解析').item.json;\nconst output = claudeData.output;\n\n// 取得 Limit 節點的 category\nconst limitData = $('Limit').item.json;\n\n// 定義類別對應表\nconst categoryMap = {\n  '政治': '2',\n  '財經': '3',\n  '科技': '8'\n};\n\n// 轉換 category 為 categoryId\nconst categoryId = categoryMap[limitData.category] || null;\n\nreturn {\n  json: {\n    output: {\n      title: output.title ? output.title.replaceAll('\"', \"'\") : output.title,\n      content: output.content ? output.content.replaceAll('\"', \"'\") : output.content,\n      tags: output.tags ? output.tags.replaceAll('\"', \"'\") : output.tags,\n      categoryId: categoryId\n    }\n  }\n};"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
@@ -1022,25 +1022,27 @@
     "templateCredsSetupCompleted": true
   },
   "pinData": {
-    "Schedule Trigger": [
+    "翻譯": [
       {
         "json": {
-          "timestamp": "2025-11-06T01:19:17.026-05:00",
-          "Readable date": "November 6th 2025, 1:19:17 am",
-          "Readable time": "1:19:17 am",
-          "Day of week": "Thursday",
-          "Year": "2025",
-          "Month": "November",
-          "Day of month": "06",
-          "Hour": "01",
-          "Minute": "19",
-          "Second": "17",
-          "Timezone": "America/New_York (UTC-05:00)"
+          "output": {
+            "tags": [
+              "川普",
+              "民主黨",
+              "美國選舉",
+              "期中選舉",
+              "選區重劃",
+              "州長選舉",
+              "反川普情緒"
+            ],
+            "content": "<p>美國東岸各地的選民在週二的選舉中，讓民主黨大獲全勝，他們選出了該黨意識形態光譜上各個派系的候選人，鮮明地展現了對總統川普（Donald Trump）在其第二任期即將屆滿一年之際的不滿。</p><p>在維吉尼亞州，溫和派前眾議員艾碧潔·史班伯格（Abigail Spanberger）輕鬆獲勝，創下該州近期歷史上民主黨最亮眼的表現。而在紐澤西州，另一位溫和派眾議員米琪·雪瑞兒（Mikie Sherrill）則瓦解了川普與她的共和黨對手、前州議員傑克·齊亞塔瑞利（Jack Ciattarelli）為了彌補紐澤西州近期選舉差距所組成的聯盟。</p><p>在紐約市，民主社會主義者卓朗·曼丹尼（Zohran Mamdani）的勝利標誌著他今年第二次擊敗前州長安德魯·古莫（Andrew Cuomo）——首先是在民主黨初選中，接著是在大選中，古莫當時是以川普支持的獨立候選人身份參選。</p><p>儘管獲勝的民主黨候選人之間存在鮮明的意識形態差異，但這些勝利對於解決該黨長期以來關於未來發展方向的激烈內部辯論，助益甚微。未來幾個月內將有多場競爭激烈的期中選舉初選，而2028年總統大選初選也已迫在眉睫。</p><p>然而，他們的競選活動也有一些共同點。儘管提出的解決方案不同，但這些候選人都將重點放在「負擔能力」議題上。同時，他們都猛烈抨擊川普的施政表現。</p><p>紐約州眾議員亞歷珊卓雅·歐加修-寇蒂茲（Alexandria Ocasio-Cortez）在曼丹尼的勝選派對上接受美國有線電視新聞網（CNN）採訪時表示：「這不僅是關於民主黨的訊息；這是關於我們整個國家的訊息。我認為美國人對這屆政府的作為感到震驚。」</p><p>在加州，選民以大幅優勢通過了一項選區重劃公投案，旨在提升民主黨在明年眾議院控制權爭奪戰中的勝算。而在賓州，民主黨州最高法院法官成功連任，使民主黨得以在這個長期搖擺州維持其在高等法院的多數席次，此地對於投票規則的法律挑戰幾乎是屢見不鮮。</p><p>以下是週二選舉的六個初步觀察重點：</p><p><b>曼丹尼再次擊敗古莫</b></p><p>曼丹尼因其進步主義意識形態以及吸引渴望新面孔的選民而獲得了巨大的全國關注。但在紐約市，他不斷強調降低生活成本的努力可能更具說服力——選民也透過批准一系列旨在減少興建可負擔住宅繁文縟節的公投案，為他即將推動的政策提供助力。</p><p>如果他兌現承諾，紐約市將成為全國各地生活成本飆升城市的發展藍圖。如果曼丹尼失敗，隨著2028年總統大選初選的臨近，他可能會被用作對廣泛進步主義者的警告。</p><p>對於在2021年辭去州長職位後試圖東山再起的古莫而言，這次結果令人尷尬。這對川普也是一次失敗，他在此次選舉後期支持古莫而非共和黨人柯提斯·史利瓦（Curtis Sliwa），並在週日美國哥倫比亞廣播公司（CBS）的節目《60分鐘》中表示：「如果要在一個糟糕的民主黨人和一個共產黨人之間做選擇，我會一直選擇那個糟糕的民主黨人。」</p><p><b>郊區選情大擺盪</b></p><p>民主黨週二在維吉尼亞州獲得的第一個大勝，是史班伯格（Spanberger）擊敗共和黨副州長溫瑟姆·厄爾-席爾斯（Winsome Earle-Sears）。史班伯格曾是美國中央情報局（CIA）官員，於2018年贏得一個競爭激烈的國會選區，並一直任職到今年退休，專注於州長競選。</p><p>史班伯格主導地位的一個縮影體現在勞登郡（Loudoun County）——維吉尼亞州北部一個備受關注、由郊區和外圍郊區組成的地區。截至週二東部時間晚上9點，該地大部分預計選票已計算完成，史班伯格在那裡獲得了超過64%的選票。這比前副總統賀錦麗（Kamala Harris）在2024年總統大選中的表現高出8個百分點，也比該黨在2021年落選的州長候選人泰瑞·麥考利夫（Terry McAuliffe）高出9個百分點。史班伯格領先前州長雷夫·諾瑟姆（Ralph Northam）2017年在勞登郡的表現近5個百分點——那次是川普第一任期內民主黨的一大勝利，預示了該黨在2018年期中選舉的強勁表現。</p><p>史班伯格在維吉尼亞州各地表現優於近期其他民主黨候選人，部分原因可能歸咎於川普政府對聯邦政府員工的削減。數千名現任和前任聯邦政府員工居住在此地區。美國有線電視新聞網（CNN）的出口民調顯示，在家庭成員中有聯邦僱員或聯邦承包商的選民中，史班伯格獲得了61%的選票支持，而在沒有相關家庭成員的選民中，她的支持率為52%。</p><p>她的領先優勢足以將民主黨檢察總長候選人傑伊·瓊斯（Jay Jones）拉過終點線，儘管瓊斯曾因被揭露簡訊內容建議應射殺一名前立法同僚而陷入困境，並且落後史班伯格約5個百分點。瓊斯擊敗了共和黨現任傑森·米亞雷斯（Jason Miyares）。</p><p><b>維吉尼亞州打破藩籬</b></p><p>無論結果如何，維吉尼亞州的選舉都將創造歷史：獲勝者將成為該州首位女性州長。</p><p>史班伯格提到了這段歷史，她向支持者轉述，她的丈夫曾告訴他們的孩子，他們的媽媽將成為維吉尼亞州的州長。</p><p>她說：「我敢保證，這些話以前從未在維吉尼亞州被說過。這對我在競選期間遇到的女孩和年輕女性來說意義重大，她們現在可以確信自己能夠實現任何目標。」</p><p><b>紐澤西州揭示反川普情緒</b></p><p>在維吉尼亞州，候選人素質是影響結果的一個因素，因為共和黨人長達數月都在抱怨他們的候選人厄爾-席爾斯（Earle-Sears）。但紐澤西州的情況則不同。齊亞塔瑞利（Ciattarelli）在2021年州長選舉中險勝後，已擁有強勁的全州表現。他也有自己的「紐澤西人」魅力品牌，儘管獲得川普背書，齊亞塔瑞利也稱讚川普的施政表現，民主黨人仍透過不斷的廣告宣傳將他與川普連結，希望能在民主黨登記人數比共和黨多出80萬人的州，讓他與川普劃清界線。</p><p>在許多方面，這些現實使紐澤西州成為衡量反川普情緒的更好指標。一個關鍵問題是，齊亞塔瑞利能否複製川普在拉丁裔選民中的表現：去年11月，拉丁裔選民在全國範圍內大幅轉向共和黨，美國有線電視新聞網（CNN）的出口民調顯示，川普獲得拉丁裔選民46%的支持，而賀錦麗（Kamala Harris）則為51%。</p><p>但週二在紐澤西州，答案是否定的：根據美國有線電視新聞網（CNN）的出口民調，雪瑞兒（Sherrill）贏得了64%的拉丁裔選民支持，而齊亞塔瑞利則獲得32%。她還贏得了91%的非裔選民支持。在無黨籍選民中，她以7個百分點的優勢獲勝。溫和派選民也以58%對39%支持雪瑞兒。</p><p>在34%認為稅收是紐澤西州面臨最重要議題的選民中，齊亞塔瑞利輕鬆獲勝。但有32%的選民表示經濟是最重要的議題——共和黨曾希望這會成為他們的優勢，因為該州目前由民主黨控制——而這些選民則以61%對37%支持雪瑞兒，根據美國有線電視新聞網（CNN）的出口民調。</p><p><b>紐森的選區重劃關鍵時刻</b></p><p>加州選民在週二大幅提升了民主黨在明年期中選舉中贏得眾議院多數席次的希望——同時也為州長蓋文·紐森（Gavin Newsom）在全國舞台上創造了一個標誌性時刻，向民主黨選民證明他能在潛在的2028年總統競選前與川普抗衡。</p><p>該州選民批准了一項公投案，該案將廢除目前由獨立委員會劃定的國會選區界線，取而代之的是將為民主黨帶來五個更有利選區的新地圖。</p><p>這次十年中期的選區重劃，是紐森對德州的回應。德州在川普的要求下重劃選區，目的是為共和黨爭取五個更容易獲勝的選區，因為川普正在尋求明年如何維持共和黨在眾議院的微弱多數。</p><p>在投票前一場短暫但激烈的廣告戰中，紐森讓自己成為選區重劃努力的代表人物。他為此籌集了1.08億美元（約新台幣34.8億元），並出現在支持該議案的廣告中。他還在一系列採訪和播客節目中推銷這項計畫。</p><p>紐森站在美國國旗前，在一個廣告中說道：「有了第50號提案，也就是《選舉舞弊應對法案》，我們就能徹底阻止川普。」</p><p>未來幾年，全國觀眾可能會更頻繁地看到他。</p><p><b>地方層級民主黨獲勝</b></p><p>除了在維吉尼亞州、紐澤西州、紐約州和加州取得的關鍵勝利外，民主黨還贏得了許多較低調的競選，這些勝利在未來幾年可能會帶來好處。</p><p>在賓州，民主黨州最高法院法官成功連任，獲得新的10年任期——這維護了該黨在一個總統選舉勝敗關鍵，且投票規則經常受到挑戰的州中，於法院的多數地位。</p><p>週二的選舉也對全國選區重劃的軍備競賽產生了影響。民主黨有望擴大其在維吉尼亞州眾議院的微弱多數，為該黨推動一項允許他們重新劃定國會選區的憲法修正案鋪平道路。而在緬因州，一個明年參議院控制權爭奪戰的關鍵州，選民否決了一項要求選民出示附照片身份證明的公投案。</p>",
+            "title": "週二選舉觀察重點：選民唾棄川普，民主黨各派系候選人全線勝選"
+          }
         }
       }
     ]
   },
-  "versionId": "3699866b-9135-45a2-8209-3b15781161e5",
+  "versionId": "e3b74f3e-a2a8-456b-b22c-b2f5bf28975f",
   "triggerCount": 0,
   "shared": [
     {

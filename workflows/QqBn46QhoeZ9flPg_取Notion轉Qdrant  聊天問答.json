@@ -1,6 +1,6 @@
 {
   "createdAt": "2025-11-06T05:49:20.463Z",
-  "updatedAt": "2025-11-06T06:09:45.000Z",
+  "updatedAt": "2025-11-06T06:35:44.000Z",
   "id": "QqBn46QhoeZ9flPg",
   "name": "取Notion轉Qdrant + 聊天問答",
   "active": false,
@@ -491,7 +491,13 @@
         1504
       ],
       "id": "e34642e2-8943-46a6-94a3-04ded9d5e908",
-      "name": "Notion Page"
+      "name": "Notion Page",
+      "credentials": {
+        "notionApi": {
+          "id": "U9GrNl7JAdc8rbKC",
+          "name": "Notion account"
+        }
+      }
     },
     {
       "parameters": {
@@ -1331,7 +1337,7 @@
   "staticData": null,
   "meta": null,
   "pinData": {},
-  "versionId": "ed826c46-13a1-4734-ac6f-e96607b8f60d",
+  "versionId": "ab33e6ba-92ef-443a-be69-2e3622c7ff79",
   "triggerCount": 0,
   "shared": [
     {
