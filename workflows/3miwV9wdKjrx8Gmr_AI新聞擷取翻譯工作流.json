@@ -1,9 +1,9 @@
 {
   "createdAt": "2025-10-27T05:57:53.778Z",
-  "updatedAt": "2025-11-07T01:31:46.000Z",
+  "updatedAt": "2025-11-07T03:27:21.000Z",
   "id": "3miwV9wdKjrx8Gmr",
   "name": "AI新聞擷取&翻譯工作流",
-  "active": true,
+  "active": false,
   "isArchived": false,
   "nodes": [
     {
@@ -15,38 +15,15 @@
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        -384,
-        -192
+        -672,
+        -720
       ],
       "id": "651e5c1b-d5ba-4d88-87a1-2b5df8fa1313",
       "name": "Sticky Note"
     },
     {
       "parameters": {
-        "assignments": {
-          "assignments": [
-            {
-              "id": "8f5e3c4a-1b2d-4e9f-a3c6-7d8e9f0a1b2c",
-              "name": "url",
-              "value": "={{ $json.sourceUrl }}",
-              "type": "string"
-            }
-          ]
-        },
-        "options": {}
-      },
-      "id": "b81a4f13-9f6f-46d5-9768-af02dadfa87d",
-      "name": "設定新聞 URL",
-      "type": "n8n-nodes-base.set",
-      "typeVersion": 3.3,
-      "position": [
-        432,
-        368
-      ]
-    },
-    {
-      "parameters": {
-        "url": "={{ $json.url }}",
+        "url": "={{ $json.sourceUrl }}",
         "sendHeaders": true,
         "headerParameters": {
           "parameters": [
@@ -70,7 +47,7 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        656,
+        576,
         368
       ]
     },
@@ -83,7 +60,7 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        880,
+        864,
         368
       ]
     },
@@ -94,7 +71,7 @@
       "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
       "typeVersion": 1,
       "position": [
-        1504,
+        1600,
         592
       ],
       "id": "2922b18d-2e47-40ee-816f-a706ae0b8669",
@@ -114,7 +91,7 @@
       "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
       "typeVersion": 1.3,
       "position": [
-        1728,
+        1824,
         576
       ],
       "id": "b87b4952-68cb-4a31-b5ec-6fe876cfd9c7",
@@ -142,7 +119,7 @@
     {
       "parameters": {
         "promptType": "define",
-        "text": "=你是一位台灣國際新聞翻譯專員，請執行以下三個任務\n1. 使用台灣用語翻譯以下內容\n2. 從內容精選3~7個適合的新聞關鍵字(tags)\n3. 翻譯摘要\n\n標題：{{ $json.output.title }}\n內容：{{ $json.output.content }}\n摘要：{{ $('Get row(s)').item.json.description }}\n\n## 翻譯對照表\n\n### 政治人物音譯\n- Vladimir Putin -> 普丁\n- Donald Trump -> 川普\n- Viktor Orbán -> 歐爾班\n- Marco Rubio -> 盧比歐\n- Benjamin Netanyahu -> 納坦雅胡\n- Volodymyr Zelenskyy -> 澤連斯基\n- Pete Hegseth -> 海格塞斯\n- John F. Kennedy -> 甘迺迪\n- Ronald Reagan -> 雷根\n- Jake Sullivan -> 蘇利文\n- Olaf Scholz -> 蕭茲\n- Justin Trudeau -> 杜魯道\n- Marcos (菲律賓) -> 馬可仕\n\n### 地名音譯\n- North Korea/朝鮮 -> 北韓\n- Gaza -> 加薩\n- Sydney -> 雪梨\n- Munich -> 慕尼黑\n- New Zealand -> 紐西蘭\n- Saudi Arabia -> 沙烏地阿拉伯\n- Dubai -> 杜拜\n- Yemen -> 葉門\n\n### 交通與運輸\n- 出租車/的士 -> 計程車\n- 集裝箱 -> 貨櫃\n- 空客 -> 空巴\n\n### 科技與網路用語\n- 視頻 -> 影片\n- 互聯網/網絡 -> 網路\n- 軟件 -> 軟體\n- 硬件 -> 硬體\n- 計算機 -> 電腦\n- 內存 -> 記憶體\n- 激光 -> 雷射\n- 光伏 -> 光電/太陽能\n- 程序 -> 程式\n- 帖子 -> 貼文\n- 樓主 -> 原發文者\n- 硅 -> 矽\n- 芯片 -> 晶片\n- 黑客 -> 駭客\n- 屏幕 -> 螢幕\n- 高清 -> 高畫質\n- 攝像頭 -> 監視器\n- 短信 -> 簡訊\n\n### 軍事與政府\n- 台防務部門 -> 國防部\n- 五角大樓 -> 五角大廈\n- 宙斯盾 -> 神盾系統\n- 空間站 -> 太空站\n- 黑匣子 -> 黑盒子\n\n### 教育與職業\n- 高校 -> 大學\n- 幼兒園 -> 幼稚園\n- 程序員 -> 工程師\n- 寫字樓 -> 辦公大樓\n- 下崗 -> 沒工作\n\n### 商業與法律用語\n- 合同 -> 合約\n- 渠道 -> 管道\n- 反饋 -> 回饋\n- 靠譜 -> 可靠\n\n### 日常用語\n- 萬億 -> 兆\n- 水平 -> 水準\n- 小區 -> 社區\n- 套路 -> 圈套\n- 給力 -> 厲害\n- 土豆 -> 馬鈴薯\n- 獼猴桃 -> 奇異果\n- 西紅柿 -> 番茄\n- 獻血 -> 捐血\n- 方便麵 -> 泡麵\n- 立馬 -> 立刻\n- 通過 -> 經由\n\n### 品牌與專有名詞\n- 奔馳 -> 賓士\n- 新聞發布會 -> 記者會\n- 宇航員 -> 太空人\n- 發動機 -> 引擎\n- 國際象棋 -> 西洋棋\n\n### 特殊用語\n- 導火索 -> 導火線\n- 河蟹 -> 掩蓋\n- 可卡因 -> 古柯鹼\n\n## 輸出要求\n- 回傳 JSON 格式\n- 照著原意翻譯\n- 可微調段落格式符合中文新聞\n- 避免使用簡體中文用詞\n- 不用分 section\n- content 段落使用 <p></p> \\n\n\n## 翻譯原則\n- 人名第一次出現時保留英文原名，例如：「美國國務卿布林肯（Antony Blinken）」\n- 數字使用阿拉伯數字，金額加上單位（例如：100萬美元、50億元）\n- 引述內容使用「」（全形引號）\n- 日期格式：2025年10月28日\n\n## 務必確認\n- 用詞為台灣慣用字\n- 標點符號使用全形(，。！？)\n- tags 需為文中有提及的字詞\n- 避免過度口語化",
+        "text": "=你是一位台灣國際新聞翻譯專員，請執行以下三個任務\n1. 使用台灣用語翻譯以下內容\n2. 從內容精選3~7個適合的新聞關鍵字(tags)\n3. 翻譯摘要\n\n標題：{{ $json.output.title }}\n內容：{{ $json.output.content }}\n摘要：{{ $('Get row(s)').item.json.description }}\n\n## 翻譯對照表\n\n### 政治人物音譯\n- Vladimir Putin -> 普丁\n- Donald Trump -> 川普\n- Viktor Orbán -> 歐爾班\n- Marco Rubio -> 盧比歐\n- Benjamin Netanyahu -> 納坦雅胡\n- Volodymyr Zelenskyy -> 澤連斯基\n- Pete Hegseth -> 海格塞斯\n- John F. Kennedy -> 甘迺迪\n- Ronald Reagan -> 雷根\n- Jake Sullivan -> 蘇利文\n- Olaf Scholz -> 蕭茲\n- Justin Trudeau -> 杜魯道\n- Marcos (菲律賓) -> 馬可仕\n\n### 地名音譯\n- North Korea/朝鮮 -> 北韓\n- Gaza -> 加薩\n- Sydney -> 雪梨\n- Munich -> 慕尼黑\n- New Zealand -> 紐西蘭\n- Saudi Arabia -> 沙烏地阿拉伯\n- Dubai -> 杜拜\n- Yemen -> 葉門\n\n### 交通與運輸\n- 出租車/的士 -> 計程車\n- 集裝箱 -> 貨櫃\n- 空客 -> 空巴\n\n### 科技與網路用語\n- 視頻 -> 影片\n- 互聯網/網絡 -> 網路\n- 軟件 -> 軟體\n- 硬件 -> 硬體\n- 計算機 -> 電腦\n- 內存 -> 記憶體\n- 激光 -> 雷射\n- 光伏 -> 光電/太陽能\n- 程序 -> 程式\n- 帖子 -> 貼文\n- 樓主 -> 原發文者\n- 硅 -> 矽\n- 芯片 -> 晶片\n- 黑客 -> 駭客\n- 屏幕 -> 螢幕\n- 高清 -> 高畫質\n- 攝像頭 -> 監視器\n- 短信 -> 簡訊\n\n### 軍事與政府\n- 台防務部門 -> 國防部\n- 五角大樓 -> 五角大廈\n- 宙斯盾 -> 神盾系統\n- 空間站 -> 太空站\n- 黑匣子 -> 黑盒子\n\n### 教育與職業\n- 高校 -> 大學\n- 幼兒園 -> 幼稚園\n- 程序員 -> 工程師\n- 寫字樓 -> 辦公大樓\n- 下崗 -> 沒工作\n\n### 商業與法律用語\n- 合同 -> 合約\n- 渠道 -> 管道\n- 反饋 -> 回饋\n- 靠譜 -> 可靠\n\n### 日常用語\n- 萬億 -> 兆\n- 水平 -> 水準\n- 小區 -> 社區\n- 套路 -> 圈套\n- 給力 -> 厲害\n- 土豆 -> 馬鈴薯\n- 獼猴桃 -> 奇異果\n- 西紅柿 -> 番茄\n- 獻血 -> 捐血\n- 方便麵 -> 泡麵\n- 立馬 -> 立刻\n- 通過 -> 經由\n\n### 品牌與專有名詞\n- 奔馳 -> 賓士\n- 新聞發布會 -> 記者會\n- 宇航員 -> 太空人\n- 發動機 -> 引擎\n- 國際象棋 -> 西洋棋\n\n### 特殊用語\n- 導火索 -> 導火線\n- 河蟹 -> 掩蓋\n- 可卡因 -> 古柯鹼\n\n## 輸出要求\n- 回傳 JSON 格式\n- 照著原意翻譯\n- 可微調段落格式符合中文新聞\n- 避免使用簡體中文用詞\n- 不用分 section\n- content 段落使用 <p></p>\n\n## 翻譯原則\n- 人名第一次出現時保留英文原名，例如：「美國國務卿布林肯（Antony Blinken）」\n- 數字使用阿拉伯數字，金額加上單位（例如：100萬美元、50億元）\n- 引述內容使用「」（全形引號）\n- 日期格式：2025年10月28日\n\n## 務必確認\n- 用詞為台灣慣用字\n- 標點符號使用全形(，。！？)\n- tags 需為文中有提及的字詞\n- 避免過度口語化",
         "hasOutputParser": true,
         "options": {
           "systemMessage": "你是一位台灣國際新聞翻譯專員，請執行以下兩個任務\n1. 使用台灣用語翻譯以下內容\n2. 從內容精選3~7個適合的新聞關鍵字(tags)\n3. 翻譯摘要\n\n## 輸出要求\n- 回傳 JSON 格式\n- 照著原意翻譯\n- 可微調段落格式符合中文新聞\n- 避免使用簡體中文用詞\n- 不用分 section\n- content 段落使用 <p></p>\n\n**重要**\n- content不能出現\\n"
@@ -151,12 +128,13 @@
       "type": "@n8n/n8n-nodes-langchain.agent",
       "typeVersion": 2.2,
       "position": [
-        1552,
+        1648,
         352
       ],
       "id": "ad1f9914-b541-4f5a-a957-333049c2129b",
       "name": "翻譯",
-      "retryOnFail": true
+      "retryOnFail": true,
+      "onError": "continueErrorOutput"
     },
     {
       "parameters": {
@@ -191,7 +169,7 @@
       "type": "n8n-nodes-base.limit",
       "typeVersion": 1,
       "position": [
-        224,
+        272,
         368
       ],
       "id": "e8a23728-adf5-4d10-94ce-ae7841e24427",
@@ -205,8 +183,8 @@
       "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
       "typeVersion": 1.3,
       "position": [
-        1232,
-        688
+        1344,
+        592
       ],
       "id": "6c518780-b9ca-4112-add9-6d2bf953a9aa",
       "name": "Structured Output Parser1"
@@ -221,7 +199,7 @@
       "type": "@n8n/n8n-nodes-langchain.agent",
       "typeVersion": 2.2,
       "position": [
-        1072,
+        1168,
         368
       ],
       "id": "92776997-9b98-42fa-ba7b-a66d01e1ad01",
@@ -245,8 +223,8 @@
       "type": "@n8n/n8n-nodes-langchain.lmChatAnthropic",
       "typeVersion": 1.3,
       "position": [
-        1024,
-        688
+        1136,
+        592
       ],
       "id": "01eaea07-d7dc-4ec2-b37c-9b1016ccd1e6",
       "name": "Anthropic Chat Model",
@@ -313,15 +291,15 @@
     },
     {
       "parameters": {
-        "content": "## 取得RSS資料",
-        "height": 304,
+        "content": "## 取得RSS資料\n- 翻譯的title為空 (表示未完成翻譯)",
+        "height": 416,
         "width": 224
       },
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
         -400,
-        192
+        80
       ],
       "id": "b4ce83c5-426d-43d9-987a-ed9123779a1f",
       "name": "Sticky Note1"
@@ -329,14 +307,14 @@
     {
       "parameters": {
         "content": "## 篩選特定類別\n- 政治\n- 財經\n- 科技",
-        "height": 304,
+        "height": 416,
         "width": 224
       },
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
         -96,
-        192
+        80
       ],
       "id": "271c5ceb-7b8e-4341-9b61-874c7470b2dd",
       "name": "Sticky Note2"
@@ -360,166 +338,14 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        2336,
-        352
+        2496,
+        336
       ],
       "id": "4fc59280-e6cf-421b-b7f4-02a0ce9cec6a",
       "name": "HTTP Request",
       "alwaysOutputData": false,
       "retryOnFail": false,
       "onError": "continueErrorOutput"
-    },
-    {
-      "parameters": {
-        "jsCode": "// 取得 claude解析 節點的輸出資料\nconst claudeData = $('claude解析').item.json;\nconst output = claudeData.output;\n\n// 取得 Limit 節點的 category\nconst limitData = $('Limit').item.json;\n\n// 定義類別對應表\nconst categoryMap = {\n  '國際': '1',\n  '財經': '3',\n  '科技': '8'\n};\n\n// 轉換 category 為 categoryId\nconst categoryId = categoryMap[limitData.category] || null;\n\nreturn {\n  json: {\n    output: {\n      title: output.title ? output.title.replaceAll('\"', \"'\") : output.title,\n      content: output.content ? output.content.replaceAll('\"', \"'\") : output.content,\n      tags: output.tags ? output.tags.replaceAll('\"', \"'\") : output.tags,\n      categoryId: categoryId\n    }\n  }\n};"
-      },
-      "type": "n8n-nodes-base.code",
-      "typeVersion": 2,
-      "position": [
-        2016,
-        352
-      ],
-      "id": "72aefec0-9bed-4a19-91a0-b07872f23ec7",
-      "name": "引號置換"
-    },
-    {
-      "parameters": {
-        "operation": "upsert",
-        "dataTableId": {
-          "__rl": true,
-          "value": "ytHc5KKgyhAvAwaX",
-          "mode": "list",
-          "cachedResultName": "world_news",
-          "cachedResultUrl": "/projects/iZydbwsMPJYYjvth/datatables/ytHc5KKgyhAvAwaX"
-        },
-        "filters": {
-          "conditions": [
-            {
-              "keyValue": "={{ $('Limit').item.json.id }}"
-            }
-          ]
-        },
-        "columns": {
-          "mappingMode": "defineBelow",
-          "value": {
-            "isTranslate": true,
-            "title": "={{ $('翻譯').item.json.output.title }}"
-          },
-          "matchingColumns": [],
-          "schema": [
-            {
-              "id": "originTitle",
-              "displayName": "originTitle",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "readOnly": false,
-              "removed": true
-            },
-            {
-              "id": "originContent",
-              "displayName": "originContent",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "readOnly": false,
-              "removed": true
-            },
-            {
-              "id": "source",
-              "displayName": "source",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "readOnly": false,
-              "removed": true
-            },
-            {
-              "id": "title",
-              "displayName": "title",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "readOnly": false,
-              "removed": false
-            },
-            {
-              "id": "content",
-              "displayName": "content",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "readOnly": false,
-              "removed": true
-            },
-            {
-              "id": "categoryId",
-              "displayName": "categoryId",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "number",
-              "readOnly": false,
-              "removed": true
-            },
-            {
-              "id": "sourceUrl",
-              "displayName": "sourceUrl",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "readOnly": false,
-              "removed": true
-            },
-            {
-              "id": "publishTime",
-              "displayName": "publishTime",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "dateTime",
-              "readOnly": false,
-              "removed": true
-            },
-            {
-              "id": "category",
-              "displayName": "category",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "readOnly": false,
-              "removed": true
-            },
-            {
-              "id": "isTranslate",
-              "displayName": "isTranslate",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "boolean",
-              "readOnly": false,
-              "removed": false
-            }
-          ],
-          "attemptToConvertTypes": false,
-          "convertFieldsToString": false
-        }
-      },
-      "type": "n8n-nodes-base.dataTable",
-      "typeVersion": 1,
-      "position": [
-        2816,
-        288
-      ],
-      "id": "f3417b72-18f1-4dec-b408-170e92ad356a",
-      "name": "翻譯成功"
     },
     {
       "parameters": {
@@ -549,8 +375,8 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        2544,
-        352
+        2864,
+        320
       ],
       "id": "91f4615f-709f-4b97-81a2-6b4142cf72e8",
       "name": "If"
@@ -575,145 +401,7 @@
         "columns": {
           "mappingMode": "defineBelow",
           "value": {
-            "isTranslate": false,
-            "title": "={{ $('翻譯').item.json.output.title }}"
-          },
-          "matchingColumns": [],
-          "schema": [
-            {
-              "id": "originTitle",
-              "displayName": "originTitle",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "readOnly": false,
-              "removed": true
-            },
-            {
-              "id": "originContent",
-              "displayName": "originContent",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "readOnly": false,
-              "removed": true
-            },
-            {
-              "id": "source",
-              "displayName": "source",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "readOnly": false,
-              "removed": true
-            },
-            {
-              "id": "title",
-              "displayName": "title",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "readOnly": false,
-              "removed": false
-            },
-            {
-              "id": "content",
-              "displayName": "content",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "readOnly": false,
-              "removed": true
-            },
-            {
-              "id": "categoryId",
-              "displayName": "categoryId",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "number",
-              "readOnly": false,
-              "removed": true
-            },
-            {
-              "id": "sourceUrl",
-              "displayName": "sourceUrl",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "readOnly": false,
-              "removed": true
-            },
-            {
-              "id": "publishTime",
-              "displayName": "publishTime",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "dateTime",
-              "readOnly": false,
-              "removed": true
-            },
-            {
-              "id": "category",
-              "displayName": "category",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "readOnly": false,
-              "removed": true
-            },
-            {
-              "id": "isTranslate",
-              "displayName": "isTranslate",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "boolean",
-              "readOnly": false,
-              "removed": false
-            }
-          ],
-          "attemptToConvertTypes": false,
-          "convertFieldsToString": false
-        }
-      },
-      "type": "n8n-nodes-base.dataTable",
-      "typeVersion": 1,
-      "position": [
-        2816,
-        480
-      ],
-      "id": "1f0d3da0-e864-4a11-8cf6-88890975796c",
-      "name": "翻譯失敗"
-    },
-    {
-      "parameters": {
-        "operation": "upsert",
-        "dataTableId": {
-          "__rl": true,
-          "value": "ytHc5KKgyhAvAwaX",
-          "mode": "list",
-          "cachedResultName": "world_news",
-          "cachedResultUrl": "/projects/iZydbwsMPJYYjvth/datatables/ytHc5KKgyhAvAwaX"
-        },
-        "filters": {
-          "conditions": [
-            {
-              "keyValue": "={{ $('Limit').item.json.id }}"
-            }
-          ]
-        },
-        "columns": {
-          "mappingMode": "defineBelow",
-          "value": {
+            "status": 3,
             "isTranslate": false
           },
           "matchingColumns": [],
@@ -789,12 +477,290 @@
               "removed": true
             },
             {
+              "id": "category",
+              "displayName": "category",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "isTranslate",
+              "displayName": "isTranslate",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "boolean",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "description",
+              "displayName": "description",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
               "id": "publishTime",
               "displayName": "publishTime",
               "required": false,
               "defaultMatch": false,
               "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "publishTimeDate",
+              "displayName": "publishTimeDate",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
               "type": "dateTime",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        }
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1,
+      "position": [
+        3136,
+        880
+      ],
+      "id": "27cd7f60-430d-4bd5-bb91-55bd5b83db7c",
+      "name": "解析失敗"
+    },
+    {
+      "parameters": {
+        "content": "## 取一篇新聞\n",
+        "height": 416,
+        "width": 224
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        208,
+        80
+      ],
+      "id": "fb85ee32-927f-4570-9ca7-0857bc92f0f9",
+      "name": "Sticky Note3"
+    },
+    {
+      "parameters": {
+        "content": "## 取網站內容",
+        "height": 416,
+        "width": 224
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        512,
+        80
+      ],
+      "id": "22af56fe-59e0-4717-9dce-cb1294cafe61",
+      "name": "Sticky Note4"
+    },
+    {
+      "parameters": {
+        "jsCode": "// 取得 claude解析 節點的輸出資料\nconst claudeData = $('claude解析').item.json;\nconst output = claudeData.output;\n\n// 取得 Limit 節點的 category\nconst limitData = $('Limit').item.json;\n\n// 定義類別對應表\nconst categoryMap = {\n  '國際': '1',\n  '財經': '3',\n  '科技': '8'\n};\n\n// 轉換 category 為 categoryId\nconst categoryId = categoryMap[limitData.category] || null;\n\nreturn {\n  json: {\n    output: {\n      title: output.title ? output.title.replaceAll('\"', \"'\") : output.title,\n      content: output.content ? output.content.replaceAll('\"', \"'\") : output.content,\n      tags: output.tags ? output.tags.replaceAll('\"', \"'\") : output.tags,\n      categoryId: categoryId\n    }\n  }\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2112,
+        336
+      ],
+      "id": "72aefec0-9bed-4a19-91a0-b07872f23ec7",
+      "name": "replace"
+    },
+    {
+      "parameters": {
+        "content": "## 清理網站內容",
+        "height": 416,
+        "width": 224
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        800,
+        80
+      ],
+      "id": "38c885ae-6563-440c-bb76-02fe74429ced",
+      "name": "Sticky Note5"
+    },
+    {
+      "parameters": {
+        "content": "## 解析重點\n- 標題(原文)\n- 內容(原文)\n### 重要\n- 去掉多餘符號(e.g. \\n)",
+        "height": 416,
+        "width": 304
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1136,
+        80
+      ],
+      "id": "564b1115-b4fc-40fc-a658-9c02cb75d8c0",
+      "name": "Sticky Note6"
+    },
+    {
+      "parameters": {
+        "content": "## 翻譯文章\n- 繁體中文標題\n- 繁體中文內容\n- 繁體中文摘要\n- 繁體中文Tag (額外分析3~7)\n\n### 重要\n- 台灣慣用語轉換清單\n- 段落間使用<p></p> (存入編輯器時自動分段)",
+        "height": 416,
+        "width": 304
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1600,
+        80
+      ],
+      "id": "c826240e-77d9-44eb-9e38-085837e38c84",
+      "name": "Sticky Note7"
+    },
+    {
+      "parameters": {
+        "content": "## 類別和符號置換\n- '國際': '1'\n- '財經': '3'\n- '科技': '8'\n- \"\" -> ''\n\n### 重要\n- 類別參考 https://www.notion.so/29a1f5951fc780fd8373f82d8d9911e9",
+        "height": 416,
+        "width": 304
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        2000,
+        80
+      ],
+      "id": "601fd95c-8fb5-44b6-8012-610e920ee40c",
+      "name": "Sticky Note8"
+    },
+    {
+      "parameters": {
+        "content": "## 存入RSS新聞管理\n### 必填\n- title\n- content\n- categoryId",
+        "height": 416,
+        "width": 304
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        2400,
+        80
+      ],
+      "id": "ef16f579-bedc-4707-b33c-f708b2564cb3",
+      "name": "Sticky Note9"
+    },
+    {
+      "parameters": {
+        "operation": "upsert",
+        "dataTableId": {
+          "__rl": true,
+          "value": "ytHc5KKgyhAvAwaX",
+          "mode": "list",
+          "cachedResultName": "world_news",
+          "cachedResultUrl": "/projects/iZydbwsMPJYYjvth/datatables/ytHc5KKgyhAvAwaX"
+        },
+        "filters": {
+          "conditions": [
+            {
+              "keyValue": "={{ $('Limit').item.json.id }}"
+            }
+          ]
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "isTranslate": true,
+            "status": 1,
+            "title": "{{ $('翻譯').item.json.output.title }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "originTitle",
+              "displayName": "originTitle",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "originContent",
+              "displayName": "originContent",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "source",
+              "displayName": "source",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "title",
+              "displayName": "title",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "content",
+              "displayName": "content",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "categoryId",
+              "displayName": "categoryId",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "sourceUrl",
+              "displayName": "sourceUrl",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
               "readOnly": false,
               "removed": true
             },
@@ -817,6 +783,46 @@
               "type": "boolean",
               "readOnly": false,
               "removed": false
+            },
+            {
+              "id": "description",
+              "displayName": "description",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "publishTime",
+              "displayName": "publishTime",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "publishTimeDate",
+              "displayName": "publishTimeDate",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": false
             }
           ],
           "attemptToConvertTypes": false,
@@ -826,25 +832,537 @@
       "type": "n8n-nodes-base.dataTable",
       "typeVersion": 1,
       "position": [
-        2816,
+        3136,
+        208
+      ],
+      "id": "f3417b72-18f1-4dec-b408-170e92ad356a",
+      "name": "儲存成功"
+    },
+    {
+      "parameters": {
+        "operation": "upsert",
+        "dataTableId": {
+          "__rl": true,
+          "value": "ytHc5KKgyhAvAwaX",
+          "mode": "list",
+          "cachedResultName": "world_news",
+          "cachedResultUrl": "/projects/iZydbwsMPJYYjvth/datatables/ytHc5KKgyhAvAwaX"
+        },
+        "filters": {
+          "conditions": [
+            {
+              "keyValue": "={{ $('Limit').item.json.id }}"
+            }
+          ]
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "isTranslate": false,
+            "title": "={{ $('翻譯').item.json.output.title }}",
+            "status": 2
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "originTitle",
+              "displayName": "originTitle",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "originContent",
+              "displayName": "originContent",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "source",
+              "displayName": "source",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "title",
+              "displayName": "title",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "content",
+              "displayName": "content",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "categoryId",
+              "displayName": "categoryId",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "sourceUrl",
+              "displayName": "sourceUrl",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "category",
+              "displayName": "category",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "isTranslate",
+              "displayName": "isTranslate",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "boolean",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "description",
+              "displayName": "description",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "publishTime",
+              "displayName": "publishTime",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "publishTimeDate",
+              "displayName": "publishTimeDate",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        }
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1,
+      "position": [
+        3136,
+        368
+      ],
+      "id": "1f0d3da0-e864-4a11-8cf6-88890975796c",
+      "name": "儲存失敗"
+    },
+    {
+      "parameters": {
+        "content": "## 狀態紀錄\n- 成功存入後於datatable紀錄\n- 狀態說明 1:儲存成功 2:儲存失敗 3:解析失敗 4:翻譯失敗 5:API異常",
+        "height": 976,
+        "width": 560
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        2800,
+        80
+      ],
+      "id": "c29a6f5e-0265-4f06-970b-3322b0ad7d58",
+      "name": "Sticky Note10"
+    },
+    {
+      "parameters": {
+        "operation": "upsert",
+        "dataTableId": {
+          "__rl": true,
+          "value": "ytHc5KKgyhAvAwaX",
+          "mode": "list",
+          "cachedResultName": "world_news",
+          "cachedResultUrl": "/projects/iZydbwsMPJYYjvth/datatables/ytHc5KKgyhAvAwaX"
+        },
+        "filters": {
+          "conditions": [
+            {
+              "keyValue": "={{ $('Limit').item.json.id }}"
+            }
+          ]
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "isTranslate": false,
+            "status": 4
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "originTitle",
+              "displayName": "originTitle",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "originContent",
+              "displayName": "originContent",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "source",
+              "displayName": "source",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "title",
+              "displayName": "title",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "content",
+              "displayName": "content",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "categoryId",
+              "displayName": "categoryId",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "sourceUrl",
+              "displayName": "sourceUrl",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "category",
+              "displayName": "category",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "isTranslate",
+              "displayName": "isTranslate",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "boolean",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "description",
+              "displayName": "description",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "publishTime",
+              "displayName": "publishTime",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "publishTimeDate",
+              "displayName": "publishTimeDate",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        }
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1,
+      "position": [
+        3136,
         704
       ],
-      "id": "27cd7f60-430d-4bd5-bb91-55bd5b83db7c",
-      "name": "解析失敗"
+      "id": "44b3d7fb-4224-49ff-a848-b36c3b4e7a7c",
+      "name": "翻譯失敗"
+    },
+    {
+      "parameters": {
+        "operation": "upsert",
+        "dataTableId": {
+          "__rl": true,
+          "value": "ytHc5KKgyhAvAwaX",
+          "mode": "list",
+          "cachedResultName": "world_news",
+          "cachedResultUrl": "/projects/iZydbwsMPJYYjvth/datatables/ytHc5KKgyhAvAwaX"
+        },
+        "filters": {
+          "conditions": [
+            {
+              "keyValue": "={{ $('Limit').item.json.id }}"
+            }
+          ]
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "isTranslate": false,
+            "status": 5
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "originTitle",
+              "displayName": "originTitle",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "originContent",
+              "displayName": "originContent",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "source",
+              "displayName": "source",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "title",
+              "displayName": "title",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "content",
+              "displayName": "content",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "categoryId",
+              "displayName": "categoryId",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "sourceUrl",
+              "displayName": "sourceUrl",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "category",
+              "displayName": "category",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "isTranslate",
+              "displayName": "isTranslate",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "boolean",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "description",
+              "displayName": "description",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "publishTime",
+              "displayName": "publishTime",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "publishTimeDate",
+              "displayName": "publishTimeDate",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        }
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1,
+      "position": [
+        3136,
+        544
+      ],
+      "id": "3f6191e5-23be-4a7c-85e3-93c46767a618",
+      "name": "API異常"
     }
   ],
   "connections": {
-    "設定新聞 URL": {
-      "main": [
-        [
-          {
-            "node": "抓取網頁內容",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
     "抓取網頁內容": {
       "main": [
         [
@@ -904,7 +1422,14 @@
       "main": [
         [
           {
-            "node": "引號置換",
+            "node": "replace",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "翻譯失敗",
             "type": "main",
             "index": 0
           }
@@ -926,7 +1451,7 @@
       "main": [
         [
           {
-            "node": "設定新聞 URL",
+            "node": "抓取網頁內容",
             "type": "main",
             "index": 0
           }
@@ -995,18 +1520,7 @@
         ],
         [
           {
-            "node": "解析失敗",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "引號置換": {
-      "main": [
-        [
-          {
-            "node": "HTTP Request",
+            "node": "API異常",
             "type": "main",
             "index": 0
           }
@@ -1017,14 +1531,25 @@
       "main": [
         [
           {
-            "node": "翻譯成功",
+            "node": "儲存成功",
             "type": "main",
             "index": 0
           }
         ],
         [
           {
-            "node": "翻譯失敗",
+            "node": "儲存失敗",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "replace": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
             "type": "main",
             "index": 0
           }
@@ -1044,7 +1569,7 @@
     "templateCredsSetupCompleted": true
   },
   "pinData": {},
-  "versionId": "41fc2ec2-4f96-4561-8634-12cfaf09e6da",
+  "versionId": "6f73e128-91a4-4e7c-9877-d2cba051f725",
   "triggerCount": 1,
   "shared": [
     {
