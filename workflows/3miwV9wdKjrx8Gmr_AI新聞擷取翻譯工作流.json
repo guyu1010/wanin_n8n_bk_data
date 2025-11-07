@@ -1,9 +1,9 @@
 {
   "createdAt": "2025-10-27T05:57:53.778Z",
-  "updatedAt": "2025-11-07T00:42:52.000Z",
+  "updatedAt": "2025-11-07T01:31:46.000Z",
   "id": "3miwV9wdKjrx8Gmr",
   "name": "AI新聞擷取&翻譯工作流",
-  "active": false,
+  "active": true,
   "isArchived": false,
   "nodes": [
     {

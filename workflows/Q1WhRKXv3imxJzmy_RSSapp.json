@@ -1,9 +1,9 @@
 {
   "createdAt": "2025-10-31T03:58:43.404Z",
-  "updatedAt": "2025-11-06T10:10:24.000Z",
+  "updatedAt": "2025-11-07T01:31:43.000Z",
   "id": "Q1WhRKXv3imxJzmy",
   "name": "RSS.app",
-  "active": true,
+  "active": false,
   "isArchived": false,
   "nodes": [
     {
