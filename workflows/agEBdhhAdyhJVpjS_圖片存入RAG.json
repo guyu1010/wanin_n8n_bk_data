@@ -1,6 +1,6 @@
 {
   "createdAt": "2025-11-04T06:57:00.098Z",
-  "updatedAt": "2025-11-10T08:57:04.000Z",
+  "updatedAt": "2025-11-10T10:36:27.000Z",
   "id": "agEBdhhAdyhJVpjS",
   "name": "圖片存入RAG",
   "active": true,
@@ -252,12 +252,71 @@
       "type": "CUSTOM.qdrantUpsert",
       "typeVersion": 1,
       "position": [
-        1136,
-        224
+        1152,
+        336
       ],
       "id": "f4d48231-98ba-440d-8b58-0c97d4cb8d0a",
       "name": "Wanin RAG Upsert",
       "disabled": true
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        608,
+        224
+      ],
+      "id": "d5bc5cce-2b0d-447b-ab17-11f453480a5e",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        480,
+        432
+      ],
+      "id": "9f0b4c23-527d-493e-af6b-ca0319bcecc4",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "TcbdbxzebK9gSKPI",
+          "name": "Google Gemini(PaLM) Api account 6"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "image",
+        "operation": "analyze",
+        "modelId": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.googleGeminiTool",
+      "typeVersion": 1,
+      "position": [
+        768,
+        432
+      ],
+      "id": "921be9e7-6255-468c-a415-7c27ad800412",
+      "name": "Analyze an image in Google Gemini",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "TcbdbxzebK9gSKPI",
+          "name": "Google Gemini(PaLM) Api account 6"
+        }
+      }
     }
   ],
   "connections": {
@@ -320,6 +379,28 @@
       "main": [
         []
       ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Analyze an image in Google Gemini": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "settings": {
@@ -334,7 +415,7 @@
     "templateCredsSetupCompleted": true
   },
   "pinData": {},
-  "versionId": "4f84c554-c47a-4f1b-ae66-61adfea12bbd",
+  "versionId": "82f83d32-d9d5-42a4-809e-41ed942d68da",
   "triggerCount": 1,
   "shared": [
     {
