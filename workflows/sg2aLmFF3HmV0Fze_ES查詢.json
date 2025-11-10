@@ -1,6 +1,6 @@
 {
   "createdAt": "2025-11-10T05:39:43.120Z",
-  "updatedAt": "2025-11-10T08:52:28.000Z",
+  "updatedAt": "2025-11-10T09:28:03.000Z",
   "id": "sg2aLmFF3HmV0Fze",
   "name": "ES查詢",
   "active": false,
@@ -25,7 +25,7 @@
         "genericAuthType": "httpBearerAuth",
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "{\n    \"StartTime\": \"2025-11-09T00:00:00+08:00\",\n    \"EndTime\": \"2025-11-10T14:12:00+08:00\",\n    \"ArticleSource\":\"X\"\n}",
+        "jsonBody": "{\n    \"StartTime\": \"2025-11-09T00:00:00+08:00\",\n    \"EndTime\": \"2025-11-10T17:12:00+08:00\",\n    \"ArticleSource\":\"X\"\n}",
         "options": {}
       },
       "type": "n8n-nodes-base.httpRequest",
@@ -45,7 +45,7 @@
     },
     {
       "parameters": {
-        "content": "## I'm a note \n [api說明](https://respected-kilometer-b5e.notion.site/MediaMonitoring-API-2-250163b4a081817a9424e39f9b1c767b)"
+        "content": "## I'm a note \n [api說明](https://respected-kilometer-b5e.notion.site/MediaMonitoring-API-2-250163b4a081817a9424e39f9b1c767b)\n\n* 起訖時間為存入ES的時間"
       },
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -81,7 +81,7 @@
   "staticData": null,
   "meta": null,
   "pinData": {},
-  "versionId": "08f88ee2-2724-4efa-b3af-86a85ba9667e",
+  "versionId": "427de16d-b967-4244-87cc-6dad57612f1d",
   "triggerCount": 0,
   "shared": [
     {
