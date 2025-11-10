@@ -1,6 +1,6 @@
 {
   "createdAt": "2025-11-10T05:39:43.120Z",
-  "updatedAt": "2025-11-10T07:44:16.000Z",
+  "updatedAt": "2025-11-10T08:52:28.000Z",
   "id": "sg2aLmFF3HmV0Fze",
   "name": "ES查詢",
   "active": false,
@@ -42,6 +42,19 @@
           "name": "Bearer Auth account"
         }
       }
+    },
+    {
+      "parameters": {
+        "content": "## I'm a note \n [api說明](https://respected-kilometer-b5e.notion.site/MediaMonitoring-API-2-250163b4a081817a9424e39f9b1c767b)"
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        0,
+        -272
+      ],
+      "id": "6bb0f440-008c-45e4-bf5e-b92ff1c4e7f2",
+      "name": "Sticky Note"
     }
   ],
   "connections": {
@@ -68,7 +81,7 @@
   "staticData": null,
   "meta": null,
   "pinData": {},
-  "versionId": "c1899666-c8ad-44ee-8cf4-a458a3c1afc3",
+  "versionId": "08f88ee2-2724-4efa-b3af-86a85ba9667e",
   "triggerCount": 0,
   "shared": [
     {

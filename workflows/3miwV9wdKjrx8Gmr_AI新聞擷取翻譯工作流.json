@@ -1,6 +1,6 @@
 {
   "createdAt": "2025-10-27T05:57:53.778Z",
-  "updatedAt": "2025-11-10T03:32:54.000Z",
+  "updatedAt": "2025-11-10T08:52:54.000Z",
   "id": "3miwV9wdKjrx8Gmr",
   "name": "AI新聞擷取&翻譯工作流",
   "active": false,
@@ -8,7 +8,7 @@
   "nodes": [
     {
       "parameters": {
-        "content": "## I'm a note \n**川普TruthSocial** \n**CNN**✅\n**Fox News**\n**New York Times**\n**Bloomberg**\n**Wall Street Journal**\n**Washington Post**\n**Political**\n**BBC**✅",
+        "content": "## I'm a note \n**川普TruthSocial** \n**CNN**✅\n**Fox News**\n**New York Times**\n**Bloomberg**\n**Wall Street Journal**\n**Washington Post**\n**Political**\n**BBC**",
         "height": 240,
         "width": 432
       },
@@ -1569,7 +1569,7 @@
     "templateCredsSetupCompleted": true
   },
   "pinData": {},
-  "versionId": "c3766e50-1037-4181-99e6-c1cbc308f2f1",
+  "versionId": "e19079f3-8996-41b9-85b4-408428a03a41",
   "triggerCount": 1,
   "shared": [
     {

@@ -1,6 +1,6 @@
 {
   "createdAt": "2025-10-31T03:58:43.404Z",
-  "updatedAt": "2025-11-10T04:00:09.000Z",
+  "updatedAt": "2025-11-10T08:48:41.000Z",
   "id": "Q1WhRKXv3imxJzmy",
   "name": "RSS.app",
   "active": false,
@@ -279,6 +279,15 @@
                 "type": "string",
                 "operation": "notContains"
               }
+            },
+            {
+              "id": "c3459ed2-662d-4131-b733-831df1a02774",
+              "leftValue": "={{ $json.link }}",
+              "rightValue": "/5-things-pm",
+              "operator": {
+                "type": "string",
+                "operation": "notContains"
+              }
             }
           ],
           "combinator": "and"
@@ -468,7 +477,7 @@
     "templateCredsSetupCompleted": true
   },
   "pinData": {},
-  "versionId": "d1bed534-3888-4c50-b820-aea65a39bf2e",
+  "versionId": "54f5f576-161d-4939-b406-c2e00a60903b",
   "triggerCount": 1,
   "shared": [
     {
