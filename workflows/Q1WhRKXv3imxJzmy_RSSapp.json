@@ -1,6 +1,6 @@
 {
   "createdAt": "2025-10-31T03:58:43.404Z",
-  "updatedAt": "2025-11-07T01:31:43.000Z",
+  "updatedAt": "2025-11-10T04:00:09.000Z",
   "id": "Q1WhRKXv3imxJzmy",
   "name": "RSS.app",
   "active": false,
@@ -51,20 +51,6 @@
       ],
       "id": "6d30a950-2936-4918-9c2d-383f71ebd950",
       "name": "Schedule Trigger_Reuters"
-    },
-    {
-      "parameters": {
-        "url": "https://rss.app/feeds/wh5bnCiGZHmgVcrS.xml",
-        "options": {}
-      },
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4.2,
-      "position": [
-        80,
-        -112
-      ],
-      "id": "8d7b87d8-06cb-4bb6-b214-6bbd73c443df",
-      "name": "Reuters"
     },
     {
       "parameters": {
@@ -351,6 +337,20 @@
       "id": "aa35bd36-14c8-414e-8a29-238bc6f4b571",
       "name": "Call 'AI新聞擷取&翻譯工作流'",
       "disabled": true
+    },
+    {
+      "parameters": {
+        "url": "https://rss.app/feeds/wh5bnCiGZHmgVcrS.xml",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        80,
+        -112
+      ],
+      "id": "8d7b87d8-06cb-4bb6-b214-6bbd73c443df",
+      "name": "RSS"
     }
   ],
   "connections": {
@@ -380,18 +380,7 @@
       "main": [
         [
           {
-            "node": "Reuters",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Reuters": {
-      "main": [
-        [
-          {
-            "node": "XML",
+            "node": "RSS",
             "type": "main",
             "index": 0
           }
@@ -452,6 +441,17 @@
           }
         ]
       ]
+    },
+    "RSS": {
+      "main": [
+        [
+          {
+            "node": "XML",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "settings": {
@@ -468,7 +468,7 @@
     "templateCredsSetupCompleted": true
   },
   "pinData": {},
-  "versionId": "439ce894-8bf5-460c-a5db-aff94792cc5c",
+  "versionId": "d1bed534-3888-4c50-b820-aea65a39bf2e",
   "triggerCount": 1,
   "shared": [
     {
@@ -493,7 +493,7 @@
             "projectId": "iZydbwsMPJYYjvth",
             "user": {
               "createdAt": "2025-09-16T02:39:54.628Z",
-              "updatedAt": "2025-11-10T02:20:23.000Z",
+              "updatedAt": "2025-11-10T04:11:41.000Z",
               "id": "55f25be3-69cb-4a61-849e-09b3e6328043",
               "email": "web@wanin.tw",
               "firstName": "common",
