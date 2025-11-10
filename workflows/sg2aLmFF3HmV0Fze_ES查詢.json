@@ -1,6 +1,6 @@
 {
   "createdAt": "2025-11-10T05:39:43.120Z",
-  "updatedAt": "2025-11-10T05:45:17.000Z",
+  "updatedAt": "2025-11-10T07:44:16.000Z",
   "id": "sg2aLmFF3HmV0Fze",
   "name": "ES查詢",
   "active": false,
@@ -25,7 +25,7 @@
         "genericAuthType": "httpBearerAuth",
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "{\n    \"StartTime\": \"2025-11-07T10:20:00+08:00\",\n    \"EndTime\": \"2025-11-10T11:12:00+08:00\"\n}",
+        "jsonBody": "{\n    \"StartTime\": \"2025-11-09T00:00:00+08:00\",\n    \"EndTime\": \"2025-11-10T14:12:00+08:00\",\n    \"ArticleSource\":\"X\"\n}",
         "options": {}
       },
       "type": "n8n-nodes-base.httpRequest",
@@ -55,6 +55,11 @@
           }
         ]
       ]
+    },
+    "HTTP Request": {
+      "main": [
+        []
+      ]
     }
   },
   "settings": {
@@ -63,7 +68,7 @@
   "staticData": null,
   "meta": null,
   "pinData": {},
-  "versionId": "5253253d-3ef1-4024-a008-2c74cf086f9b",
+  "versionId": "c1899666-c8ad-44ee-8cf4-a458a3c1afc3",
   "triggerCount": 0,
   "shared": [
     {
