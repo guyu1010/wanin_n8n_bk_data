@@ -1,6 +1,6 @@
 {
   "createdAt": "2025-11-04T06:58:41.179Z",
-  "updatedAt": "2025-11-11T04:13:26.000Z",
+  "updatedAt": "2025-11-11T08:58:06.000Z",
   "id": "VSpyRj9uTiplR3Rw",
   "name": "儲存圖片",
   "active": false,
@@ -89,6 +89,34 @@
       ],
       "id": "883c6040-e70a-4e42-a262-118894b63191",
       "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "data.list",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        640,
+        -16
+      ],
+      "id": "a5418283-b69c-4afd-8d57-411ee4dd3f31",
+      "name": "Split Out 成功"
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "data.errorList",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        640,
+        160
+      ],
+      "id": "2c2194c0-b9d2-4ca7-8a8c-6f8074dd45dd",
+      "name": "Split Out 失敗"
     },
     {
       "parameters": {
@@ -222,11 +250,11 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        848,
-        -16
+        1040,
+        -96
       ],
       "id": "9e43d0b0-4acb-4a6e-a553-6b04c552da61",
-      "name": "Update row in sheet",
+      "name": "Update row in sheet 成功",
       "credentials": {
         "googleApi": {
           "id": "iBwCenGPFzEiIQU1",
@@ -236,17 +264,175 @@
     },
     {
       "parameters": {
-        "fieldToSplitOut": "data",
+        "authentication": "serviceAccount",
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "https://docs.google.com/spreadsheets/d/12k7b-4kU1dafqHkxrjm-gSAtSRE-oCu1oEVM6HiwXAs/edit?gid=0#gid=0",
+          "mode": "url"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "URL",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/12k7b-4kU1dafqHkxrjm-gSAtSRE-oCu1oEVM6HiwXAs/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "URL": "={{ $json.originalUrl }}",
+            "isSave": "false",
+            "newtalkUrl": "={{ $json.newtalkUrl }}",
+            "newtalkResizeUrl": "={{ $json.newtalkResizeUrl }}",
+            "id": "={{ $json.id }}"
+          },
+          "matchingColumns": [
+            "URL"
+          ],
+          "schema": [
+            {
+              "id": "URL",
+              "displayName": "URL",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "isSave",
+              "displayName": "isSave",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "description_zh",
+              "displayName": "description_zh",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "description_en",
+              "displayName": "description_en",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "tags",
+              "displayName": "tags",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "quality_score",
+              "displayName": "quality_score",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "newtalkUrl",
+              "displayName": "newtalkUrl",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "newtalkResizeUrl",
+              "displayName": "newtalkResizeUrl",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
         "options": {}
       },
-      "type": "n8n-nodes-base.splitOut",
-      "typeVersion": 1,
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
       "position": [
-        592,
-        -16
+        1040,
+        240
       ],
-      "id": "1c63c8f9-0576-4aae-8827-4d0151e0b35f",
-      "name": "Split Out"
+      "id": "0fdb04cb-4727-4fd9-a350-23ae6932b618",
+      "name": "Update row in sheet 失敗",
+      "credentials": {
+        "googleApi": {
+          "id": "iBwCenGPFzEiIQU1",
+          "name": "Google Service Account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "agEBdhhAdyhJVpjS",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/agEBdhhAdyhJVpjS",
+          "cachedResultName": "圖片存入RAG"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {}
+        },
+        "mode": "each",
+        "options": {
+          "waitForSubWorkflow": true
+        }
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.3,
+      "position": [
+        1040,
+        80
+      ],
+      "id": "7984f5ec-d529-47ca-9f28-7b400cde6a1b",
+      "name": "Call '圖片存入RAG'",
+      "onError": "continueRegularOutput"
     }
   ],
   "connections": {
@@ -287,23 +473,44 @@
       "main": [
         [
           {
-            "node": "Split Out",
+            "node": "Split Out 成功",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Split Out 失敗",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Update row in sheet": {
+    "Split Out 成功": {
+      "main": [
+        [
+          {
+            "node": "Update row in sheet 成功",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Call '圖片存入RAG'",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update row in sheet 成功": {
       "main": [
         []
       ]
     },
-    "Split Out": {
+    "Split Out 失敗": {
       "main": [
         [
           {
-            "node": "Update row in sheet",
+            "node": "Update row in sheet 失敗",
             "type": "main",
             "index": 0
           }
@@ -319,7 +526,7 @@
     "templateCredsSetupCompleted": true
   },
   "pinData": {},
-  "versionId": "4c636262-3eac-44ea-96fe-45afa178ad6f",
+  "versionId": "909b252c-1c78-48c7-9280-c16791533a30",
   "triggerCount": 0,
   "shared": [
     {
