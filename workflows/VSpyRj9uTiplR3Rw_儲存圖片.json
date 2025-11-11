@@ -1,19 +1,94 @@
 {
   "createdAt": "2025-11-04T06:58:41.179Z",
-  "updatedAt": "2025-11-04T06:58:41.000Z",
+  "updatedAt": "2025-11-11T03:25:36.000Z",
   "id": "VSpyRj9uTiplR3Rw",
   "name": "儲存圖片",
   "active": false,
   "isArchived": false,
-  "nodes": [],
-  "connections": {},
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -448,
+        -16
+      ],
+      "id": "670860c3-9f09-4389-b368-c3dd3ccefcc2",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://dev88.newtalk.tw/newsapi/uploadImageByUrl",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{\n    \"token\": \"61af9f535f694a56912a7ea660b01a7e8369b74cfac3199667dc82946f5d1e5c\",\n    \"images\": [ \n        \"https://images.unsplash.com/photo-1560221328-12fe60f83ab8?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=1174\"\n    ]\n}",
+        "options": {
+          "allowUnauthorizedCerts": true
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        208,
+        0
+      ],
+      "id": "13ae6dbf-ee1b-4e3d-9bdf-dc31c99202e4",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "authentication": "serviceAccount",
+        "documentId": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        },
+        "sheetName": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        }
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -240,
+        -16
+      ],
+      "id": "103993ce-6946-4c3e-9f46-2c133713cf59",
+      "name": "Get row(s) in sheet",
+      "credentials": {
+        "googleApi": {
+          "id": "iBwCenGPFzEiIQU1",
+          "name": "Google Service Account"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Get row(s) in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
   "settings": {
     "executionOrder": "v1"
   },
   "staticData": null,
-  "meta": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
   "pinData": {},
-  "versionId": "2740fedd-bdbd-4f27-8e74-0f36278b29fe",
+  "versionId": "20ee4c29-a850-4bed-a7e4-2459abfab70f",
   "triggerCount": 0,
   "shared": [
     {
