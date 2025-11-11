@@ -1,6 +1,6 @@
 {
   "createdAt": "2025-10-31T03:58:43.404Z",
-  "updatedAt": "2025-11-10T08:48:41.000Z",
+  "updatedAt": "2025-11-11T10:11:29.000Z",
   "id": "Q1WhRKXv3imxJzmy",
   "name": "RSS.app",
   "active": false,
@@ -171,7 +171,7 @@
               "display": true,
               "type": "boolean",
               "readOnly": false,
-              "removed": false
+              "removed": true
             },
             {
               "id": "description",
@@ -202,6 +202,16 @@
               "type": "dateTime",
               "readOnly": false,
               "removed": false
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": true
             }
           ],
           "attemptToConvertTypes": false,
@@ -477,7 +487,7 @@
     "templateCredsSetupCompleted": true
   },
   "pinData": {},
-  "versionId": "54f5f576-161d-4939-b406-c2e00a60903b",
+  "versionId": "c08c5eb3-ed29-4de6-a1ef-db67859a2d4d",
   "triggerCount": 1,
   "shared": [
     {

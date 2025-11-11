@@ -1,6 +1,6 @@
 {
   "createdAt": "2025-10-27T05:57:53.778Z",
-  "updatedAt": "2025-11-10T08:52:54.000Z",
+  "updatedAt": "2025-11-11T10:15:20.000Z",
   "id": "3miwV9wdKjrx8Gmr",
   "name": "AI新聞擷取&翻譯工作流",
   "active": false,
@@ -690,7 +690,7 @@
           "value": {
             "isTranslate": true,
             "status": 1,
-            "title": "{{ $('翻譯').item.json.output.title }}"
+            "title": "={{ $('翻譯').item.json.output.title }}"
           },
           "matchingColumns": [],
           "schema": [
@@ -1010,7 +1010,7 @@
     },
     {
       "parameters": {
-        "content": "## 狀態紀錄\n- 成功存入後於datatable紀錄\n- 狀態說明 1:儲存成功 2:儲存失敗 3:解析失敗 4:翻譯失敗 5:API異常",
+        "content": "## 狀態紀錄\n- 成功存入後於datatable紀錄\n- 儲存到RSS狀態說明 1:儲存成功 2:儲存失敗 3:解析失敗 4:翻譯失敗 5:API異常",
         "height": 976,
         "width": 560
       },
@@ -1569,7 +1569,7 @@
     "templateCredsSetupCompleted": true
   },
   "pinData": {},
-  "versionId": "e19079f3-8996-41b9-85b4-408428a03a41",
+  "versionId": "bf23befe-e832-4c4d-baa2-2280a8de0b75",
   "triggerCount": 1,
   "shared": [
     {
