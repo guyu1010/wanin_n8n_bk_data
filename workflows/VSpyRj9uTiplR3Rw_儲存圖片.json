@@ -1,6 +1,6 @@
 {
   "createdAt": "2025-11-04T06:58:41.179Z",
-  "updatedAt": "2025-11-11T03:52:51.000Z",
+  "updatedAt": "2025-11-11T04:13:26.000Z",
   "id": "VSpyRj9uTiplR3Rw",
   "name": "儲存圖片",
   "active": false,
@@ -23,7 +23,7 @@
         "url": "https://dev88.newtalk.tw/newsapi/uploadImageByUrl",
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "={\n    \"token\": \"61af9f535f694a56912a7ea660b01a7e8369b74cfac3199667dc82946f5d1e5c\",\n    \"images\": [ \n        \"{{ $json.URL }}\"\n    ]\n} ",
+        "jsonBody": "={\n    \"token\": \"61af9f535f694a56912a7ea660b01a7e8369b74cfac3199667dc82946f5d1e5c\",\n    \"images\": [ \n       {{ $json.urls.images }}\n    ]\n} ",
         "options": {
           "allowUnauthorizedCerts": true
         }
@@ -31,7 +31,7 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        208,
+        336,
         -16
       ],
       "id": "13ae6dbf-ee1b-4e3d-9bdf-dc31c99202e4",
@@ -60,13 +60,12 @@
             }
           ]
         },
-        "combineFilters": "={{ $json.URL }}",
         "options": {}
       },
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        -240,
+        -224,
         -16
       ],
       "id": "103993ce-6946-4c3e-9f46-2c133713cf59",
@@ -80,23 +79,174 @@
     },
     {
       "parameters": {
-        "fieldsToAggregate": {
-          "fieldToAggregate": [
+        "jsCode": "// 取得所有從 Google Sheets 來的資料\nconst items = $input.all();\n\n// 提取所有 URL 並加上雙引號,用逗號連接\nconst formattedUrls = items\n  .map(item => `\"${item.json.URL}\"`)\n  .join(',');\n\n// 返回格式化後的結果\nreturn [{\n  urls: {\n    images: [formattedUrls]\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        64,
+        -16
+      ],
+      "id": "883c6040-e70a-4e42-a262-118894b63191",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "authentication": "serviceAccount",
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "https://docs.google.com/spreadsheets/d/12k7b-4kU1dafqHkxrjm-gSAtSRE-oCu1oEVM6HiwXAs/edit?gid=0#gid=0",
+          "mode": "url"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "URL",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/12k7b-4kU1dafqHkxrjm-gSAtSRE-oCu1oEVM6HiwXAs/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "URL": "={{ $json.originalUrl }}",
+            "isSave": "true",
+            "newtalkUrl": "={{ $json.newtalkUrl }}",
+            "newtalkResizeUrl": "={{ $json.newtalkResizeUrl }}",
+            "id": "={{ $json.id }}"
+          },
+          "matchingColumns": [
+            "URL"
+          ],
+          "schema": [
             {
-              "fieldToAggregate": "URL"
+              "id": "URL",
+              "displayName": "URL",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "isSave",
+              "displayName": "isSave",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "description_zh",
+              "displayName": "description_zh",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "description_en",
+              "displayName": "description_en",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "tags",
+              "displayName": "tags",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "quality_score",
+              "displayName": "quality_score",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "newtalkUrl",
+              "displayName": "newtalkUrl",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "newtalkResizeUrl",
+              "displayName": "newtalkResizeUrl",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": true
             }
-          ]
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
         },
         "options": {}
       },
-      "type": "n8n-nodes-base.aggregate",
-      "typeVersion": 1,
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
       "position": [
-        -32,
+        848,
         -16
       ],
-      "id": "67bf24f6-c1bb-40e6-b045-76d777fd5492",
-      "name": "Aggregate"
+      "id": "9e43d0b0-4acb-4a6e-a553-6b04c552da61",
+      "name": "Update row in sheet",
+      "credentials": {
+        "googleApi": {
+          "id": "iBwCenGPFzEiIQU1",
+          "name": "Google Service Account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "data",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        592,
+        -16
+      ],
+      "id": "1c63c8f9-0576-4aae-8827-4d0151e0b35f",
+      "name": "Split Out"
     }
   ],
   "connections": {
@@ -115,18 +265,45 @@
       "main": [
         [
           {
-            "node": "Aggregate",
+            "node": "Code in JavaScript",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Aggregate": {
+    "Code in JavaScript": {
       "main": [
         [
           {
             "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Split Out",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update row in sheet": {
+      "main": [
+        []
+      ]
+    },
+    "Split Out": {
+      "main": [
+        [
+          {
+            "node": "Update row in sheet",
             "type": "main",
             "index": 0
           }
@@ -142,7 +319,7 @@
     "templateCredsSetupCompleted": true
   },
   "pinData": {},
-  "versionId": "7790b056-b224-4efe-afb4-ee52614587ad",
+  "versionId": "4c636262-3eac-44ea-96fe-45afa178ad6f",
   "triggerCount": 0,
   "shared": [
     {
@@ -167,7 +344,7 @@
             "projectId": "iZydbwsMPJYYjvth",
             "user": {
               "createdAt": "2025-09-16T02:39:54.628Z",
-              "updatedAt": "2025-11-10T04:11:41.000Z",
+              "updatedAt": "2025-11-11T04:01:33.000Z",
               "id": "55f25be3-69cb-4a61-849e-09b3e6328043",
               "email": "web@wanin.tw",
               "firstName": "common",
@@ -189,7 +366,7 @@
               },
               "disabled": false,
               "mfaEnabled": false,
-              "lastActiveAt": "2025-11-09",
+              "lastActiveAt": "2025-11-10",
               "isPending": false
             }
           }
