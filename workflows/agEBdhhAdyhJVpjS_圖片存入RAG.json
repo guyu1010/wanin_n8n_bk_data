@@ -1,6 +1,6 @@
 {
   "createdAt": "2025-11-04T06:57:00.098Z",
-  "updatedAt": "2025-11-11T04:23:52.000Z",
+  "updatedAt": "2025-11-11T08:03:23.000Z",
   "id": "agEBdhhAdyhJVpjS",
   "name": "圖片存入RAG",
   "active": false,
@@ -25,8 +25,8 @@
       "type": "@n8n/n8n-nodes-langchain.googleGemini",
       "typeVersion": 1,
       "position": [
-        736,
-        0
+        1296,
+        464
       ],
       "id": "6adad9ae-ae97-4b50-b6a3-40ba8b73b0d5",
       "name": "Analyze an image",
@@ -38,54 +38,12 @@
       }
     },
     {
-      "parameters": {
-        "authentication": "serviceAccount",
-        "documentId": {
-          "__rl": true,
-          "value": "12k7b-4kU1dafqHkxrjm-gSAtSRE-oCu1oEVM6HiwXAs",
-          "mode": "list",
-          "cachedResultName": "圖片URL",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/12k7b-4kU1dafqHkxrjm-gSAtSRE-oCu1oEVM6HiwXAs/edit?usp=drivesdk"
-        },
-        "sheetName": {
-          "__rl": true,
-          "value": "gid=0",
-          "mode": "list",
-          "cachedResultName": "工作表1",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/12k7b-4kU1dafqHkxrjm-gSAtSRE-oCu1oEVM6HiwXAs/edit#gid=0"
-        },
-        "filtersUI": {
-          "values": [
-            {
-              "lookupColumn": "isSave",
-              "lookupValue": "false"
-            }
-          ]
-        },
-        "options": {}
-      },
-      "type": "n8n-nodes-base.googleSheets",
-      "typeVersion": 4.7,
-      "position": [
-        272,
-        0
-      ],
-      "id": "2f2977d1-e0ee-456a-877b-7d02dea2dae8",
-      "name": "Get row(s) in sheet",
-      "credentials": {
-        "googleApi": {
-          "id": "WwIp2mkjzXCbuzFK",
-          "name": "Google Sheets account"
-        }
-      }
-    },
-    {
       "parameters": {},
       "type": "n8n-nodes-base.limit",
       "typeVersion": 1,
       "position": [
-        480,
-        0
+        336,
+        16
       ],
       "id": "6a935910-b8a2-4bb8-b791-febf08bea6b6",
       "name": "Limit"
@@ -98,7 +56,7 @@
       "typeVersion": 2,
       "position": [
         944,
-        0
+        16
       ],
       "id": "a1e24999-b2d5-48fa-8429-600b34c44e6b",
       "name": "Code in JavaScript"
@@ -117,8 +75,8 @@
       "type": "n8n-nodes-base.scheduleTrigger",
       "typeVersion": 1.2,
       "position": [
-        32,
-        0
+        -112,
+        -96
       ],
       "id": "38f624ec-b33e-450f-a82a-201c9a0b9749",
       "name": "Schedule Trigger"
@@ -236,14 +194,14 @@
       "typeVersion": 4.7,
       "position": [
         1392,
-        0
+        16
       ],
       "id": "36bfd693-583c-4b82-97f5-ea574cc617dd",
       "name": "Update row in sheet",
       "credentials": {
         "googleApi": {
-          "id": "WwIp2mkjzXCbuzFK",
-          "name": "Google Sheets account"
+          "id": "iBwCenGPFzEiIQU1",
+          "name": "Google Service Account"
         }
       }
     },
@@ -253,7 +211,7 @@
       "typeVersion": 1,
       "position": [
         1152,
-        336
+        320
       ],
       "id": "f4d48231-98ba-440d-8b58-0c97d4cb8d0a",
       "name": "Wanin RAG Upsert",
@@ -262,13 +220,15 @@
     {
       "parameters": {
         "promptType": "define",
+        "text": "請用英文和繁體中文詳細描述這張圖片,包含:\n- 主要場景和主題\n- 重要人物或物體\n- 情境和氛圍\n- 可能適合搭配的新聞類型\n    \n## 執行四個任務\n1.提供一段英文描述，適用於RAG搜尋\n2.提供一段繁體中文描述，約50~100字，適用人工搜尋\n3.替照片產生中文標籤，可以做精準搜尋，至多10個\n4.品質評分 (0-1,單位0.05):\n   - 圖片清晰嗎?\n   - 解析度足夠嗎?\n   - 圖片有重點嗎?\n   - 畫面完整嗎(無浮水印/遮擋)?\n\n並以json格式回覆\n{\n\t\"description_en\": \"圖片描述\",\n\t\"description_zh\": \"圖片描述\",\n    \"tags\": [\"tag1\",\"tag2\"],\n    \"quality_score\": 0.85\n} ",
+        "hasOutputParser": true,
         "options": {}
       },
       "type": "@n8n/n8n-nodes-langchain.agent",
       "typeVersion": 2.2,
       "position": [
-        608,
-        224
+        576,
+        16
       ],
       "id": "d5bc5cce-2b0d-447b-ab17-11f453480a5e",
       "name": "AI Agent"
@@ -280,8 +240,8 @@
       "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
       "typeVersion": 1,
       "position": [
-        480,
-        432
+        464,
+        320
       ],
       "id": "9f0b4c23-527d-493e-af6b-ca0319bcecc4",
       "name": "Google Gemini Chat Model",
@@ -298,16 +258,19 @@
         "operation": "analyze",
         "modelId": {
           "__rl": true,
+          "value": "models/gemini-2.5-flash",
           "mode": "list",
-          "value": ""
+          "cachedResultName": "models/gemini-2.5-flash"
         },
+        "text": "請用英文和繁體中文詳細描述這張圖片,包含:\n- 主要場景和主題\n- 重要人物或物體\n- 情境和氛圍\n- 可能適合搭配的新聞類型",
+        "imageUrls": "={{ $('Limit').item.json.URL }}",
         "options": {}
       },
       "type": "@n8n/n8n-nodes-langchain.googleGeminiTool",
       "typeVersion": 1,
       "position": [
-        768,
-        432
+        640,
+        320
       ],
       "id": "921be9e7-6255-468c-a415-7c27ad800412",
       "name": "Analyze an image in Google Gemini",
@@ -317,25 +280,38 @@
           "name": "Google Gemini(PaLM) Api account 6"
         }
       }
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "{\n\t\"description_en\": \"圖片描述\",\n\t\"description_zh\": \"圖片描述\",\n    \"tags\": [\"tag1\",\"tag2\"],\n    \"quality_score\": 0.85\n} "
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        816,
+        320
+      ],
+      "id": "d5464560-b020-42e8-8092-d42c3e2fd8e7",
+      "name": "Structured Output Parser"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -96,
+        160
+      ],
+      "id": "b45ef2e9-13f6-4330-99bd-e647c82130e0",
+      "name": "When clicking ‘Execute workflow’"
     }
   ],
   "connections": {
-    "Get row(s) in sheet": {
-      "main": [
-        [
-          {
-            "node": "Limit",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
     "Limit": {
       "main": [
         [
           {
-            "node": "Analyze an image",
+            "node": "AI Agent",
             "type": "main",
             "index": 0
           }
@@ -344,13 +320,7 @@
     },
     "Analyze an image": {
       "main": [
-        [
-          {
-            "node": "Code in JavaScript",
-            "type": "main",
-            "index": 0
-          }
-        ]
+        []
       ]
     },
     "Code in JavaScript": {
@@ -368,7 +338,7 @@
       "main": [
         [
           {
-            "node": "Get row(s) in sheet",
+            "node": "Limit",
             "type": "main",
             "index": 0
           }
@@ -401,6 +371,39 @@
           }
         ]
       ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Limit",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "settings": {
@@ -415,7 +418,7 @@
     "templateCredsSetupCompleted": true
   },
   "pinData": {},
-  "versionId": "82f83d32-d9d5-42a4-809e-41ed942d68da",
+  "versionId": "2529c6d2-8133-4c70-a890-e4f57b2fef18",
   "triggerCount": 1,
   "shared": [
     {
