@@ -6815,7 +6815,7 @@
             "projectId": "7goAssCGKgwfIAES",
             "user": {
               "createdAt": "2025-08-06T02:37:42.798Z",
-              "updatedAt": "2025-11-05T00:21:52.000Z",
+              "updatedAt": "2025-11-13T00:26:53.000Z",
               "id": "67944008-c997-4154-bbd0-26d022398054",
               "email": "peggy.lin@wanin.tw",
               "firstName": "peggy",
@@ -6841,7 +6841,7 @@
               },
               "disabled": false,
               "mfaEnabled": false,
-              "lastActiveAt": "2025-11-04",
+              "lastActiveAt": "2025-11-12",
               "isPending": false
             }
           }

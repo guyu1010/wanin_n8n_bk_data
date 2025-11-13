@@ -1,0 +1,1953 @@
+{
+  "createdAt": "2025-11-13T00:23:22.633Z",
+  "updatedAt": "2025-11-13T00:23:22.000Z",
+  "id": "WVxzvQg0zGvMjai8",
+  "name": "自動發文-優惠-方案四(RD提供)",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "content": "## 透過RSS取得threads文章\nhttps://rss.app/",
+        "height": 1760,
+        "width": 1024
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        400,
+        -976
+      ],
+      "typeVersion": 1,
+      "id": "36590058-5b03-4101-a66c-1fd5f8356a18",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "url": "https://rss.app/feeds/7baN3gQFYmgj8sgF.xml",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.rssFeedRead",
+      "typeVersion": 1.2,
+      "position": [
+        608,
+        240
+      ],
+      "id": "227fed34-3cbe-48bc-9de5-15cabde8ffd9",
+      "name": "RSS Read(省錢主婦｜蝦皮、超商、好市多、優惠)"
+    },
+    {
+      "parameters": {
+        "url": "https://rss.app/feeds/Zt6uKporNenBG7Pt.xml",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.rssFeedRead",
+      "typeVersion": 1.2,
+      "position": [
+        608,
+        -912
+      ],
+      "id": "92cc41fe-c251-4e51-a54a-099faa3c3c0e",
+      "name": "必勝客 台灣官方"
+    },
+    {
+      "parameters": {
+        "url": "https://rss.app/feeds/nEstR90TEte7AhBc.xml",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.rssFeedRead",
+      "typeVersion": 1.2,
+      "position": [
+        608,
+        -720
+      ],
+      "id": "4205b443-5f7f-4e17-ac9f-bf75ffc9c496",
+      "name": "7-ELEVEn Taiwan"
+    },
+    {
+      "parameters": {
+        "url": "https://rss.app/feeds/kNUsjSw3bJqXT0wh.xml",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.rssFeedRead",
+      "typeVersion": 1.2,
+      "position": [
+        608,
+        -528
+      ],
+      "id": "0ac14479-f532-45e9-934f-bfce4b9ad024",
+      "name": "全家便利商店"
+    },
+    {
+      "parameters": {
+        "url": "https://rss.app/feeds/qZXf4BgkzWRNLSng.xml",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.rssFeedRead",
+      "typeVersion": 1.2,
+      "position": [
+        608,
+        48
+      ],
+      "id": "30f5cf7a-1cab-41be-8347-8cfaeb4e926d",
+      "name": "麥當勞"
+    },
+    {
+      "parameters": {
+        "url": "https://rss.app/feeds/RWEIT3klsc7T9QFp.xml",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.rssFeedRead",
+      "typeVersion": 1.2,
+      "position": [
+        608,
+        -144
+      ],
+      "id": "a1249888-393c-4f93-8e84-733b05567992",
+      "name": "省錢加雞腿"
+    },
+    {
+      "parameters": {
+        "url": "https://rss.app/feeds/Pr0ZRrID8qmdIM77.xml",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.rssFeedRead",
+      "typeVersion": 1.2,
+      "position": [
+        608,
+        624
+      ],
+      "id": "8ec952d4-5ad3-4c2a-8a74-8783b3fa75b3",
+      "name": "foodpanda Taiwan"
+    },
+    {
+      "parameters": {
+        "url": "https://rss.app/feeds/HC35A4meBZtOETot.xml",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.rssFeedRead",
+      "typeVersion": 1.2,
+      "position": [
+        608,
+        432
+      ],
+      "id": "c2501ea4-9282-4b5f-9ab7-a2af16e0d1d6",
+      "name": "好康情報誌"
+    },
+    {
+      "parameters": {
+        "url": "https://rss.app/feeds/7baN3gQFYmgj8sgF.xml",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.rssFeedRead",
+      "typeVersion": 1.2,
+      "position": [
+        608,
+        -336
+      ],
+      "id": "c478fd3f-9225-424d-a386-2a320a7ed02c",
+      "name": "省錢主婦"
+    },
+    {
+      "parameters": {
+        "tableId": "threads_test_discount",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "creator",
+              "fieldValue": "={{ $json.creator }}"
+            },
+            {
+              "fieldId": "link",
+              "fieldValue": "={{ $json.link }}"
+            },
+            {
+              "fieldId": "content",
+              "fieldValue": "={{ $json.content }}"
+            },
+            {
+              "fieldId": "contentSnippet",
+              "fieldValue": "={{ $json.contentSnippet }}"
+            },
+            {
+              "fieldId": "isoDate",
+              "fieldValue": "={{ $json.isoDate }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        1136,
+        -224
+      ],
+      "id": "0e4f09a2-a92b-4238-8592-76019209bd71",
+      "name": "寫入supabase DB",
+      "credentials": {
+        "supabaseApi": {
+          "id": "fPPNqZ5ZGXEc0sc1",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.5-pro",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        864,
+        1392
+      ],
+      "id": "ac8b4e7b-9567-452a-af62-0690a283e4d7",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "rzGYcHVXRNXHjFPp",
+          "name": "Google Gemini(PaLM) Api account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "tableId": "threads_test_discount",
+        "returnAll": true
+      },
+      "type": "n8n-nodes-base.supabaseTool",
+      "typeVersion": 1,
+      "position": [
+        1088,
+        1408
+      ],
+      "id": "344ec4ed-48e2-458b-baad-26969d6f5e34",
+      "name": "Supabase DB_threads",
+      "credentials": {
+        "supabaseApi": {
+          "id": "fPPNqZ5ZGXEc0sc1",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const titleGatekeeperPrompt = `\n階段一：單一最佳品牌選題與深度生成\n\n【AI 系統角色與任務】\n角色：您是一位專門撰寫高流量、高 SEO 權重優惠文章的**內容總監**。您的核心任務是：從提供的所有原始優惠資料中，**嚴格篩選**並**僅選擇出單一最適合發布的「頭條品牌」**，然後將該品牌當天所有合格的優惠資訊，整合為一篇**專屬且完整的深度文章**。\n\n目標：在一次執行中，**僅產出一篇**針對單一品牌的最高價值文章 JSON 物件。\n\n**【輸入資料格式說明】**\n請**嚴格**參考以下欄位名稱進行篩選與寫作：\n1. 「內容/優惠詳情」：欄位名稱為 **'contentSnippet'**。\n2. 「發布日期」：欄位名稱為 **'isoDate'** (用於判斷發文時間)。\n3. 「發文者/品牌帳號」：欄位名稱為 **'creator'** (例如: '@familymart_tw')。\n\n【第一階段：資料篩選與判斷 — 絕對排除！】\n在開始寫作前，您必須嚴格遵循以下規則。任何違反規則的資料，必須立即排除，不予寫作。\n\n1. 品牌範圍：\n* **僅處理**以下 **10 大品牌**的資料：麥當勞, Foodpanda, 好市多, 高鐵, 星巴克, 全家, 全聯, Uber, 必勝客, 7-ELEVEN。請從 **'creator'** 欄位判斷品牌。資料若來自這 10 個品牌以外，請立即排除。\n2. 內容類型排除（吸引力篩選）：\n* 流量關鍵字：**必須**從 **'contentSnippet'** 中提取，包含以下任一實質優惠關鍵字：「優惠碼」、「折扣碼」、「買一送一」、「半價」、「降價」、「免費」、「最低 X 折」。\n* 強制排除：若優惠內容屬於「聯名商品」、「周邊商品加購」、「集點活動」、「抽獎」，且無任何實質折扣或優惠碼，則立即排除。\n3. 時效性判斷：\n* **時效性判定標準：** 只要 **'isoDate'** 在**今日起算 7 天內**，且內容符合「流量關鍵字」，即通過篩選。\n\n---\n\n## 【第二階段：單一最佳品牌選擇與深度寫作】\n\n**重要指令：**\n1.  **頭條品牌選擇：** 請比較所有通過第一階段篩選的優惠項目，您必須且只能選擇**單一**品牌作為本輪文章的主題。\n2.  **優先級：** 優先選擇**擁有最多**「買一送一」或「優惠碼」活動的品牌。如果多個品牌數量相同，選擇**最近發布日期 ('isoDate')** 的品牌。\n3.  **內容整合（關鍵！）：** 請將所有**通過篩選的，且與您選中品牌相關的所有優惠細節**，全部寫入同一篇文章中。\n\n---\n\n## 【嚴格格式規範與排除】\n\n**輸出格式強制要求：**\n* 內文 **'content'** 欄位**絕對禁止**輸出任何 HTML 標籤。這包括但不限於：<p>、<b>、<br>、<code>或任何其他 HTML 標籤。\n* **僅使用 Markdown 語法** (**粗體**、- 列點、\\n 換行) 來控制格式。\n* **嚴禁**輸出任何形式的 <br> 標籤。\n\n### 文章結構寫作規範 (使用 \\n 控制換行)\n\n1. 標題與導言（決定點擊率）\n標題規範：標題長度應在 18-25 個中文字之間。標題強制包含「品牌名稱」、「關鍵優惠字」和「精確時效性」。\n**導言結束後：** 必須以 **兩個換行符號 (\\n\\n)** 區隔下方的懶人包。\n\n2. **核心懶人包（快速解決痛點 - 內容與日期強化！）**\n**強制置頂：** 將**所有**與選定品牌相關的有效優惠資訊，以 **Markdown 粗體列點清單**的方式置於導言之後。\n**日期提取強化：** 在「活動日期」欄位，**必須盡全力從原始資料中提取出精確的日期**。如果原始資料中沒有任何日期線索，才允許寫「**詳見官方貼文**」。\n**清單結構範例：**\n請務必使用粗體字來強調關鍵資訊。在每一個項目（例如：優惠品項/代碼、內容、**活動日期**）之間使用 **一個換行符號 (\\n)** 來保持緊湊，項目結束後再使用 **兩個換行符號 (\\n\\n)** 區隔下一個區塊：\n**【本週 [品牌名稱] 必看優惠整理】**\\n\n- **優惠品項/代碼：** [精確的品項名稱或代碼]\\n\n  **內容：** [優惠內容/折扣額度]\\n\n  **活動日期：** [**必須**是精確日期或**詳見官方貼文**]\\n\\n\n\n3. 優惠詳細分類與說明（強化 SEO）\n結構化：將所有優惠資訊按類別分段落介紹。**嚴禁使用 H2 和 H3 標籤。**\n**標籤模擬與換行強制規定：**\n* 所有分類的大標題（例如：週末消暑首選），請使用**粗體字**，並在標題**上方與下方**各加上 **兩個換行符號 (\\n\\n)** 來模擬清晰的段落間隔。\n* **強制細節分段：** 針對每個優惠活動，必須使用以下**獨立標註與分段**，確保細節清晰可讀：\n    * 在段落內使用 **優惠條件：** [內容]\\n\\n\n    * 在段落內使用 **適用門市/對象：** [內容]\\n\\n\n    * 在段落內使用 **使用限制：** [內容]\\n\\n\n* 每個**詳細內容段落**之間（例如：從「週末消暑首選」到「手搖飲愛好者必看」），必須使用 **兩個換行符號 (\\n\\n)** 來區隔。\n詳細內容：必須針對該優惠，詳細說明「優惠條件」、「適用門市/對象」及「使用限制」。\n\n**請嚴格依照以下 JSON 結構回傳：**\n{\n  \"prompt\": \"<請直接塞入上面這段字串，不要改寫>\",\n  \"title\": 標題,\n  \"content\": 內文\n}\n`;\n\nreturn [\n  {\n    json: {\n      prompt: titleGatekeeperPrompt, // 固定塞入\n      // title 和 content 要交給 AI 生成，這裡先留空\n      title: \"\",\n      content: \"\",\n    },\n  },\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        640,
+        1168
+      ],
+      "id": "9b0aa2b4-8b06-40cf-8e25-ee67f12d366c",
+      "name": "撰寫prompt"
+    },
+    {
+      "parameters": {
+        "content": "## AI取資料來源寫文章",
+        "height": 608,
+        "width": 2000,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        384,
+        976
+      ],
+      "typeVersion": 1,
+      "id": "b59be3c2-e762-4f6a-a829-be40909f15fe",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "chatId": "7802109813",
+        "text": "=標題：{{ $json.title }}\n內文：{{ $json.content_html }}",
+        "additionalFields": {},
+        "path": "136345ac-d522-463b-859a-2b39f845ddf9"
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1968,
+        1040
+      ],
+      "id": "7683fde5-0daf-4218-97e3-200c9bba177b",
+      "name": "telegram通知",
+      "webhookId": "136345ac-d522-463b-859a-2b39f845ddf9",
+      "credentials": {
+        "telegramApi": {
+          "id": "ADiZMdkyDmUbDLRw",
+          "name": "Telegram account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "tableId": "discount_test_ALL",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "content",
+              "fieldValue": "={{ $json.content }}"
+            },
+            {
+              "fieldId": "prompt",
+              "fieldValue": "={{ $json.prompt }}"
+            },
+            {
+              "fieldId": "title",
+              "fieldValue": "={{ $json.title }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        1968,
+        1376
+      ],
+      "id": "3c41c61d-bb35-43fb-8279-378c2e07fdc9",
+      "name": "寫入supabase DB_ALL",
+      "credentials": {
+        "supabaseApi": {
+          "id": "fPPNqZ5ZGXEc0sc1",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "tableId": "discount_test_new",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "content",
+              "fieldValue": "={{ $json.content }}"
+            },
+            {
+              "fieldId": "prompt",
+              "fieldValue": "={{ $json.prompt }}"
+            },
+            {
+              "fieldId": "title",
+              "fieldValue": "={{ $json.title }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        1968,
+        1216
+      ],
+      "id": "883f4986-6499-474d-bcd5-249721c5e629",
+      "name": "寫入supabase DB_new",
+      "credentials": {
+        "supabaseApi": {
+          "id": "fPPNqZ5ZGXEc0sc1",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        3616,
+        1104
+      ],
+      "id": "3a217f75-85e4-42e1-ad07-cb0477a48666",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "jsCode": "return $items().map(item => {\n  // 先取 content 欄位\n  const content = item.json[\"content\"] || \"\";\n\n  // 將 Markdown 粗體與換行符號轉 HTML\n  const html = content\n    .replace(/\\\\n/g, \"<br>\")                       // 換行符號\n    .replace(/\\*\\*(.*?)\\*\\*/g, \"<strong>$1</strong>\"); // 粗體\n\n  return {\n    json: {\n      ...item.json, // 保留原本欄位\n      content_html: html, // 新增 HTML 欄位\n    }\n  };\n});\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1504,
+        1152
+      ],
+      "id": "0cb41c04-9f80-48ab-8767-42ffd1bbb65e",
+      "name": "內文_Markdown/換行符號轉成 HTML"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.prompt }}",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        928,
+        1168
+      ],
+      "id": "595fb66f-29c9-46c8-9ba9-32fa8ae0da29",
+      "name": "AI Agent(產內文)"
+    },
+    {
+      "parameters": {
+        "jsCode": "const inputText =$input.first().json.output ;\n\n// 找出 ```json ... ``` 區塊\nconst regex = /```json\\s*([\\s\\S]*?)```/;\nconst match = inputText.match(regex);\nif (!match) throw new Error(\"找不到 JSON 格式區塊\");\n\n// 取出內容\nconst jsonBlock = match[1];\n\n// 手動抓 title 與 content\n// 假設 title 以 \"title\": \" 開頭，content 以 \"content\": \" 開頭\nconst titleStart = jsonBlock.indexOf('\"title\": \"') + 10;\nconst titleEnd = jsonBlock.indexOf('\",', titleStart);\nconst contentStart = jsonBlock.indexOf('\"content\": \"') + 12;\nconst contentEnd = jsonBlock.lastIndexOf('\"'); // 最後一個雙引號\n\nconst title = jsonBlock.substring(titleStart, titleEnd);\nconst content = jsonBlock.substring(contentStart, contentEnd);\n\n// 輸出\nreturn [{\n  json: {\n    prompt: jsonBlock, // 原始 JSON 區塊，保留\n    title: title,\n    content: content\n  }\n}];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1264,
+        1168
+      ],
+      "id": "d48e8e11-6cf4-48eb-b5c3-be3e5a895ed4",
+      "name": "內文AI回傳轉json",
+      "retryOnFail": true,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.5-pro",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        1712,
+        1952
+      ],
+      "id": "c2bdafeb-4711-4214-b300-0fadc58acdd4",
+      "name": "Google Gemini Chat Model1",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "rzGYcHVXRNXHjFPp",
+          "name": "Google Gemini(PaLM) Api account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=原始文章：{{ $json.content }}\n驗證標的：{{ $json.content }}\n{{ $json.prompt }}\n",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        1712,
+        1776
+      ],
+      "id": "d8778cce-2eae-4667-a56f-efa102d2b4c9",
+      "name": "AI Agent(內文守門員)"
+    },
+    {
+      "parameters": {
+        "jsCode": "const inputText =$input.first().json.output ;\n\n// 找出 ```json ... ``` 區塊\nconst regex = /```json\\s*([\\s\\S]*?)```/;\nconst match = inputText.match(regex);\nif (!match) throw new Error(\"找不到 JSON 格式區塊\");\n\n// 取出內容\nconst jsonBlock = match[1];\n\n// 手動抓 title 與 content\n// 假設 title 以 \"title\": \" 開頭，content 以 \"content\": \" 開頭\nconst titleStart = jsonBlock.indexOf('\"title\": \"') + 10;\nconst titleEnd = jsonBlock.indexOf('\",', titleStart);\nconst contentStart = jsonBlock.indexOf('\"content\": \"') + 12;\nconst contentEnd = jsonBlock.lastIndexOf('\"'); // 最後一個雙引號\n\nconst title = jsonBlock.substring(titleStart, titleEnd);\nconst content = jsonBlock.substring(contentStart, contentEnd);\n\n// 輸出\nreturn [{\n  json: {\n    prompt: jsonBlock, // 原始 JSON 區塊，保留\n  }\n}];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2032,
+        1776
+      ],
+      "id": "e676e5ae-f80e-4dd0-85fe-adabc08eb115",
+      "name": "內文守門員AI回傳轉json",
+      "retryOnFail": true,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "// 取原始輸入\nconst inputRaw = $input.all()[0].json;\n\n// 取第一筆，然後解析 prompt 字串\nconst data = Array.isArray(inputRaw) ? inputRaw[0] : inputRaw;\n\nlet parsed;\ntry {\n  parsed = JSON.parse(data.prompt);\n} catch (e) {\n  parsed = {};\n}\n\n// 遞迴複製現有欄位\nfunction cloneExisting(obj) {\n  if (obj === null || typeof obj !== 'object') return obj;\n  if (Array.isArray(obj)) return obj.map(cloneExisting);\n  const res = {};\n  for (const key in obj) {\n    res[key] = cloneExisting(obj[key]);\n  }\n  return res;\n}\n\nreturn [\n  {\n    json: cloneExisting(parsed)\n  }\n];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2288,
+        1760
+      ],
+      "id": "0f63e41a-3c39-4a3c-bbc6-eb6c74b2a57f",
+      "name": "轉成平鋪格式物件"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "f66cb580-34bd-4e1a-9132-e581f94376cd",
+              "leftValue": "={{ $json.is_title_acceptable }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        2496,
+        1760
+      ],
+      "id": "bf610101-fd4f-4b18-abd3-93a1c5bc0efc",
+      "name": "本次訓練結果"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=內文：{{ $('內文_Markdown/換行符號轉成 HTML').item.json.content }}\n\n請依內文生成1個標題",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        2512,
+        2272
+      ],
+      "id": "08c6b631-33ff-4f20-9c51-6f22e96aa490",
+      "name": "AI Agent(標題生成)"
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.5-pro",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        2512,
+        2448
+      ],
+      "id": "70949028-0ffa-42ee-bf28-967843504afc",
+      "name": "Google Gemini Chat Model2",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "rzGYcHVXRNXHjFPp",
+          "name": "Google Gemini(PaLM) Api account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "## AI內文驗證",
+        "height": 384,
+        "width": 1408,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1408,
+        1696
+      ],
+      "typeVersion": 1,
+      "id": "4384db57-b996-499c-b384-3f057a134255",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "content": "## AI標題生成",
+        "height": 384,
+        "width": 1408,
+        "color": 2
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        2256,
+        2192
+      ],
+      "typeVersion": 1,
+      "id": "bdb89df8-2e27-4709-8bd2-a478704b8c71",
+      "name": "Sticky Note3"
+    },
+    {
+      "parameters": {
+        "jsCode": "const inputText =$input.first().json.output ;\n\n// 找出 ```json ... ``` 區塊\nconst regex = /```json\\s*([\\s\\S]*?)```/;\nconst match = inputText.match(regex);\nif (!match) throw new Error(\"找不到 JSON 格式區塊\");\n\n// 取出內容\nconst jsonBlock = match[1];\n\n// 手動抓 title 與 content\n// 假設 title 以 \"title\": \" 開頭，content 以 \"content\": \" 開頭\nconst titleStart = jsonBlock.indexOf('\"title\": \"') + 10;\nconst titleEnd = jsonBlock.indexOf('\",', titleStart);\nconst contentStart = jsonBlock.indexOf('\"content\": \"') + 12;\nconst contentEnd = jsonBlock.lastIndexOf('\"'); // 最後一個雙引號\n\nconst title = jsonBlock.substring(titleStart, titleEnd);\nconst content = jsonBlock.substring(contentStart, contentEnd);\n\n// 輸出\nreturn [{\n  json: {\n    prompt: jsonBlock, // 原始 JSON 區塊，保留\n    content: content\n  }\n}];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2928,
+        2272
+      ],
+      "id": "0ec423e1-10de-4080-9104-a33e7b0fbd98",
+      "name": "內文守門員AI回傳轉json1",
+      "retryOnFail": true,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "const dealReportContent = $input.first().json.deal_report_content || ''; // 原本的 deal report\n\n// 將原始文章內容取出，方便在 prompt 中使用\nconst originalArticleContent = $input.first().json.content || '';\n\n// 內容守門員 prompt（保留原 prompt，只是原始文章用 originalArticleContent）\nconst titleGatekeeperPrompt = `\n角色：你是我的內容(content)守門員，負責以新聞編輯的專業眼光，嚴格篩選與評估優惠文章標題。你的評價應同時兼顧資訊的正確性、語氣的吸引力，以及對讀者的警示作用。\n\n任務：我會給你一個需要驗證的優惠內容，以及原始文章內容。請你根據我的驗收內文，對內文進行客觀分析與評分，也請將原始文章內容一併納入驗收內文的評價中，確保評分、判斷皆反映原文主旨。\n\n驗收內文：\n\n資訊準確性與精確度 (Accuracy & Precision)\n\nis_info_correct (布林值): 判斷內文的核心資訊是否與原文一致。\n\n核心資訊：指受影響地區、優惠事件（如折扣）、具體影響或後果（如折扣金額、持續時間）。\n\n判斷原則：\n\n地區統稱與摘要：內文中的地區統稱只要與原文有合理重疊，且沒有產生誤導，即視為正確。\n\n允許摘要：內文可僅提及部分受影響地區，只要提及的地區資訊正確，就不應判定為錯誤。\n\n允許概括：內文使用「全台」、「指定門市」等詞描述原文中不同適用範圍，是合理且專業的寫法。\n\n語法與詞彙彈性：任何將「滿千折百」寫作「現折」、「現省」等說法，皆視為合理且正確。同樣，內文中的「瘋搶」、「激省」等生活化詞彙，只要與原文優惠合理對應，即視為正確。\n\n時間與區域連結：若原文提及優惠的持續性（如「連續3天以上」），則內文使用「限時3天」或「限時連日」等詞語，視為合理且正確。即使該持續性僅適用於原文的部分地區，內文仍可合理概括。\n\n嚴禁錯誤：\n內文嚴禁提及原文未受影響的地區，或憑空捏造原文沒有的資訊。\n核心資訊精準：內文若提及受影響的分店數量，該數量必須與原文精準匹配，不可自行增減或合併計算。\n\nreality_check_score (1-10分): 綜合評估內文資訊的真實性。\n\n內文格式與閱讀流暢度 (Format & Readability)\n\ncharacter_count (數字): 內文字數。\n\nis_format_ok (布林值): 判斷內文是否符合所有格式規範。\n\n規範包含：字數必須在15至20字之間；語句通順，無斷句問題；適當使用標點或空格進行區隔。\n\n衝擊與警示性判斷 (Impact & Urgency)\n\nimpact_match (布林值): 判斷內文的警示性是否與原文的衝擊等級「合理對應」。\n\n判斷原則：優惠強度與生活影響存在合理的因果關係，內文提及「獨家限搶」或「最後倒數」這類強烈語句，應視為與優惠內容的衝擊等級「合理對應」，而非誇大。\n\nengagement_potential (1-10分): 評估內文在不違背準確性前提下，能多大程度吸引讀者。\n\n評分原則：優先給予使用生活化比喻、強烈警示語氣的內文高分。\n\n綜合評分 (is_title_acceptable)\n\n同時滿足以下所有條件才為 true：\n\nis_info_correct 為 true\nis_format_ok 為 true\nreality_check_score >= 8\nimpact_match 為 true\nengagement_potential >= 8\n\n請嚴格依照以下 JSON 結構回傳：\n{\n  \"is_title_acceptable\": true 或 false,\n  \"is_title_acceptable_reason\": \"若 false，說明原因\",\n  \"deal_report\": {\n    \"report_content\": \"${dealReportContent}\"\n  },\n  \"title_analysis_results\": {\n    \"accuracy_and_precision\": {\n      \"is_info_correct\": true 或 false,\n      \"reality_check_score\": 1-10\n    },\n    \"format_and_readability\": {\n      \"character_count\": 內文字數,\n      \"is_format_ok\": true 或 false\n    },\n    \"impact_and_urgency\": {\n      \"impact_match\": true 或 false,\n      \"engagement_potential\": 1-10\n    }\n  },\n  \"original_article_content\": \"${originalArticleContent}\"\n}\n`;\n\nreturn [\n  {\n    json: {\n      content: originalArticleContent,  // 將 weather_report 改成 content\n      prompt: titleGatekeeperPrompt,\n      deal_report: {\n        report_content: dealReportContent\n      }\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1424,
+        1776
+      ],
+      "id": "218fc73f-6121-483e-8711-59ba1047ee98",
+      "name": "內文守門員prompt"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://dev88.newtalk.tw/newsapi/GetRewriteArticles",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{\n\"token\":\"61af9f535f694a56912a7ea660b01a7e8369b74cfac3199667dc82946f5d1e5c\"\n}",
+        "options": {
+          "allowUnauthorizedCerts": true
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        4304,
+        1104
+      ],
+      "id": "8792a9d3-eb59-4680-a724-396c906d941e",
+      "name": "取得ES資料"
+    },
+    {
+      "parameters": {
+        "jsCode": "const inputData = items[0].json.data;\n//const inputData = $input.first().json.data[0].data;\n\n// 篩選只保留 ArticleCategory = \"優惠折扣\" 的項目\nconst filteredData = inputData\n  .filter(article => article.ArticleCategory === \"優惠折扣\")\n  .map(article => article);\n\nreturn [\n  {\n    json: {\n      isSuccess: true,\n      errorCode: 0,\n      data: filteredData,\n      errorMessage: null\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        4560,
+        1104
+      ],
+      "id": "6c0c9247-42c9-4ad2-b0f5-50801770b4d0",
+      "name": "篩選ES資料"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://dev88.newtalk.tw/newsapi/insertRewriteNews",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"token\": \"{{ $json.token }}\",\n  \"rewriteNews\": {{ JSON.stringify($json.rewriteNews) }}\n}",
+        "options": {
+          "allowUnauthorizedCerts": true
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        6848,
+        2288
+      ],
+      "id": "81f7633a-4f6d-47ad-af9d-fa617b68e4ea",
+      "name": "儲存到新頭殼DB"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.articlesForAI.articles }}",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "={{ $json.aiPrompt }}"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        4912,
+        1104
+      ],
+      "id": "560d786d-5b74-4d82-a68a-51add789801c",
+      "name": "挑選文章AI"
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.5-pro",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        4912,
+        1296
+      ],
+      "id": "007ec7db-0854-4de9-b088-752f86464d42",
+      "name": "Google Gemini Chat Model4",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "rzGYcHVXRNXHjFPp",
+          "name": "Google Gemini(PaLM) Api account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const titleGatekeeperPrompt = `\n🎯【AI 系統角色與任務】\n角色定位：您是一位專精於撰寫高流量、高 SEO 權重優惠文章的 **內容總監**。  \n任務目標：根據提供的原始文章資訊，**改寫並生成一篇專屬且完整的深度文章**，並在一次執行中 **僅輸出一篇** 對應單一品牌的最高價值 JSON 物件。\n\n---\n\n## 【輸入資料格式】\n請嚴格依照以下欄位名稱理解輸入內容：\n1. 內容/優惠詳情：**ArticleTile**\n2. 發布時間：**PublishTime**（用於判斷時效性）\n3. 發文者/品牌帳號：**ArticleAuthor**（例如：@familymart_tw）\n\n---\n\n## 【輸出格式與內容規範】\n\n**⚠️ 輸出格式強制規定：**\n* 'content' 欄位禁止出現任何 HTML 標籤（如 <p>、<b>、<br>、<code> 等）。\n* 僅可使用 **Markdown 語法**（**粗體**、- 列點、\\\\n 換行）。\n* 嚴禁輸出任何 <br>、</br>、HTML Entities 或其他非 Markdown 格式字元。\n\n---\n\n### 🧱【文章結構規範】（以 \\\\n 控制換行）\n\n#### 一、標題與導言（決定點擊率）\n* 標題長度：**18~25 個中文字**\n* 必須包含：\n  - 品牌名稱\n  - 關鍵優惠字\n  - 精確時效性\n* 導言結束後，**以兩個換行符號 (\\\\n\\\\n)** 區隔下方的懶人包。\n\n---\n\n#### 二、核心懶人包（快速解決痛點）\n* 將與該品牌相關的有效優惠，以 **Markdown 粗體列點清單** 方式置於導言之後。\n* 日期提取原則：\n  - 儘可能從原文提取精確日期；\n  - 若無日期線索，請填「**詳見官方貼文**」。\n\n📘 清單格式範例：\n\\\\n\n**【本週 [品牌名稱] 必看優惠整理】**\\\\n\n- **優惠品項/代碼：** [精確品項或代碼]\\\\n\n  **內容：** [優惠內容/折扣額度]\\\\n\n  **活動日期：** [精確日期或詳見官方貼文]\\\\n\\\\n\n\n---\n\n#### 三、優惠詳細分類與說明（強化 SEO）\n* 請以段落分類方式撰寫（不可使用 H2/H3 標籤）\n* 每個分類標題使用 **粗體字**，上下各留 **兩個換行符號 (\\\\n\\\\n)**。\n* 每個優惠段落中，必須包含以下三項：\n  - **優惠條件：** [內容]\\\\n\\\\n\n  - **適用門市/對象：** [內容]\\\\n\\\\n\n  - **使用限制：** [內容]\\\\n\\\\n\n\n段落之間請以 **兩個換行符號 (\\\\n\\\\n)** 區隔。\n\n若原文缺乏必要資訊，請明確寫「無法判斷」或「詳見官方貼文」，不要自行生成或臆測內容。\n\n---\n\n## 【最終輸出 JSON 結構】\n請最終僅輸出以下 JSON 物件：\n\n{\n  \"title\": \"您生成的標題\",\n  \"content\": \"您生成的 Markdown 文章內容\"\n}\n`;\n\nreturn [\n  {\n    json: {\n      prompt: titleGatekeeperPrompt\n    },\n  },\n];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        5408,
+        1248
+      ],
+      "id": "9f7f0474-5d9a-42e4-ad7c-ce9c17184758",
+      "name": "文章生成prompt"
+    },
+    {
+      "parameters": {
+        "jsCode": "// 取得 AI 挑選的結果\nlet aiOutput = $input.first().json.output;\n\n// 容錯處理:如果是 markdown 包裹的 JSON,先提取出來\nlet aiDecision;\nif (typeof aiOutput === 'string') {\n  const jsonMatch = aiOutput.match(/```json\\s*([\\s\\S]*?)\\s*```/);\n  if (jsonMatch && jsonMatch[1]) {\n    aiDecision = JSON.parse(jsonMatch[1]);\n  } else {\n    aiDecision = JSON.parse(aiOutput);\n  }\n} else {\n  aiDecision = aiOutput;\n}\n\nconst selectedIndex = aiDecision.selectedIndex;\n\n// 取得原始文章列表\nlet esDataItems = $node[\"篩選ES資料\"].json;\n\n// 如果是包在 data 屬性裡\nif (esDataItems.data) {\n  esDataItems = esDataItems.data;\n}\n\n// 如果本身不是陣列,可能是單一物件\nif (!Array.isArray(esDataItems)) {\n  esDataItems = [esDataItems];\n}\n\n// 根據序號取得文章 (序號從 1 開始,陣列從 0 開始)\nconst selectedArticle = esDataItems[selectedIndex - 1];\n\n// 如果找不到文章,拋出錯誤\nif (!selectedArticle) {\n  throw new Error(`找不到序號 ${selectedIndex} 的文章,總共有 ${esDataItems.length} 篇`);\n}\n\nreturn {\n  json: {\n    IdentityKey: selectedArticle.IdentityKey,\n    ArticleUrl: selectedArticle.ArticleUrl,\n    ArticleTitle: selectedArticle.ArticleTitle,\n    ArticleContent: selectedArticle.ArticleContent,\n    CreateTime: selectedArticle.CreateTime,\n    UpdateTime: selectedArticle.UpdateTime,\n    PublishTime: selectedArticle.PublishTime,\n    ArticleCategory: selectedArticle.ArticleCategory,\n    ArticleSubcategory: selectedArticle.ArticleSubcategory,\n    ArticleSource: selectedArticle.ArticleSource,\n    ArticleTags: selectedArticle.ArticleTags,\n    ArticleAuthor: selectedArticle.ArticleAuthor,\n    ArticleImgUrl: selectedArticle.ArticleImgUrl,\n    aiReason: aiDecision.selectionReason\n  }\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        5216,
+        1104
+      ],
+      "id": "c86af366-7ff4-4e79-88c2-7a9dee2164a8",
+      "name": "整理挑選中的文章",
+      "retryOnFail": true
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=原始文章：{{ $node.整理挑選中的文章.data.ArticleContent }}\n\n待驗證標題：{{ $node.轉成HTML.json.title }}\n\n待驗證文章：{{ $node.轉成HTML.json.html }}\n\n\n",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "={{ $json.prompt }}"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        5600,
+        1728
+      ],
+      "id": "405b659d-10bc-4c13-9641-c8bc150c57ea",
+      "name": "品質守門員"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $node.整理挑選中的文章.json }}",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "={{ $json.prompt }}"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        5584,
+        1248
+      ],
+      "id": "4b257ebb-a4d7-45b2-9ee5-6b50f6e05807",
+      "name": "文章生成"
+    },
+    {
+      "parameters": {
+        "jsCode": "const titleGatekeeperPrompt = `\n你是新聞文章的品質守門員，負責以新聞編輯的專業眼光，嚴格篩選與評估優惠文章的標題與內文。\n\n任務：\n我會給你三個資料：\n1. 原始文章內容\n2. 待驗證標題\n3. 待驗證HTML內文\n\n請你依據原始文章的真實內容，判斷標題與內文是否合理、準確且無誤導。\n\n驗收準則如下：\n\n1️⃣ 標題驗收 (Title Check)\n- 是否忠實反映原文主旨。\n- 是否未誇大、未失焦。\n- 是否格式正常（語句通順、用字合宜）。\n- 字數在15~30字\n\n2️⃣ 內文驗收 (Content Check)\n- 是否忠於原文資訊（地點、時間、優惠內容皆正確）。\n- 是否沒有捏造原文沒有的資訊。\n- 是否語句自然通順、可讀性良好。\n- 格式為正確的HTML\n\n請僅依照以下 JSON 結構回傳結果（不要多餘說明文字）：\n\n{\n  \"is_title_acceptable\": true 或 false,\n  \"is_title_acceptable_reason\": \"若 false，說明原因\",\n  \"is_content_acceptable\": true 或 false,\n  \"is_content_acceptable_reason\": \"若 false，說明原因\"\n}\n`;\n\n// 每個 item 都輸出一個 prompt 給下一節點（例如 OpenAI）\nreturn $input.all().map(item => ({\n  json: {\n    prompt: titleGatekeeperPrompt\n  }\n}));\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        5440,
+        1728
+      ],
+      "id": "49735fe0-79a9-4133-b0b0-0dff1b267940",
+      "name": "品質守門員prompt"
+    },
+    {
+      "parameters": {
+        "jsCode": "// ============= 步驟1：從輸入資料中取得所有文章 =============\nconst esDataItems = $input.first().json.data;\n\nif (!esDataItems || esDataItems.length === 0) {\n  throw new Error('未取得任何文章資料，請檢查前置節點或輸入格式');\n}\n\n// ============= 步驟2：為每篇文章加上序號（根據實際欄位結構）=============\nconst articlesWithIndex = esDataItems.map((article, index) => {\n\n  // 根據你的實際欄位提取資訊\n  const identityKey = article.IdentityKey || '';\n  const title = article.ArticleTitle || '';\n  const content = article.ArticleContent || '';\n  const publishTime = article.PublishTime || article.CreateTime || '';\n  const category = article.ArticleCategory || '';\n  const url = article.ArticleUrl || '';\n  const author = article.ArticleAuthor || '';\n  \n  const contentSnippet = content\n    .replace(/\\n/g, ' ')\n    .replace(/\\s+/g, ' ')\n    .trim();\n  \n  return {\n    index: index + 1,\n    title: title || '[無標題]',\n    contentSnippet: contentSnippet || '[無內容]',\n    publishTime: publishTime,\n    category: category,\n    author: author,\n    url: url,\n    IdentityKey: identityKey,\n    ArticleContent: content,\n    CreateTime: article.CreateTime || '',\n    UpdateTime: article.UpdateTime || '',\n    ArticleSource: article.ArticleSource || ''\n  };\n});\n\n// ============= 步驟3：生成 AI 提示詞 =============\nconst titleGatekeeperPrompt = `\n您是一位文章挑選專家。您的核心任務是：從提供的所有優惠資料中，**嚴格篩選**並**僅選擇出單一最適合發布的「頭條品牌」**。\n\n**【重要：文章識別方式】**\n每篇文章都有一個 **'index'** 欄位（序號，例如 1, 2, 3, ...）。\n請務必記住文章的 **index 序號**，不要試圖記住或複製 IdentityKey。\n\n**【輸入資料格式說明】**\n您將收到一個 JSON 陣列，每個物件包含：\n- index: 文章序號（1 到 ${articlesWithIndex.length}）\n- title: 文章標題\n- contentSnippet: 內容摘要\n- publishTime: 發布日期\n- category: 文章分類\n- author: 作者/品牌\n- url: 文章 URL\n\n**【篩選規則】**\n1. **品牌範圍**：優先處理以下 10 大品牌：\n   - 麥當勞 (McDonald's, mcdonaldstw)\n   - Foodpanda\n   - 好市多 (Costco)\n   - 高鐵 (THSR)\n   - 星巴克 (Starbucks, starbuckstw)\n   - 全家 (FamilyMart, familymart_tw)\n   - 全聯 (PX Mart, pxmartofficial)\n   - Uber\n   - 必勝客 (Pizza Hut, pizzahuttw)\n   - 7-ELEVEN (7eleven_tw)\n\n2. **時效性判斷**：\n   - 優先選擇 publishTime 在**今日起算 7 天內**的文章\n   - 同等條件下，選擇最新發布的內容\n\n3. **優惠吸引力**：\n   - 優先選擇 contentSnippet 或 title 中包含「優惠」、「折扣」、「免費」、「買一送一」、「套餐」等關鍵字\n   - 優先選擇具有時限性或限量性的優惠\n\n**【決策邏輯】**\n1. 先篩選符合時效性的文章（7 天內）\n2. 再從符合的文章中篩選出 10 大品牌\n3. 最後從符合的品牌文章中，選擇最具吸引力和最新的優惠\n\n**【回傳格式（必須遵守）】**\n請以 JSON 格式回傳以下資訊：\n\\`\\`\\`json\n{\n  \"selectedIndex\": 選中文章的序號（純數字，例如 1, 2, 3），\n  \"selectedTitle\": \"選中文章的 title\",\n  \"selectedAuthor\": \"選中文章的 author\",\n  \"selectedPublishTime\": \"選中文章的 publishTime\",\n  \"selectionReason\": \"簡述選擇原因（20字以內）\"\n}\n\\`\\`\\`\n\n**重要提醒：**\n- 只回傳序號（selectedIndex），不要回傳 IdentityKey\n- selectedIndex 必須是實際存在的序號（1 到 ${articlesWithIndex.length} 之間）\n- 必須使用純數字作為 selectedIndex，例如 1 或 5，不要使用字符串\n- 如果無法找到符合條件的文章，回傳 {\"selectedIndex\": null, \"selectionReason\": \"無符合條件的文章\"}\n- 回傳的 JSON 必須有效，不要包含任何解釋文字或 markdown 格式外的內容\n`;\n\n// ============= 步驟4：組織輸出結果 =============\nreturn {\n  json: {\n    // 提供給 AI 的提示詞\n    aiPrompt: titleGatekeeperPrompt,\n \n    articlesForAI: {\n      totalCount: articlesWithIndex.length,\n      articles: articlesWithIndex.map(article => ({\n        index: article.index,\n        contentSnippet: article.contentSnippet,\n        publishTime: article.publishTime,\n        category: article.category,\n        author: article.author\n      }))\n    },\n    \n    // 用於後續 Code 節點查詢的完整對應表（序號 -> 完整資料）\n    articleIndexMap: articlesWithIndex.reduce((map, article) => {\n      map[article.index] = {\n        IdentityKey: article.IdentityKey,\n        author: article.author,\n        publishTime: article.publishTime,\n        url: article.url,\n        ArticleContent: article.ArticleContent,\n        CreateTime: article.CreateTime,\n        UpdateTime: article.UpdateTime,\n        ArticleSource: article.ArticleSource,\n        category: article.category\n      };\n      return map;\n    }, {}),\n    \n    // 完整的文章資料（供除錯和備查用）\n    fullArticlesData: articlesWithIndex,\n   \n    metadata: {\n      totalArticles: articlesWithIndex.length,\n      preparationTime: new Date().toISOString(),\n      nodeVersion: '3.0'\n    }\n  }\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        4736,
+        1104
+      ],
+      "id": "062d32e8-14b9-458d-a5a2-6a7c4fcb2c39",
+      "name": "挑選文章prompt"
+    },
+    {
+      "parameters": {
+        "jsCode": "const token = \"61af9f535f694a56912a7ea660b01a7e8369b74cfac3199667dc82946f5d1e5c\";\n\nconst promotion_title = $node.轉成HTML.json.title;\nconst htmlContent = $node.轉成HTML.json.html;\n\n// 組合新的文章物件\nconst rewriteArticle = {\n    IdentityKey: $node.整理挑選中的文章.json.IdentityKey,\n    ArticleUrl: $node.整理挑選中的文章.json.ArticleUrl,\n    ArticleTitle: promotion_title,  // 使用新的標題\n    CreateTime: $node.整理挑選中的文章.json.CreateTime,\n    UpdateTime: $node.整理挑選中的文章.json.UpdateTime,\n    PublishTime: $node.整理挑選中的文章.json.PublishTime,\n    ArticleCategory: $node.整理挑選中的文章.json.ArticleCategory,\n    ArticleSubcategory: $node.整理挑選中的文章.json.ArticleCategory,\n    ArticleSource: $node.整理挑選中的文章.json.ArticleSource,\n    ArticleContent: htmlContent,  // 使用新的內容\n    ArticleDescription: \"優惠資訊\",\n    ArticleTags: \"優惠資訊\",\n    ArticleAuthor: $node.整理挑選中的文章.json.ArticleAuthor,\n    ArticleImgUrl: $node.整理挑選中的文章.json.ArticleImgUrl\n};\n\n// 回傳最終結構\nreturn {\n    token: token,\n    rewriteNews: [rewriteArticle]\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        6320,
+        2304
+      ],
+      "id": "4e4edd23-267b-4de5-9c5a-6dbe5ac26cba",
+      "name": "整理回寫格式"
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "{\n  \"selectedIndex\": 1,\n  \"selectedTitle\": \"選中文章title\",\n  \"selectedAuthor\": \"選中文章的author\",\n  \"selectedPublishTime\": \"選中文章的 publishTime\",\n  \"selectionReason\": \"簡述選擇原因\"\n}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        5056,
+        1360
+      ],
+      "id": "46bb3409-34cc-4443-b95f-ed3558ba9972",
+      "name": "Output Parser (驗證)",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "{\n  \"title\": \"您生成的標題\",\n  \"content\": \"您生成的 Markdown 文章內容\"\n}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        5728,
+        1456
+      ],
+      "id": "7b09d98d-3355-45c1-8573-0d1f9d0300fa",
+      "name": "Structured Output Parser"
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "{\n  \"is_title_acceptable\": true,\n  \"is_title_acceptable_reason\": \"若false，說明原因\",\n  \"is_content_acceptable\": true,\n  \"is_content_acceptable_reason\": \"若false，說明原因\"\n}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        5744,
+        1952
+      ],
+      "id": "fb279606-e2c2-461c-a4e5-1e290bcdb376",
+      "name": "Structured Output Parser1"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "f66cb580-34bd-4e1a-9132-e581f94376cd",
+              "leftValue": "={{ $json.rewriteNews[0].ArticleContent }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "5568448c-5cdf-4d33-8e94-51914aac7f19",
+              "leftValue": "={{ $json.rewriteNews[0].ArticleTitle }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "f8e7bb0f-0a09-4746-974e-8704b71f7c8a",
+              "leftValue": "={{ $json.rewriteNews[0].IdentityKey }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "44a9bb5c-7699-422d-8420-7585b7aa0990",
+              "leftValue": "={{ $json.rewriteNews[0].ArticleUrl }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "062bf558-bc3d-4c2b-b1c9-f0266270539b",
+              "leftValue": "={{ $json.rewriteNews[0].ArticleCategory }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "74e80024-0f62-4682-ad0e-96ded2ce5430",
+              "leftValue": "={{ $json.rewriteNews[0].ArticleAuthor }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        6560,
+        2304
+      ],
+      "id": "b66a000d-8934-4633-8e3c-4ef5990bb9ad",
+      "name": "最終檢查所有欄位"
+    },
+    {
+      "parameters": {
+        "jsCode": "// 取得輸入資料\nconst inputData = $input.all();\n\n// Markdown 轉 HTML 的函式\nfunction contentToHtml(markdown) {\n  if (!markdown) return '';\n  \n  let html = markdown;\n  \n  // 處理標題 (## 和 **)\n  html = html.replace(/\\*\\*\\【(.*?)\\】\\*\\*/g, '<h2>$1</h2>');\n  html = html.replace(/\\*\\*(.*?)\\*\\*/g, '<strong>$1</strong>');\n  \n  // 處理項目符號列表\n  html = html.replace(/^- \\*\\*(.*?):\\*\\* (.*?)$/gm, '<li><strong>$1:</strong> $2</li>');\n  html = html.replace(/^- (.*?)$/gm, '<li>$1</li>');\n  \n  // 將連續的 <li> 包在 <ul> 中\n  html = html.replace(/(<li>.*?<\\/li>\\n?)+/gs, match => {\n    return '<ul>\\n' + match + '</ul>\\n';\n  });\n  \n  // 處理段落(將連續的文字行包在 <p> 中)\n  const lines = html.split('\\n');\n  let result = [];\n  let paragraphBuffer = [];\n  \n  for (let line of lines) {\n    const trimmedLine = line.trim();\n    \n    // 如果是 HTML 標籤開頭,直接加入結果\n    if (trimmedLine.startsWith('<')) {\n      // 先清空段落緩衝\n      if (paragraphBuffer.length > 0) {\n        result.push('<p>' + paragraphBuffer.join(' ') + '</p>');\n        paragraphBuffer = [];\n      }\n      result.push(line);\n    } \n    // 如果是空行,清空段落緩衝\n    else if (trimmedLine === '') {\n      if (paragraphBuffer.length > 0) {\n        result.push('<p>' + paragraphBuffer.join(' ') + '</p>');\n        paragraphBuffer = [];\n      }\n    }\n    // 一般文字加入段落緩衝\n    else {\n      paragraphBuffer.push(trimmedLine);\n    }\n  }\n  \n  // 處理最後剩餘的段落\n  if (paragraphBuffer.length > 0) {\n    result.push('<p>' + paragraphBuffer.join(' ') + '</p>');\n  }\n  \n  return result.join('\\n');\n}\n\n// 處理所有輸入項目\nconst outputData = inputData.map(item => {\n  const data = item.json.output || item.json;\n  \n  return {\n    json: {\n      title: data.title,\n      content: data.content,\n      html: contentToHtml(data.content)\n    }\n  };\n});\n\nreturn outputData;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        5888,
+        1248
+      ],
+      "id": "f9d0e372-ace4-4001-93ed-3edb34183135",
+      "name": "轉成HTML",
+      "retryOnFail": false,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "f66cb580-34bd-4e1a-9132-e581f94376cd",
+              "leftValue": "={{ $json.output.is_title_acceptable }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "6c825718-cf1b-49e6-a2b8-0ea39a0ac9b0",
+              "leftValue": "={{ $json.output.is_content_acceptable }}",
+              "rightValue": "=",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        6016,
+        1728
+      ],
+      "id": "c572b390-3e64-4057-bec3-45e4b3a36e65",
+      "name": "品質檢驗結果"
+    },
+    {
+      "parameters": {
+        "chatId": "7802109813",
+        "text": "=標題：{{ $json.title }}\n內文：{{ $json.content_html }}",
+        "additionalFields": {},
+        "path": "e0770dbb-a943-42ba-b8b4-0b629f3b8aee"
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        7232,
+        1248
+      ],
+      "id": "8455eaf1-ed9d-451c-bc5f-d16f854f8484",
+      "name": "telegram失敗通知",
+      "webhookId": "e0770dbb-a943-42ba-b8b4-0b629f3b8aee",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "chatId": "7802109813",
+        "text": "=標題：{{ $json.title }}\n內文：{{ $json.content_html }}",
+        "additionalFields": {},
+        "path": "2be8bdfa-da38-4200-99e6-de25e1c787eb"
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        7232,
+        2288
+      ],
+      "id": "13cb51ec-caab-435b-8ba7-c4f4c2246597",
+      "name": "telegram成功通知",
+      "webhookId": "2be8bdfa-da38-4200-99e6-de25e1c787eb",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "756e3af4-7478-4636-a04d-b6feaf491895",
+              "name": "data",
+              "value": "=[   {     \"isSuccess\": true,     \"errorCode\": 0,     \"data\": [       {         \"IdentityKey\": \"7dafc917-f94d-4be3-a7ba-f7802f0a407a\",         \"ArticleUrl\": \"https://www.threads.net/@mcdonaldstw/post/DOxJmt7EybT\",         \"ArticleTitle\": \"\",         \"CreateTime\": \"2025-10-23T14:55:07+08:00\",         \"UpdateTime\": \"2025-10-23T14:55:07+08:00\",         \"PublishTime\": \"2025-09-19T11:00:56+08:00\",         \"ArticleCategory\": \"優惠折扣\",         \"ArticleSubcategory\": \"\",         \"ArticleSource\": \"Threads\",         \"ArticleContent\": \"活潑可愛的角色一一登場，只見小朋友們都全神貫注地盯著，不想錯過任何一個精彩片刻！\\n\\n過程中小朋友們熱情的幫忙貼上零件，讓紅色小跑車重拾活力～\\n來到舞動時間與有獎徵答時間🎁大家熱情地跟著節奏跳起來，更踴躍舉手搶答拿小禮物！讓週末午後的麥當勞，充滿歡樂笑聲❤️\\n\\n精彩、好玩的故事就在麥麥樂天團故事秀！小朋友、大朋友們，我們下次見👋🏻\",         \"ArticleDescription\": \"\",         \"ArticleTags\": \"\",         \"ArticleAuthor\": \"mcdonaldstw\",         \"ArticleImgUrl\": \"\"       },       {         \"IdentityKey\": \"c2bf9313-797a-4728-8354-214f79cc8805\",         \"ArticleUrl\": \"https://www.threads.net/@mcdonaldstw/post/DOxJmKUk1tu\",         \"ArticleTitle\": \"\",         \"CreateTime\": \"2025-10-23T14:55:04+08:00\",         \"UpdateTime\": \"2025-10-23T14:55:04+08:00\",         \"PublishTime\": \"2025-09-19T11:00:51+08:00\",         \"ArticleCategory\": \"優惠折扣\",         \"ArticleSubcategory\": \"\",         \"ArticleSource\": \"Threads\",         \"ArticleContent\": \"小朋友想聽精彩的故事和遊戲？\\n交給麥麥樂天團故事秀！\\n\\n這次大哥哥、大姐姐要帶來的是\\n關於互相幫助與找回自信的——\\n《紅色小跑車》冒險故事🚗\\n\\n快來看看當天記錄下的精彩瞬間\\n一起回味快樂的時光吧📸✨\\n\\n#大麥客日誌\",         \"ArticleDescription\": \"\",         \"ArticleTags\": \"\",         \"ArticleAuthor\": \"mcdonaldstw\",         \"ArticleImgUrl\": [           \"https://instagram.fkhh1-1.fna.fbcdn.net/v/t51.2885-15/551067223_17894996358300350_9000049039573670504_n.jpg?stp=dst-jpg_e35_p1080x1080_tt6&efg=eyJ2ZW5jb2RlX3RhZyI6InRocmVhZHMuQ0FST1VTRUxfSVRFTS5pbWFnZV91cmxnZW4uMTIwMHgxNTAwLnNkci5mODI3ODcuZGVmYXVsdF9pbWFnZS5jMiJ9&_nc_ht=instagram.fkhh1-1.fna.fbcdn.net&_nc_cat=102&_nc_oc=Q6cZ2QFKVPq3N8tvOx-67tpjJPse7KV_0KY2Zx51L96zDFXCl2Ken5fXEoHgtZSuC80Jzbo&_nc_ohc=LbumiNbrQG8Q7kNvwGWGkWS&_nc_gid=YkHjuKKO-TiMk0QyvW_GXA&edm=APs17CUBAAAA&ccb=7-5&ig_cache_key=MzcyNDgwMDU2NjMxODI3OTMwNw%3D%3D.3-ccb7-5&oh=00_AfepOqAIJhHe5_VHGIgIPf6DTN4YZP8tcYIqvhlQj4pUug&oe=68FF997E&_nc_sid=10d13b\",           \"https://instagram.fkhh1-1.fna.fbcdn.net/v/t51.2885-15/551072006_17894996337300350_7715747804753751246_n.jpg?stp=dst-jpg_e35_p1080x1080_tt6&efg=eyJ2ZW5jb2RlX3RhZyI6InRocmVhZHMuQ0FST1VTRUxfSVRFTS5pbWFnZV91cmxnZW4uMTIwMHgxNTAwLnNkci5mODI3ODcuZGVmYXVsdF9pbWFnZS5jMiJ9&_nc_ht=instagram.fkhh1-1.fna.fbcdn.net&_nc_cat=102&_nc_oc=Q6cZ2QFKVPq3N8tvOx-67tpjJPse7KV_0KY2Zx51L96zDFXCl2Ken5fXEoHgtZSuC80Jzbo&_nc_ohc=-U3yMNQfV3EQ7kNvwEdATj0&_nc_gid=YkHjuKKO-TiMk0QyvW_GXA&edm=APs17CUBAAAA&ccb=7-5&ig_cache_key=MzcyNDgwMDU2NjY4NzQxMTQ0Ng%3D%3D.3-ccb7-5&oh=00_AfdeQ_OWsLseagdHlvoNgYpKURbOPZY_scoVfXoM3bk-fw&oe=68FFA2FF&_nc_sid=10d13b\",           \"https://instagram.fkhh1-1.fna.fbcdn.net/v/t51.2885-15/550600611_17894996361300350_1350957965668442697_n.jpg?stp=dst-jpg_e35_p1080x1080_tt6&efg=eyJ2ZW5jb2RlX3RhZyI6InRocmVhZHMuQ0FST1VTRUxfSVRFTS5pbWFnZV91cmxnZW4uMTIwMHgxNTAwLnNkci5mODI3ODcuZGVmYXVsdF9pbWFnZS5jMiJ9&_nc_ht=instagram.fkhh1-1.fna.fbcdn.net&_nc_cat=102&_nc_oc=Q6cZ2QFKVPq3N8tvOx-67tpjJPse7KV_0KY2Zx51L96zDFXCl2Ken5fXEoHgtZSuC80Jzbo&_nc_ohc=p2B7yh0w680Q7kNvwER4aHt&_nc_gid=YkHjuKKO-TiMk0QyvW_GXA&edm=APs17CUBAAAA&ccb=7-5&ig_cache_key=MzcyNDgwMDU2NjMwMTUxMjc0Nw%3D%3D.3-ccb7-5&oh=00_AfdrgniaEVfxp4GKgWK1P8WgvbV_zU-24nILV2wNn0-Ycg&oe=68FFA24B&_nc_sid=10d13b\",           \"https://instagram.fkhh1-1.fna.fbcdn.net/v/t51.2885-15/551055562_17894996340300350_7696019697340966231_n.jpg?stp=dst-jpg_e35_p1080x1080_tt6&efg=eyJ2ZW5jb2RlX3RhZyI6InRocmVhZHMuQ0FST1VTRUxfSVRFTS5pbWFnZV91cmxnZW4uMTIwMHgxNTAwLnNkci5mODI3ODcuZGVmYXVsdF9pbWFnZS5jMiJ9&_nc_ht=instagram.fkhh1-1.fna.fbcdn.net&_nc_cat=102&_nc_oc=Q6cZ2QFKVPq3N8tvOx-67tpjJPse7KV_0KY2Zx51L96zDFXCl2Ken5fXEoHgtZSuC80Jzbo&_nc_ohc=hcj0Dz4bbnMQ7kNvwFPRxaS&_nc_gid=YkHjuKKO-TiMk0QyvW_GXA&edm=APs17CUBAAAA&ccb=7-5&ig_cache_key=MzcyNDgwMDU2NjQ1MjUyNzg0OA%3D%3D.3-ccb7-5&oh=00_AfdqqwAusYutzP3b22IhDymIvqMul4dPLm0ceIKB58DriQ&oe=68FFAC23&_nc_sid=10d13b\",           \"https://instagram.fkhh1-1.fna.fbcdn.net/v/t51.2885-15/551054350_17894996352300350_6022975101769282382_n.jpg?stp=dst-jpg_e35_p1080x1080_tt6&efg=eyJ2ZW5jb2RlX3RhZyI6InRocmVhZHMuQ0FST1VTRUxfSVRFTS5pbWFnZV91cmxnZW4uMTIwMHgxNTAwLnNkci5mODI3ODcuZGVmYXVsdF9pbWFnZS5jMiJ9&_nc_ht=instagram.fkhh1-1.fna.fbcdn.net&_nc_cat=102&_nc_oc=Q6cZ2QFKVPq3N8tvOx-67tpjJPse7KV_0KY2Zx51L96zDFXCl2Ken5fXEoHgtZSuC80Jzbo&_nc_ohc=q5VgLQP5e_oQ7kNvwHMOAuP&_nc_gid=YkHjuKKO-TiMk0QyvW_GXA&edm=APs17CUBAAAA&ccb=7-5&ig_cache_key=MzcyNDgwMDU2NjU5NTE0MTA3NQ%3D%3D.3-ccb7-5&oh=00_Aff0L7R_QONly635HWggzOUmAbHCJH7hVOnz4jTIg9EXeQ&oe=68FF9A84&_nc_sid=10d13b\"         ]       },       {         \"IdentityKey\": \"17e0d149-aca9-4be9-bfb3-9130f1ceb95b\",         \"ArticleUrl\": \"https://www.threads.net/@mcdonaldstw/post/DPIUvZFk2hL\",         \"ArticleTitle\": \"\",         \"CreateTime\": \"2025-10-23T14:55:00+08:00\",         \"UpdateTime\": \"2025-10-23T14:55:00+08:00\",         \"PublishTime\": \"2025-09-28T11:00:46+08:00\",         \"ArticleCategory\": \"優惠折扣\",         \"ArticleSubcategory\": \"\",         \"ArticleSource\": \"Threads\",         \"ArticleContent\": \"感謝花蓮第一線的警消、醫護、以及所有志工們，昨天花蓮中山二餐廳、羅東光榮餐廳的麥胞、以及供應商夥伴，帶著礦泉水、紅茶、更帶了象徵著「平平安安」的蘋果派，給花蓮鄉親與志工們送上暖暖的能量！\\n到達現場後，除了分送物資，麥胞夥伴們也一同鏟土清淤、協助下貨，盡一份心力，與所有居民與志工攜手讓家園逐步復原。\\n願花蓮早日回到寧靜與安穩，平平安安！\",         \"ArticleDescription\": \"\",         \"ArticleTags\": \"\",         \"ArticleAuthor\": \"mcdonaldstw\",         \"ArticleImgUrl\": [           \"https://instagram.fkhh1-1.fna.fbcdn.net/v/t51.2885-15/556095105_17896090326300350_4173826239973458325_n.jpg?stp=dst-jpg_e35_s720x720_tt6&efg=eyJ2ZW5jb2RlX3RhZyI6InRocmVhZHMuQ0FST1VTRUxfSVRFTS5pbWFnZV91cmxnZW4uOTIyeDkyMi5zZHIuZjgyNzg3LmRlZmF1bHRfaW1hZ2UuYzIifQ&_nc_ht=instagram.fkhh1-1.fna.fbcdn.net&_nc_cat=102&_nc_oc=Q6cZ2QEKsiC1CJ6HB9iLOTIGhCcJvZTjEq8brXZ50tIIxOQmlQcPu2ADEOYNmozMfsRtfF4&_nc_ohc=Sz83o-3M4-wQ7kNvwFL737-&_nc_gid=io8yDKB1lGCjmZbcptm8Nw&edm=APs17CUBAAAA&ccb=7-5&ig_cache_key=MzczMTMyMzUwMTk2MzA2MDY1MQ%3D%3D.3-ccb7-5&oh=00_AffU-ooc8Xo85Tr8gBPwgXSqE10J-JuLq89FKLBltmdSag&oe=68FFBFBB&_nc_sid=10d13b\",           \"https://instagram.fkhh1-1.fna.fbcdn.net/v/t51.2885-15/556320200_17896090320300350_4959486580373364855_n.jpg?stp=dst-jpg_e35_s480x480_tt6&efg=eyJ2ZW5jb2RlX3RhZyI6InRocmVhZHMuQ0FST1VTRUxfSVRFTS5pbWFnZV91cmxnZW4uNjI0eDYyNC5zZHIuZjgyNzg3LmRlZmF1bHRfaW1hZ2UuYzIifQ&_nc_ht=instagram.fkhh1-1.fna.fbcdn.net&_nc_cat=102&_nc_oc=Q6cZ2QEKsiC1CJ6HB9iLOTIGhCcJvZTjEq8brXZ50tIIxOQmlQcPu2ADEOYNmozMfsRtfF4&_nc_ohc=5orfhT0bUX0Q7kNvwHTx8pX&_nc_gid=io8yDKB1lGCjmZbcptm8Nw&edm=APs17CUBAAAA&ccb=7-5&ig_cache_key=MzczMTMyMzUwMTY5NDY0MzE0Nw%3D%3D.3-ccb7-5&oh=00_AfelccPcNSeyW9uuD8L1Q9qDK0zmcVGEXZu2FKU_4rbETQ&oe=68FFA5C3&_nc_sid=10d13b\",           \"https://instagram.fkhh1-1.fna.fbcdn.net/v/t51.2885-15/556320154_17896090314300350_7233859844254815126_n.jpg?stp=dst-jpg_e35_s720x720_tt6&efg=eyJ2ZW5jb2RlX3RhZyI6InRocmVhZHMuQ0FST1VTRUxfSVRFTS5pbWFnZV91cmxnZW4uMTEwOHgxMTA4LnNkci5mODI3ODcuZGVmYXVsdF9pbWFnZS5jMiJ9&_nc_ht=instagram.fkhh1-1.fna.fbcdn.net&_nc_cat=102&_nc_oc=Q6cZ2QEKsiC1CJ6HB9iLOTIGhCcJvZTjEq8brXZ50tIIxOQmlQcPu2ADEOYNmozMfsRtfF4&_nc_ohc=RnThJtGf29gQ7kNvwFzz2if&_nc_gid=io8yDKB1lGCjmZbcptm8Nw&edm=APs17CUBAAAA&ccb=7-5&ig_cache_key=MzczMTMyMzUwMTY5NDY1NTE2NA%3D%3D.3-ccb7-5&oh=00_Afdrcnovq36SbnuN1tQ620gI0Ow8G0ypCQ5DfF9YtJ56KQ&oe=68FF960C&_nc_sid=10d13b\",           \"https://instagram.fkhh1-1.fna.fbcdn.net/v/t51.2885-15/554864848_17896090329300350_8578212203873187888_n.jpg?stp=dst-jpg_e35_s720x720_tt6&efg=eyJ2ZW5jb2RlX3RhZyI6InRocmVhZHMuQ0FST1VTRUxfSVRFTS5pbWFnZV91cmxnZW4uODE1eDgxNS5zZHIuZjgyNzg3LmRlZmF1bHRfaW1hZ2UuYzIifQ&_nc_ht=instagram.fkhh1-1.fna.fbcdn.net&_nc_cat=102&_nc_oc=Q6cZ2QEKsiC1CJ6HB9iLOTIGhCcJvZTjEq8brXZ50tIIxOQmlQcPu2ADEOYNmozMfsRtfF4&_nc_ohc=0-bfKt5aUGUQ7kNvwE3mPRo&_nc_gid=io8yDKB1lGCjmZbcptm8Nw&edm=APs17CUBAAAA&ccb=7-5&ig_cache_key=MzczMTMyMzUwMTk2MzA2OTM2NQ%3D%3D.3-ccb7-5&oh=00_AfcGjG0akPw4bTtfQ31uEdS4cDtIFMHJ65taqY6nog0xiw&oe=68FFA150&_nc_sid=10d13b\"         ]       },       {         \"IdentityKey\": \"35fdf543-dced-4d93-8c72-86a9add6a127\",         \"ArticleUrl\": \"https://www.threads.net/@mcdonaldstw/post/DPNeetEExQm\",         \"ArticleTitle\": \"\",         \"CreateTime\": \"2025-10-23T14:54:55+08:00\",         \"UpdateTime\": \"2025-10-23T14:54:55+08:00\",         \"PublishTime\": \"2025-09-30T11:02:04+08:00\",         \"ArticleCategory\": \"優惠折扣\",         \"ArticleSubcategory\": \"\",         \"ArticleSource\": \"Threads\",         \"ArticleContent\": \"打卡全台灣最南端的麥當勞\\n📍恆春恒公餐廳\\n\\n走過國境之南，千萬別錯過這間麥當勞～\\n來一杯 McCafé，和超好拍的 M 拍照打卡留念📸\\n\\n吃飽後還可以到恆春老街散散步，\\n或到萬里桐浮潛、拜訪全台最老的土地公廟\\n細細感受恆春的美好！\\n\\n無論你是在地鄉親、浮潛客，\\n還是被超強落山風吹進來的朋友🌀\\n都歡迎你到這裡休息，留下美好的恆春回憶！\\n\\n#大麥客日誌\",         \"ArticleDescription\": \"\",         \"ArticleTags\": \"\",         \"ArticleAuthor\": \"mcdonaldstw\",         \"ArticleImgUrl\": [           \"https://instagram.fkhh1-1.fna.fbcdn.net/v/t51.2885-15/554823211_17896311543300350_7908608578469244936_n.jpg?stp=dst-jpg_e35_p1080x1080_tt6&efg=eyJ2ZW5jb2RlX3RhZyI6InRocmVhZHMuQ0FST1VTRUxfSVRFTS5pbWFnZV91cmxnZW4uMTIwMHgxNTAwLnNkci5mODI3ODcuZGVmYXVsdF9pbWFnZS5jMiJ9&_nc_ht=instagram.fkhh1-1.fna.fbcdn.net&_nc_cat=102&_nc_oc=Q6cZ2QEbc6zbRgd5nT1bEBpynLTBjlCF5kwsqzIIwhzaideTn4zSDFWyHkcYuqfs2TwFgKA&_nc_ohc=-nhCDJg6lUcQ7kNvwGbrURd&_nc_gid=5JOTmq8JdHy8578LvCL4kg&edm=APs17CUBAAAA&ccb=7-5&ig_cache_key=MzczMjc3MzcxMTgxMzc5NzU0OA%3D%3D.3-ccb7-5&oh=00_Afcfykf2r6y9Ka1p8wr_iC3CD0mN8YTuwl6pGz4ZAhU6zA&oe=68FF88B7&_nc_sid=10d13b\",           \"https://instagram.fkhh1-1.fna.fbcdn.net/v/t51.2885-15/557339321_17896311591300350_4228508390610167338_n.jpg?stp=dst-jpg_e35_p1080x1080_tt6&efg=eyJ2ZW5jb2RlX3RhZyI6InRocmVhZHMuQ0FST1VTRUxfSVRFTS5pbWFnZV91cmxnZW4uMTIwMHgxNTAwLnNkci5mODI3ODcuZGVmYXVsdF9pbWFnZS5jMiJ9&_nc_ht=instagram.fkhh1-1.fna.fbcdn.net&_nc_cat=102&_nc_oc=Q6cZ2QEbc6zbRgd5nT1bEBpynLTBjlCF5kwsqzIIwhzaideTn4zSDFWyHkcYuqfs2TwFgKA&_nc_ohc=3hDge-BI7NcQ7kNvwE_1MBS&_nc_gid=5JOTmq8JdHy8578LvCL4kg&edm=APs17CUBAAAA&ccb=7-5&ig_cache_key=MzczMjc3MzcxMTgxMzc1ODIzMQ%3D%3D.3-ccb7-5&oh=00_AfeuJlnm51cGrOpqrLKFTrkLsyDa5tKhO_werwIJlUNbbg&oe=68FF9027&_nc_sid=10d13b\",           \"https://instagram.fkhh1-1.fna.fbcdn.net/v/t51.2885-15/555042303_17896311588300350_1810574040750435498_n.jpg?stp=dst-jpg_e35_p1080x1080_tt6&efg=eyJ2ZW5jb2RlX3RhZyI6InRocmVhZHMuQ0FST1VTRUxfSVRFTS5pbWFnZV91cmxnZW4uMTIwMHgxNTAwLnNkci5mODI3ODcuZGVmYXVsdF9pbWFnZS5jMiJ9&_nc_ht=instagram.fkhh1-1.fna.fbcdn.net&_nc_cat=102&_nc_oc=Q6cZ2QEbc6zbRgd5nT1bEBpynLTBjlCF5kwsqzIIwhzaideTn4zSDFWyHkcYuqfs2TwFgKA&_nc_ohc=ZGvmU7ivje4Q7kNvwEy8911&_nc_gid=5JOTmq8JdHy8578LvCL4kg&edm=APs17CUBAAAA&ccb=7-5&ig_cache_key=MzczMjc3MzcxMTU1MzcxODA1Mg%3D%3D.3-ccb7-5&oh=00_AfdRlSsBH54vFGAWFIVj1bVWhbY-c8ev1WfVap9vMUEG6A&oe=68FFB8AF&_nc_sid=10d13b\",           \"https://instagram.fkhh1-1.fna.fbcdn.net/v/t51.2885-15/555046189_17896311564300350_44447161018977510_n.jpg?stp=dst-jpg_e35_p1080x1080_tt6&efg=eyJ2ZW5jb2RlX3RhZyI6InRocmVhZHMuQ0FST1VTRUxfSVRFTS5pbWFnZV91cmxnZW4uMTIwMHgxNTAwLnNkci5mODI3ODcuZGVmYXVsdF9pbWFnZS5jMiJ9&_nc_ht=instagram.fkhh1-1.fna.fbcdn.net&_nc_cat=102&_nc_oc=Q6cZ2QEbc6zbRgd5nT1bEBpynLTBjlCF5kwsqzIIwhzaideTn4zSDFWyHkcYuqfs2TwFgKA&_nc_ohc=DjgIE731NWcQ7kNvwFT7gyw&_nc_gid=5JOTmq8JdHy8578LvCL4kg&edm=APs17CUBAAAA&ccb=7-5&ig_cache_key=MzczMjc3MzcxMTU1MzY5MjI4NQ%3D%3D.3-ccb7-5&oh=00_Afd27jr6_aSjdWawn6bYF4GPICfsk5XSE56SgCH5hQOxug&oe=68FF8EF0&_nc_sid=10d13b\",           \"https://instagram.fkhh1-1.fna.fbcdn.net/v/t51.2885-15/556641594_17896311594300350_1301939974355684639_n.jpg?stp=dst-jpg_e35_p1080x1080_tt6&efg=eyJ2ZW5jb2RlX3RhZyI6InRocmVhZHMuQ0FST1VTRUxfSVRFTS5pbWFnZV91cmxnZW4uMTIwMHgxNTAwLnNkci5mODI3ODcuZGVmYXVsdF9pbWFnZS5jMiJ9&_nc_ht=instagram.fkhh1-1.fna.fbcdn.net&_nc_cat=102&_nc_oc=Q6cZ2QEbc6zbRgd5nT1bEBpynLTBjlCF5kwsqzIIwhzaideTn4zSDFWyHkcYuqfs2TwFgKA&_nc_ohc=nzqpGgWS9d4Q7kNvwHgABfy&_nc_gid=5JOTmq8JdHy8578LvCL4kg&edm=APs17CUBAAAA&ccb=7-5&ig_cache_key=MzczMjc3MzcxMTY2Mjc3Mjc2Ng%3D%3D.3-ccb7-5&oh=00_AffakoyOTiJ8rsTP7WKVuDOlSUr23xLzeQ1FWf9aY9vkvw&oe=68FF9FA2&_nc_sid=10d13b\",           \"https://instagram.fkhh1-1.fna.fbcdn.net/v/t51.2885-15/556230314_17896311597300350_643050266456596319_n.jpg?stp=dst-jpg_e35_p1080x1080_tt6&efg=eyJ2ZW5jb2RlX3RhZyI6InRocmVhZHMuQ0FST1VTRUxfSVRFTS5pbWFnZV91cmxnZW4uMTIwMHgxNTAwLnNkci5mODI3ODcuZGVmYXVsdF9pbWFnZS5jMiJ9&_nc_ht=instagram.fkhh1-1.fna.fbcdn.net&_nc_cat=102&_nc_oc=Q6cZ2QEbc6zbRgd5nT1bEBpynLTBjlCF5kwsqzIIwhzaideTn4zSDFWyHkcYuqfs2TwFgKA&_nc_ohc=Br3KzgQuTwQQ7kNvwG9_VUd&_nc_gid=5JOTmq8JdHy8578LvCL4kg&edm=APs17CUBAAAA&ccb=7-5&ig_cache_key=MzczMjc3MzcxMTcyMTUyMzIzMg%3D%3D.3-ccb7-5&oh=00_AffjnhIzPHbWuoGRhsi7UxJCrxGw7vUFNc9HQthT_k5AWg&oe=68FFBDA2&_nc_sid=10d13b\",           \"https://instagram.fkhh1-1.fna.fbcdn.net/v/t51.2885-15/556172245_17896311585300350_1888856103380109034_n.jpg?stp=dst-jpg_e35_p1080x1080_tt6&efg=eyJ2ZW5jb2RlX3RhZyI6InRocmVhZHMuQ0FST1VTRUxfSVRFTS5pbWFnZV91cmxnZW4uMTIwMHgxNTAwLnNkci5mODI3ODcuZGVmYXVsdF9pbWFnZS5jMiJ9&_nc_ht=instagram.fkhh1-1.fna.fbcdn.net&_nc_cat=102&_nc_oc=Q6cZ2QEbc6zbRgd5nT1bEBpynLTBjlCF5kwsqzIIwhzaideTn4zSDFWyHkcYuqfs2TwFgKA&_nc_ohc=4gmRS1aFgj0Q7kNvwE1HD4f&_nc_gid=5JOTmq8JdHy8578LvCL4kg&edm=APs17CUBAAAA&ccb=7-5&ig_cache_key=MzczMjc3MzcxMTU2MjExNTA0NA%3D%3D.3-ccb7-5&oh=00_Aff0e7S6k3Dg064_mctzkA_BMMz0XcfwoWRKcaxIXrr9oQ&oe=68FFA1AD&_nc_sid=10d13b\"         ]       },       {         \"IdentityKey\": \"f7ec51cf-87a5-4a47-93c0-ac3f0a6d6abb\",         \"ArticleUrl\": \"https://www.threads.net/@mcdonaldstw/post/DPff18Xk5l5\",         \"ArticleTitle\": \"\",         \"CreateTime\": \"2025-10-23T14:54:52+08:00\",         \"UpdateTime\": \"2025-10-23T14:54:52+08:00\",         \"PublishTime\": \"2025-10-07T11:00:19+08:00\",         \"ArticleCategory\": \"優惠折扣\",         \"ArticleSubcategory\": \"\",         \"ArticleSource\": \"Threads\",         \"ArticleContent\": \"TinyTAN 來啦！\\n\\n購買任一超值全餐＋$129，就可獲得盲盒 1 個，內含隨機公仔與角色卡，全套 7 款，快把本命帶回家！10/8 10:30 起開始販售，鬧鐘設定好了嗎⏰\",         \"ArticleDescription\": \"\",         \"ArticleTags\": \"\",         \"ArticleAuthor\": \"mcdonaldstw\",         \"ArticleImgUrl\": \"\"       },       {         \"IdentityKey\": \"c768bd53-697f-412f-bb21-c3295de8c277\",         \"ArticleUrl\": \"https://www.threads.net/@mcdonaldstw/post/DPff1Sskzq-\",         \"ArticleTitle\": \"\",         \"CreateTime\": \"2025-10-23T14:54:48+08:00\",         \"UpdateTime\": \"2025-10-23T14:54:48+08:00\",         \"PublishTime\": \"2025-10-07T11:00:13+08:00\",         \"ArticleCategory\": \"優惠折扣\",         \"ArticleSubcategory\": \"\",         \"ArticleSource\": \"Threads\",         \"ArticleContent\": \"憑直覺點開一個👇看明天去麥當勞時可能會遇到誰！\",         \"ArticleDescription\": \"\",         \"ArticleTags\": \"\",         \"ArticleAuthor\": \"mcdonaldstw\",         \"ArticleImgUrl\": [           \"https://instagram.fkhh1-1.fna.fbcdn.net/v/t51.2885-15/560337146_17897078223300350_8099444662823762448_n.jpg?stp=dst-jpg_e35_p320x320_tt6&efg=eyJ2ZW5jb2RlX3RhZyI6InRocmVhZHMuQ0FST1VTRUxfSVRFTS5pbWFnZV91cmxnZW4uNTMyeDE2OTguc2RyLmY4Mjc4Ny5kZWZhdWx0X2ltYWdlLmMyIn0&_nc_ht=instagram.fkhh1-1.fna.fbcdn.net&_nc_cat=102&_nc_oc=Q6cZ2QENuaGtpgoFi7ktUvk-8Uf598SMHG0Am6lxHwYhcIiYdUZ8peSXV2mgmNHzhc7w4iA&_nc_ohc=OHESodJ_LQIQ7kNvwHZwyPD&_nc_gid=FwDxikgO3D23Li6JT_LzOA&edm=APs17CUBAAAA&ccb=7-5&ig_cache_key=MzczNzg0NjIwODIyOTc2Mjk1Ng%3D%3D.3-ccb7-5&oh=00_AffZqdEiPBmagWP6VSRh8FUjVKzv8goI3rFkknFjNalz-g&oe=68FF8A9C&_nc_sid=10d13b\",           \"https://instagram.fkhh1-1.fna.fbcdn.net/v/t51.2885-15/561360792_17897078217300350_6479646703746085141_n.jpg?stp=dst-jpg_e35_p320x320_tt6&efg=eyJ2ZW5jb2RlX3RhZyI6InRocmVhZHMuQ0FST1VTRUxfSVRFTS5pbWFnZV91cmxnZW4uNTMyeDE2OTguc2RyLmY4Mjc4Ny5kZWZhdWx0X2ltYWdlLmMyIn0&_nc_ht=instagram.fkhh1-1.fna.fbcdn.net&_nc_cat=102&_nc_oc=Q6cZ2QENuaGtpgoFi7ktUvk-8Uf598SMHG0Am6lxHwYhcIiYdUZ8peSXV2mgmNHzhc7w4iA&_nc_ohc=yZsIeLe08uoQ7kNvwEU6csx&_nc_gid=FwDxikgO3D23Li6JT_LzOA&edm=APs17CUBAAAA&ccb=7-5&ig_cache_key=MzczNzg0NjIwNzkzNjE2NTE5Nw%3D%3D.3-ccb7-5&oh=00_AfcrIfwAa3DtWz52qG5sZpBWXberkd2W7_7aYBqQENljsg&oe=68FFA4CD&_nc_sid=10d13b\",           \"https://instagram.fkhh1-1.fna.fbcdn.net/v/t51.2885-15/561289596_17897078211300350_7336851075775892996_n.jpg?stp=dst-jpg_e35_p320x320_tt6&efg=eyJ2ZW5jb2RlX3RhZyI6InRocmVhZHMuQ0FST1VTRUxfSVRFTS5pbWFnZV91cmxnZW4uNTMyeDE2OTguc2RyLmY4Mjc4Ny5kZWZhdWx0X2ltYWdlLmMyIn0&_nc_ht=instagram.fkhh1-1.fna.fbcdn.net&_nc_cat=102&_nc_oc=Q6cZ2QENuaGtpgoFi7ktUvk-8Uf598SMHG0Am6lxHwYhcIiYdUZ8peSXV2mgmNHzhc7w4iA&_nc_ohc=0LiJ2gVMzxgQ7kNvwHs17h_&_nc_gid=FwDxikgO3D23Li6JT_LzOA&edm=APs17CUBAAAA&ccb=7-5&ig_cache_key=MzczNzg0NjIwNzk4NjUwMTg0Nw%3D%3D.3-ccb7-5&oh=00_AffaCO6GdMaAP5U8aWNhEvN3YlUEd0Q3vDinF_7d6AGw-g&oe=68FFB5AD&_nc_sid=10d13b\",           \"https://instagram.fkhh1-1.fna.fbcdn.net/v/t51.2885-15/560554341_17897078220300350_4778788029376743955_n.jpg?stp=dst-jpg_e35_p320x320_tt6&efg=eyJ2ZW5jb2RlX3RhZyI6InRocmVhZHMuQ0FST1VTRUxfSVRFTS5pbWFnZV91cmxnZW4uNTMyeDE2OTguc2RyLmY4Mjc4Ny5kZWZhdWx0X2ltYWdlLmMyIn0&_nc_ht=instagram.fkhh1-1.fna.fbcdn.net&_nc_cat=102&_nc_oc=Q6cZ2QENuaGtpgoFi7ktUvk-8Uf598SMHG0Am6lxHwYhcIiYdUZ8peSXV2mgmNHzhc7w4iA&_nc_ohc=r44i6yrlSkcQ7kNvwHKfisN&_nc_gid=FwDxikgO3D23Li6JT_LzOA&edm=APs17CUBAAAA&ccb=7-5&ig_cache_key=MzczNzg0NjIwNzk0NDU0MDA2Nw%3D%3D.3-ccb7-5&oh=00_Afe3BF4ikd3w7tAczgwKi8M5OjErDKGHbBLF9g59zXZRhQ&oe=68FF9884&_nc_sid=10d13b\",           \"https://instagram.fkhh1-1.fna.fbcdn.net/v/t51.2885-15/560465639_17897078169300350_7061362556964341234_n.jpg?stp=dst-jpg_e35_p320x320_tt6&efg=eyJ2ZW5jb2RlX3RhZyI6InRocmVhZHMuQ0FST1VTRUxfSVRFTS5pbWFnZV91cmxnZW4uNTMyeDE2OTguc2RyLmY4Mjc4Ny5kZWZhdWx0X2ltYWdlLmMyIn0&_nc_ht=instagram.fkhh1-1.fna.fbcdn.net&_nc_cat=102&_nc_oc=Q6cZ2QENuaGtpgoFi7ktUvk-8Uf598SMHG0Am6lxHwYhcIiYdUZ8peSXV2mgmNHzhc7w4iA&_nc_ohc=5zEG0YEkG5sQ7kNvwEEzfCK&_nc_gid=FwDxikgO3D23Li6JT_LzOA&edm=APs17CUBAAAA&ccb=7-5&ig_cache_key=MzczNzg0NjIwNzkzNjE0MTI1NA%3D%3D.3-ccb7-5&oh=00_AfdFf0m2svAPpH49doSpj73g9wyz7eR5D63oPQIiubNiKw&oe=68FFB6D8&_nc_sid=10d13b\",           \"https://instagram.fkhh1-1.fna.fbcdn.net/v/t51.2885-15/560396660_17897078214300350_9083716945765450352_n.jpg?stp=dst-jpg_e35_p320x320_tt6&efg=eyJ2ZW5jb2RlX3RhZyI6InRocmVhZHMuQ0FST1VTRUxfSVRFTS5pbWFnZV91cmxnZW4uNTMyeDE2OTguc2RyLmY4Mjc4Ny5kZWZhdWx0X2ltYWdlLmMyIn0&_nc_ht=instagram.fkhh1-1.fna.fbcdn.net&_nc_cat=102&_nc_oc=Q6cZ2QENuaGtpgoFi7ktUvk-8Uf598SMHG0Am6lxHwYhcIiYdUZ8peSXV2mgmNHzhc7w4iA&_nc_ohc=fGIzY89G2McQ7kNvwGzpofQ&_nc_gid=FwDxikgO3D23Li6JT_LzOA&edm=APs17CUBAAAA&ccb=7-5&ig_cache_key=MzczNzg0NjIwNzkzNjE3MDU5NA%3D%3D.3-ccb7-5&oh=00_AfdShAFRUYtwDpVbTfUQI90NOlKoBeJ2z7YLJ0ABKc_iPg&oe=68FF9449&_nc_sid=10d13b\",           \"https://instagram.fkhh1-1.fna.fbcdn.net/v/t51.2885-15/560431513_17897078208300350_5976670210283907744_n.jpg?stp=dst-jpg_e35_p320x320_tt6&efg=eyJ2ZW5jb2RlX3RhZyI6InRocmVhZHMuQ0FST1VTRUxfSVRFTS5pbWFnZV91cmxnZW4uNTMyeDE2OTguc2RyLmY4Mjc4Ny5kZWZhdWx0X2ltYWdlLmMyIn0&_nc_ht=instagram.fkhh1-1.fna.fbcdn.net&_nc_cat=102&_nc_oc=Q6cZ2QENuaGtpgoFi7ktUvk-8Uf598SMHG0Am6lxHwYhcIiYdUZ8peSXV2mgmNHzhc7w4iA&_nc_ohc=86UsonYovucQ7kNvwEY2mB3&_nc_gid=FwDxikgO3D23Li6JT_LzOA&edm=APs17CUBAAAA&ccb=7-5&ig_cache_key=MzczNzg0NjIwNzkzNjE1MjEwNw%3D%3D.3-ccb7-5&oh=00_Afc29S64xbmk6mD4JB5DmwLyNJz8blhcjm6yMJuq8ClDxg&oe=68FFA5CC&_nc_sid=10d13b\"         ]       },       {         \"IdentityKey\": \"3cefd865-8595-4dac-9a38-b71fc9063a7f\",         \"ArticleUrl\": \"https://www.threads.net/@mcdonaldstw/post/DPiEoxAE-u9\",         \"ArticleTitle\": \"\",         \"CreateTime\": \"2025-10-23T14:54:43+08:00\",         \"UpdateTime\": \"2025-10-23T14:54:43+08:00\",         \"PublishTime\": \"2025-10-08T11:00:18+08:00\",         \"ArticleCategory\": \"優惠折扣\",         \"ArticleSubcategory\": \"\",         \"ArticleSource\": \"Threads\",         \"ArticleContent\": \"美國薯間（形容詞）\\n美式風味的漢堡 有薯餅夾在中間\\n\\n今天開始，到麥當勞就能吃到有「美國」道地切達起司醬，還有「薯」餅夾在中「間」的起司脆薯雙牛堡，和同樣充滿美式風味的起司脆薯辣鷄堡、起司三層牛肉堡🇺🇸🍔\\n\\n快點分享給想要有很多美國薯間的朋友\",         \"ArticleDescription\": \"\",         \"ArticleTags\": \"\",         \"ArticleAuthor\": \"mcdonaldstw\",         \"ArticleImgUrl\": \"\"       },       {         \"IdentityKey\": \"4058a3e6-1727-4cdb-9716-c4e4c093c6c8\",         \"ArticleUrl\": \"https://www.threads.net/@mcdonaldstw/post/DPiEn00kyzD\",         \"ArticleTitle\": \"\",         \"CreateTime\": \"2025-10-23T14:54:40+08:00\",         \"UpdateTime\": \"2025-10-23T14:54:40+08:00\",         \"PublishTime\": \"2025-10-08T11:00:10+08:00\",         \"ArticleCategory\": \"優惠折扣\",         \"ArticleSubcategory\": \"\",         \"ArticleSource\": \"Threads\",         \"ArticleContent\": \"你各位注意！現在時間是：美國薯間！\",         \"ArticleDescription\": \"\",         \"ArticleTags\": \"\",         \"ArticleAuthor\": \"mcdonaldstw\",         \"ArticleImgUrl\": [           \"https://instagram.fkhh1-1.fna.fbcdn.net/v/t51.2885-15/562580201_17897182923300350_3514092182173519157_n.jpg?stp=cp6_dst-jpg_e35_s720x720_tt6&efg=eyJ2ZW5jb2RlX3RhZyI6InRocmVhZHMuQ0FST1VTRUxfSVRFTS5pbWFnZV91cmxnZW4uMTA4MHgxMDcyLnNkci5mODI3ODcuZGVmYXVsdF9pbWFnZS5jMiJ9&_nc_ht=instagram.fkhh1-1.fna.fbcdn.net&_nc_cat=102&_nc_oc=Q6cZ2QEb1Y0TRYCKlfz3lHxI4QXMmCaJPo3H7DUn7FLia6Soi7ou12gzG8hM2V4RvG1xly0&_nc_ohc=NDqF3ErmHskQ7kNvwFGPakv&_nc_gid=dpRSd2zC7bgRKQt0CZ0ODw&edm=APs17CUBAAAA&ccb=7-5&ig_cache_key=MzczODU3MDk2MzMyNDk3MTA5NQ%3D%3D.3-ccb7-5&oh=00_AffXTOvcof2yyP75lADYNQ0dzfuabnjy5XKCsT6WUtAYZQ&oe=68FFBDA5&_nc_sid=10d13b\",           \"https://instagram.fkhh1-1.fna.fbcdn.net/v/t51.2885-15/561428844_17897182932300350_3120806180125934817_n.jpg?stp=dst-jpg_e35_s720x720_tt6&efg=eyJ2ZW5jb2RlX3RhZyI6InRocmVhZHMuQ0FST1VTRUxfSVRFTS5pbWFnZV91cmxnZW4uMTA4MHgxMDgwLnNkci5mODI3ODcuZGVmYXVsdF9pbWFnZS5jMiJ9&_nc_ht=instagram.fkhh1-1.fna.fbcdn.net&_nc_cat=102&_nc_oc=Q6cZ2QEb1Y0TRYCKlfz3lHxI4QXMmCaJPo3H7DUn7FLia6Soi7ou12gzG8hM2V4RvG1xly0&_nc_ohc=PEkUlLK944QQ7kNvwGe7ekk&_nc_gid=dpRSd2zC7bgRKQt0CZ0ODw&edm=APs17CUBAAAA&ccb=7-5&ig_cache_key=MzczODU3MDk2Mzc4NjM0NzQyOQ%3D%3D.3-ccb7-5&oh=00_Afd16kzWQYYF5G2zFSllZ2Z2sHtAxiIH-xJs2UyjLDVNjg&oe=68FF97AF&_nc_sid=10d13b\",           \"https://instagram.fkhh1-1.fna.fbcdn.net/v/t51.2885-15/560568725_17897182950300350_255371564999556465_n.jpg?stp=dst-jpg_e35_s720x720_tt6&efg=eyJ2ZW5jb2RlX3RhZyI6InRocmVhZHMuQ0FST1VTRUxfSVRFTS5pbWFnZV91cmxnZW4uMTA4MHgxMDgwLnNkci5mODI3ODcuZGVmYXVsdF9pbWFnZS5jMiJ9&_nc_ht=instagram.fkhh1-1.fna.fbcdn.net&_nc_cat=102&_nc_oc=Q6cZ2QEb1Y0TRYCKlfz3lHxI4QXMmCaJPo3H7DUn7FLia6Soi7ou12gzG8hM2V4RvG1xly0&_nc_ohc=BrZh471QwOIQ7kNvwESObq-&_nc_gid=dpRSd2zC7bgRKQt0CZ0ODw&edm=APs17CUBAAAA&ccb=7-5&ig_cache_key=MzczODU3MDk2Mzc3ODAwMDExOQ%3D%3D.3-ccb7-5&oh=00_Afc9SmD_NqoT5YPSN53eQ0olMAmYofqh61YCTelaFBbyow&oe=68FF93AD&_nc_sid=10d13b\",           \"https://instagram.fkhh1-1.fna.fbcdn.net/v/t51.2885-15/561175787_17897182947300350_5748042082545598739_n.jpg?stp=dst-jpg_e35_s720x720_tt6&efg=eyJ2ZW5jb2RlX3RhZyI6InRocmVhZHMuQ0FST1VTRUxfSVRFTS5pbWFnZV91cmxnZW4uMTA4MHgxMDgwLnNkci5mODI3ODcuZGVmYXVsdF9pbWFnZS5jMiJ9&_nc_ht=instagram.fkhh1-1.fna.fbcdn.net&_nc_cat=102&_nc_oc=Q6cZ2QEb1Y0TRYCKlfz3lHxI4QXMmCaJPo3H7DUn7FLia6Soi7ou12gzG8hM2V4RvG1xly0&_nc_ohc=NBp4IcSlTLYQ7kNvwGegoyP&_nc_gid=dpRSd2zC7bgRKQt0CZ0ODw&edm=APs17CUBAAAA&ccb=7-5&ig_cache_key=MzczODU3MDk2MzcxMDg1NzA4MQ%3D%3D.3-ccb7-5&oh=00_AfeelAfz7lvgngcftr0REiEx_jaqAefW83rOAihFLpV8Ww&oe=68FF92CB&_nc_sid=10d13b\"         ]       },       {         \"IdentityKey\": \"bb7c358c-e80b-491b-9bb9-94344702fb9d\",         \"ArticleUrl\": \"https://www.threads.net/@mcdonaldstw/post/DPxhYswEx77\",         \"ArticleTitle\": \"\",         \"CreateTime\": \"2025-10-23T14:54:37+08:00\",         \"UpdateTime\": \"2025-10-23T14:54:37+08:00\",         \"PublishTime\": \"2025-10-14T11:00:07+08:00\",         \"ArticleCategory\": \"優惠折扣\",         \"ArticleSubcategory\": \"\",         \"ArticleSource\": \"Threads\",         \"ArticleContent\": \"你想要的口味 在這裡啦\\n⬇ ⬇ ⬇ ⬇ ⬇ ⬇ \\n藍 莓 卡 士 達 雙 餡 派\\n⬆ ⬆ ⬆ ⬆ ⬆ ⬆ \\n酸甜藍莓 x 香濃卡士達 x 可可派皮\\n雙重內餡，雙倍美味！\",         \"ArticleDescription\": \"\",         \"ArticleTags\": \"\",         \"ArticleAuthor\": \"mcdonaldstw\",         \"ArticleImgUrl\": \"\"       },       {         \"IdentityKey\": \"1c0191c4-2307-407c-acea-99de42a3fbd9\",         \"ArticleUrl\": \"https://www.threads.net/@mcdonaldstw/post/DPxhYVPkyVh\",         \"ArticleTitle\": \"\",         \"CreateTime\": \"2025-10-23T14:54:35+08:00\",         \"UpdateTime\": \"2025-10-23T14:54:35+08:00\",         \"PublishTime\": \"2025-10-14T11:00:04+08:00\",         \"ArticleCategory\": \"優惠折扣\",         \"ArticleSubcategory\": \"\",         \"ArticleSource\": \"Threads\",         \"ArticleContent\": \"這次期間限定的派 好像有三種：\\n1. 藍莓卡士達口味\\n2. 卡士達藍莓口味\\n3. 綜合口味，可以同時吃到藍莓與卡士達\\n你選都幾？\",         \"ArticleDescription\": \"\",         \"ArticleTags\": \"\",         \"ArticleAuthor\": \"mcdonaldstw\",         \"ArticleImgUrl\": \"\"       },       {         \"IdentityKey\": \"b15609d4-b26c-4df7-a446-2e343e210755\",         \"ArticleUrl\": \"https://www.threads.net/@mcdonaldstw/post/DP0GP5wE0IG\",         \"ArticleTitle\": \"\",         \"CreateTime\": \"2025-10-23T14:54:31+08:00\",         \"UpdateTime\": \"2025-10-23T14:54:31+08:00\",         \"PublishTime\": \"2025-10-15T11:00:43+08:00\",         \"ArticleCategory\": \"優惠折扣\",         \"ArticleSubcategory\": \"\",         \"ArticleSource\": \"Threads\",         \"ArticleContent\": \"❸得獎者需於2025年10月31日23:59前將您的寄件資料（包含：中文姓名／連絡電話／收件人／收件地址／主要聯絡信箱／Threads帳號名稱／個人Threads得獎帳號截圖及連結，截圖畫面中須露出可編輯等按鈕，以證明為該得獎者本人所持有的帳號）寄到 mcdtaiwan@gmail.com，逾期回覆及寄送資料提供不完整者視同棄權，不予遞補得獎名額，且台灣麥當勞無須負任何責任。\\n❹台灣麥當勞將於2025年 11月7日前寄出獎項，本活動獎項寄送地區僅限台、澎、金、馬地區，海外地區恕無法配送。如得獎者提供之資料有錯誤或缺漏，恕不補發獎品。\\n❺若有負面不雅言詞或不相關留言，台灣麥當勞有權利得予以刪除。\\n❻台灣麥當勞保留擴大、修改、取消、終止該活動以及更改活動截止日期的權利，無需做出解釋或通知。\",         \"ArticleDescription\": \"\",         \"ArticleTags\": \"\",         \"ArticleAuthor\": \"mcdonaldstw\",         \"ArticleImgUrl\": \"\"       },       {         \"IdentityKey\": \"536198c5-5bd8-4603-8287-901c67d68a6c\",         \"ArticleUrl\": \"https://www.threads.net/@mcdonaldstw/post/DP0GPd_k7kz\",         \"ArticleTitle\": \"\",         \"CreateTime\": \"2025-10-23T14:54:27+08:00\",         \"UpdateTime\": \"2025-10-23T14:54:27+08:00\",         \"PublishTime\": \"2025-10-15T11:00:39+08:00\",         \"ArticleCategory\": \"優惠折扣\",         \"ArticleSubcategory\": \"\",         \"ArticleSource\": \"Threads\",         \"ArticleContent\": \"✦活動辦法✦\\n❶活動期間自即日起至2025年10月21日23:59止，以 Threads 個人帳號於本活動貼文下方留言「最想送家中毛孩哪一組家家酒」並曬出毛孩照片，即具備抽獎資格，範例：「最想送 OO 歡樂送組！（附上毛孩\\n照片）」； 每個 Threads 帳號僅限 1 次抽獎資格，麥當勞 Threads  隨機抽出 1 位得獎者。\\n❷Threads 得獎名單將於2025年10月27日公告在麥當勞本篇貼文下方，得獎者可獲得「小麥麥家家酒 2.0 套組（包含服務員配件組、煎爐機組、麥克鷄塊組、飲料機組、得來速組、歡樂送組，共六款家家酒）」，共 1 名。本活動之獎項不得轉換、轉讓或折換現金。\",         \"ArticleDescription\": \"\",         \"ArticleTags\": \"\",         \"ArticleAuthor\": \"mcdonaldstw\",         \"ArticleImgUrl\": \"\"       },       {         \"IdentityKey\": \"4e6c4f59-ffbd-42a1-86f0-3d92037391de\",         \"ArticleUrl\": \"https://www.threads.net/@mcdonaldstw/post/DP0GPAkE6jr\",         \"ArticleTitle\": \"\",         \"CreateTime\": \"2025-10-23T14:54:23+08:00\",         \"UpdateTime\": \"2025-10-23T14:54:23+08:00\",         \"PublishTime\": \"2025-10-15T11:00:36+08:00\",         \"ArticleCategory\": \"優惠折扣\",         \"ArticleSubcategory\": \"\",         \"ArticleSource\": \"Threads\",         \"ArticleContent\": \"10/15 起，只要用麥當勞 APP 點歡樂送購買「小麥麥家家酒 2.0 特餐」，內含隨機一款家家酒收藏（全套六款，隨機供應不挑款）+ 一份指定主餐選擇 + 大薯 + 飲料。 快來一起收集，把麥當勞帶回家吧！\\n\\n1.家家酒含有細小配件，請謹慎收納與使用避免毛孩與幼童誤食。\\n2.拍攝全程由專業寵物訓練師陪同指導，確保毛孩們在舒適與安全的環境中進行拍攝。\\n3.畫面中部分家家酒與道具僅為情境示意使用，實際商品內容請以麥當勞官網說明為準。\\n\\n #麥當勞 #McDonalds #麥當勞歡樂送 #小麥麥家家酒2.0\",         \"ArticleDescription\": \"\",         \"ArticleTags\": \"\",         \"ArticleAuthor\": \"mcdonaldstw\",         \"ArticleImgUrl\": \"\"       },       {         \"IdentityKey\": \"ea63a509-fa3f-47ae-af11-5957063acf99\",         \"ArticleUrl\": \"https://www.threads.net/@mcdonaldstw/post/DP0GOVukwyi\",         \"ArticleTitle\": \"\",         \"CreateTime\": \"2025-10-23T14:54:19+08:00\",         \"UpdateTime\": \"2025-10-23T14:54:19+08:00\",         \"PublishTime\": \"2025-10-15T11:00:30+08:00\",         \"ArticleCategory\": \"優惠折扣\",         \"ArticleSubcategory\": \"\",         \"ArticleSource\": \"Threads\",         \"ArticleContent\": \"u90qewur0q9eifqq4n afg9097g000000000\\n以上是貓貓按到鍵盤 … 幫忙翻譯一下 － \\n沒錯，就是超可愛的歡樂送小麥麥家家酒 2.0 來了 >> https://mcdtw.com/5/9/54\\n留言曬出你家毛孩的照片，還有機會送毛孩一組家家酒！\",         \"ArticleDescription\": \"\",         \"ArticleTags\": \"\",         \"ArticleAuthor\": \"mcdonaldstw\",         \"ArticleImgUrl\": [           \"https://instagram.fkhh1-1.fna.fbcdn.net/v/t51.2885-15/566376445_17897939118300350_579885388698329888_n.jpg?stp=dst-jpg_e35_s1080x1080_tt6&efg=eyJ2ZW5jb2RlX3RhZyI6InRocmVhZHMuQ0FST1VTRUxfSVRFTS5pbWFnZV91cmxnZW4uMTIwMHgxMjAwLnNkci5mODI3ODcuZGVmYXVsdF9pbWFnZS5jMiJ9&_nc_ht=instagram.fkhh1-1.fna.fbcdn.net&_nc_cat=102&_nc_oc=Q6cZ2QH4ds7sJ76PHWfd0AL9x0Mr4yu6jsjyc3zUYfOq-tYF_NeCcVT3lKdbpaMD2PgnSbo&_nc_ohc=BPo4IdqyhPUQ7kNvwFdEofv&_nc_gid=uzHUYJYEW7Q37DUuaJCkDQ&edm=APs17CUBAAAA&ccb=7-5&ig_cache_key=Mzc0MzY0NDU1NzY1MDM2MjY0Ng%3D%3D.3-ccb7-5&oh=00_AfcwPQvxKnAgGuVSxflF4-P3xxFPDcN-O6EhXa_uPNc7Yg&oe=68FFA74F&_nc_sid=10d13b\",           \"https://instagram.fkhh1-1.fna.fbcdn.net/v/t51.2885-15/565721513_17897939073300350_6817542202016555251_n.jpg?stp=dst-jpg_e35_s1080x1080_tt6&efg=eyJ2ZW5jb2RlX3RhZyI6InRocmVhZHMuQ0FST1VTRUxfSVRFTS5pbWFnZV91cmxnZW4uMTIwMHgxMjAwLnNkci5mODI3ODcuZGVmYXVsdF9pbWFnZS5jMiJ9&_nc_ht=instagram.fkhh1-1.fna.fbcdn.net&_nc_cat=102&_nc_oc=Q6cZ2QH4ds7sJ76PHWfd0AL9x0Mr4yu6jsjyc3zUYfOq-tYF_NeCcVT3lKdbpaMD2PgnSbo&_nc_ohc=j9Llcxk1eW8Q7kNvwFClgt4&_nc_gid=uzHUYJYEW7Q37DUuaJCkDQ&edm=APs17CUBAAAA&ccb=7-5&ig_cache_key=Mzc0MzY0NDU1Nzc5MzAwNjMyNw%3D%3D.3-ccb7-5&oh=00_AfdCjtelwSgGmve5TIbCyry29taB6n9NRJEe9RJzUrncQA&oe=68FFAF6B&_nc_sid=10d13b\",           \"https://instagram.fkhh1-1.fna.fbcdn.net/v/t51.2885-15/564524727_17897939124300350_4321297455120298921_n.jpg?stp=dst-jpg_e35_s1080x1080_tt6&efg=eyJ2ZW5jb2RlX3RhZyI6InRocmVhZHMuQ0FST1VTRUxfSVRFTS5pbWFnZV91cmxnZW4uMTIwMHgxMjAwLnNkci5mODI3ODcuZGVmYXVsdF9pbWFnZS5jMiJ9&_nc_ht=instagram.fkhh1-1.fna.fbcdn.net&_nc_cat=102&_nc_oc=Q6cZ2QH4ds7sJ76PHWfd0AL9x0Mr4yu6jsjyc3zUYfOq-tYF_NeCcVT3lKdbpaMD2PgnSbo&_nc_ohc=Xln_J2AJi70Q7kNvwHGJt5d&_nc_gid=uzHUYJYEW7Q37DUuaJCkDQ&edm=APs17CUBAAAA&ccb=7-5&ig_cache_key=Mzc0MzY0NDU1NzgwMTQxMjU1Mw%3D%3D.3-ccb7-5&oh=00_Afe_X9u5m8rVwOU5zdqxS_tG5fM_CNlOcmo0MhDmrIyNdA&oe=68FFA593&_nc_sid=10d13b\",           \"https://instagram.fkhh1-1.fna.fbcdn.net/v/t51.2885-15/564744919_17897939121300350_5979437904323611039_n.jpg?stp=dst-jpg_e35_s1080x1080_tt6&efg=eyJ2ZW5jb2RlX3RhZyI6InRocmVhZHMuQ0FST1VTRUxfSVRFTS5pbWFnZV91cmxnZW4uMTIwMHgxMjAwLnNkci5mODI3ODcuZGVmYXVsdF9pbWFnZS5jMiJ9&_nc_ht=instagram.fkhh1-1.fna.fbcdn.net&_nc_cat=102&_nc_oc=Q6cZ2QH4ds7sJ76PHWfd0AL9x0Mr4yu6jsjyc3zUYfOq-tYF_NeCcVT3lKdbpaMD2PgnSbo&_nc_ohc=5o1GtDUNt8MQ7kNvwHxoA1N&_nc_gid=uzHUYJYEW7Q37DUuaJCkDQ&edm=APs17CUBAAAA&ccb=7-5&ig_cache_key=Mzc0MzY0NDU1Nzc4NDY0MTk1Mg%3D%3D.3-ccb7-5&oh=00_Afe1I62mOVzakY0cBdq5c5ToLp3V1042OXMmS5pTq8PnAA&oe=68FF8CD1&_nc_sid=10d13b\",           \"https://instagram.fkhh1-1.fna.fbcdn.net/v/t51.2885-15/565193584_17897939127300350_7270774889377701823_n.jpg?stp=dst-jpg_e35_s1080x1080_tt6&efg=eyJ2ZW5jb2RlX3RhZyI6InRocmVhZHMuQ0FST1VTRUxfSVRFTS5pbWFnZV91cmxnZW4uMTIwMHgxMjAwLnNkci5mODI3ODcuZGVmYXVsdF9pbWFnZS5jMiJ9&_nc_ht=instagram.fkhh1-1.fna.fbcdn.net&_nc_cat=102&_nc_oc=Q6cZ2QH4ds7sJ76PHWfd0AL9x0Mr4yu6jsjyc3zUYfOq-tYF_NeCcVT3lKdbpaMD2PgnSbo&_nc_ohc=BnseTO5eFq0Q7kNvwHzEPB8&_nc_gid=uzHUYJYEW7Q37DUuaJCkDQ&edm=APs17CUBAAAA&ccb=7-5&ig_cache_key=Mzc0MzY0NDU1NzgwMTM4MTUwOA%3D%3D.3-ccb7-5&oh=00_AfedtxaKleAUlowedEt7eHxf96FYUWB6dkaZh0xa81k8xw&oe=68FFAAD8&_nc_sid=10d13b\",           \"https://instagram.fkhh1-1.fna.fbcdn.net/v/t51.2885-15/564189875_17897939142300350_4252851302288844606_n.jpg?stp=dst-jpg_e35_s1080x1080_tt6&efg=eyJ2ZW5jb2RlX3RhZyI6InRocmVhZHMuQ0FST1VTRUxfSVRFTS5pbWFnZV91cmxnZW4uMTIwMHgxMjAwLnNkci5mODI3ODcuZGVmYXVsdF9pbWFnZS5jMiJ9&_nc_ht=instagram.fkhh1-1.fna.fbcdn.net&_nc_cat=102&_nc_oc=Q6cZ2QH4ds7sJ76PHWfd0AL9x0Mr4yu6jsjyc3zUYfOq-tYF_NeCcVT3lKdbpaMD2PgnSbo&_nc_ohc=KwgCJKR4RQ0Q7kNvwHez8R1&_nc_gid=uzHUYJYEW7Q37DUuaJCkDQ&edm=APs17CUBAAAA&ccb=7-5&ig_cache_key=Mzc0MzY0NDU1NzY1MDQwMDA0Ng%3D%3D.3-ccb7-5&oh=00_Affih9EGVzxCvMdU6llceKImsjoyCYJACxFot-vMCfhy8Q&oe=68FFB78B&_nc_sid=10d13b\",           \"https://instagram.fkhh1-1.fna.fbcdn.net/v/t51.2885-15/564663388_17897939130300350_4463471963064970279_n.jpg?stp=dst-jpg_e35_s1080x1080_tt6&efg=eyJ2ZW5jb2RlX3RhZyI6InRocmVhZHMuQ0FST1VTRUxfSVRFTS5pbWFnZV91cmxnZW4uMTIwMHgxMjAwLnNkci5mODI3ODcuZGVmYXVsdF9pbWFnZS5jMiJ9&_nc_ht=instagram.fkhh1-1.fna.fbcdn.net&_nc_cat=102&_nc_oc=Q6cZ2QH4ds7sJ76PHWfd0AL9x0Mr4yu6jsjyc3zUYfOq-tYF_NeCcVT3lKdbpaMD2PgnSbo&_nc_ohc=D8LeMQ_myFsQ7kNvwG8UBHs&_nc_gid=uzHUYJYEW7Q37DUuaJCkDQ&edm=APs17CUBAAAA&ccb=7-5&ig_cache_key=Mzc0MzY0NDU1NzY0MjAwMjk2Nw%3D%3D.3-ccb7-5&oh=00_Afd6hVtE36dFfkKnxro_VjmotH_dnXRAWsKknbdxKexJUA&oe=68FFB194&_nc_sid=10d13b\",           \"https://instagram.fkhh1-1.fna.fbcdn.net/v/t51.2885-15/565391003_17897939145300350_1735253774359911648_n.jpg?stp=dst-jpg_e35_s1080x1080_tt6&efg=eyJ2ZW5jb2RlX3RhZyI6InRocmVhZHMuQ0FST1VTRUxfSVRFTS5pbWFnZV91cmxnZW4uMTIwMHgxMjAwLnNkci5mODI3ODcuZGVmYXVsdF9pbWFnZS5jMiJ9&_nc_ht=instagram.fkhh1-1.fna.fbcdn.net&_nc_cat=102&_nc_oc=Q6cZ2QH4ds7sJ76PHWfd0AL9x0Mr4yu6jsjyc3zUYfOq-tYF_NeCcVT3lKdbpaMD2PgnSbo&_nc_ohc=T3A6Fe_CgpEQ7kNvwGSvt8z&_nc_gid=uzHUYJYEW7Q37DUuaJCkDQ&edm=APs17CUBAAAA&ccb=7-5&ig_cache_key=Mzc0MzY0NDU1NzYyNTIxOTU0Nw%3D%3D.3-ccb7-5&oh=00_AfeYhpgkWO3mQTxy-bUcQrChcKE-DIiW9gqjvEM2XUSErQ&oe=68FFBD36&_nc_sid=10d13b\",           \"https://instagram.fkhh1-1.fna.fbcdn.net/v/t51.2885-15/564531880_17897939139300350_9115286245432982224_n.jpg?stp=dst-jpg_e35_s1080x1080_tt6&efg=eyJ2ZW5jb2RlX3RhZyI6InRocmVhZHMuQ0FST1VTRUxfSVRFTS5pbWFnZV91cmxnZW4uMTIwMHgxMjAwLnNkci5mODI3ODcuZGVmYXVsdF9pbWFnZS5jMiJ9&_nc_ht=instagram.fkhh1-1.fna.fbcdn.net&_nc_cat=102&_nc_oc=Q6cZ2QH4ds7sJ76PHWfd0AL9x0Mr4yu6jsjyc3zUYfOq-tYF_NeCcVT3lKdbpaMD2PgnSbo&_nc_ohc=hFpfY6qT4ZYQ7kNvwEi6pKU&_nc_gid=uzHUYJYEW7Q37DUuaJCkDQ&edm=APs17CUBAAAA&ccb=7-5&ig_cache_key=Mzc0MzY0NDU1NzY0MjAwOTQwOQ%3D%3D.3-ccb7-5&oh=00_AfdtgtdyKGEzoc_Lzy-5GEXWOG6M6BDylHPyAFxx-dOccQ&oe=68FF9B55&_nc_sid=10d13b\"         ]       },       {         \"IdentityKey\": \"7ee2736f-fbef-431c-9754-d47a3e33b2ec\",         \"ArticleUrl\": \"https://www.threads.net/@mcdonaldstw/post/DP5QO2dEx9q\",         \"ArticleTitle\": \"\",         \"CreateTime\": \"2025-10-23T14:54:15+08:00\",         \"UpdateTime\": \"2025-10-23T14:54:15+08:00\",         \"PublishTime\": \"2025-10-17T11:04:09+08:00\",         \"ArticleCategory\": \"優惠折扣\",         \"ArticleSubcategory\": \"\",         \"ArticleSource\": \"Threads\",         \"ArticleContent\": \"麥當勞《小麥麥家家酒 2.0 特餐》萌力升級！10/15 起，只要用麥當勞 APP 點歡樂送購買「小麥麥家家酒 2.0 特餐」，內含隨機一款家家酒收藏（全套六款，隨機供應不挑款）+ 一份指定主餐選擇 + 大薯 + 飲料。\\n6 款小麥麥家家酒組，讓你家變身麥當勞餐廳！還有 「歡樂送組」特別款只在歡樂送限定供應，快來帶回家❤️\\n1.家家酒含有細小配件，請謹慎收納與使用避免毛孩與幼童誤食。\\n2.畫面中部分家家酒與道具僅為情境示意使用，實際商品內容請以麥當勞官網說明為準。\\n\\n #麥當勞 #McDonalds #麥當勞歡樂送 #小麥麥家家酒2.0\",         \"ArticleDescription\": \"\",         \"ArticleTags\": \"\",         \"ArticleAuthor\": \"mcdonaldstw\",         \"ArticleImgUrl\": \"\"       },       {         \"IdentityKey\": \"60f6ecae-adcd-4a66-b04b-b9eee311c9fa\",         \"ArticleUrl\": \"https://www.threads.net/@mcdonaldstw/post/DP5QOMOk44B\",         \"ArticleTitle\": \"\",         \"CreateTime\": \"2025-10-23T14:54:11+08:00\",         \"UpdateTime\": \"2025-10-23T14:54:11+08:00\",         \"PublishTime\": \"2025-10-17T11:04:04+08:00\",         \"ArticleCategory\": \"優惠折扣\",         \"ArticleSubcategory\": \"\",         \"ArticleSource\": \"Threads\",         \"ArticleContent\": \"你以為歡樂送小麥麥家家酒 2.0 只適合貓派狗派嗎？不，不管你是袋鼠派、羊駝派 … 全都百搭！樹懶餐廳（萌寵農場）、哈比丘茶樹森林 @stardream_forest_theater 動物夥伴們參上！\\n\\n立即訂歡樂送 >> https://mcdtw.com/5/9/57\",         \"ArticleDescription\": \"\",         \"ArticleTags\": \"\",         \"ArticleAuthor\": \"mcdonaldstw\",         \"ArticleImgUrl\": [           \"https://instagram.fkhh1-1.fna.fbcdn.net/v/t51.2885-15/565979265_17898140496300350_1005051517532466914_n.jpg?stp=dst-jpg_e35_s1080x1080_tt6&efg=eyJ2ZW5jb2RlX3RhZyI6InRocmVhZHMuQ0FST1VTRUxfSVRFTS5pbWFnZV91cmxnZW4uMTIwMHgxMjAwLnNkci5mODI3ODcuZGVmYXVsdF9pbWFnZS5jMSJ9&_nc_ht=instagram.fkhh1-1.fna.fbcdn.net&_nc_cat=102&_nc_oc=Q6cZ2QHdkulAJb3dfQqLrFhdaBHnNXQBAoya9q0ML6AzqvNnevvBusOjTBL8ViG4CiarH1g&_nc_ohc=M4IrIK24JG4Q7kNvwFHQNt7&_nc_gid=EZu-_j1_nFtPndCzqbbieg&edm=APs17CUBAAAA&ccb=7-5&ig_cache_key=Mzc0NTA5NTkwMTYzMjQ3NzczMA%3D%3D.3-ccb7-5&oh=00_Aff3wYI8JaNTuLA_tiqITo5p3HFFNP34T6vGCPqbrPOlgA&oe=68FF8A4F&_nc_sid=10d13b\",           \"https://instagram.fkhh1-1.fna.fbcdn.net/v/t51.2885-15/566575442_17898140505300350_3734668042409225985_n.jpg?stp=dst-jpg_e35_s1080x1080_tt6&efg=eyJ2ZW5jb2RlX3RhZyI6InRocmVhZHMuQ0FST1VTRUxfSVRFTS5pbWFnZV91cmxnZW4uMTIwMHgxMjAwLnNkci5mODI3ODcuZGVmYXVsdF9pbWFnZS5jMSJ9&_nc_ht=instagram.fkhh1-1.fna.fbcdn.net&_nc_cat=102&_nc_oc=Q6cZ2QHdkulAJb3dfQqLrFhdaBHnNXQBAoya9q0ML6AzqvNnevvBusOjTBL8ViG4CiarH1g&_nc_ohc=rfDJ1EMo3boQ7kNvwGKCQMe&_nc_gid=EZu-_j1_nFtPndCzqbbieg&edm=APs17CUBAAAA&ccb=7-5&ig_cache_key=Mzc0NTA5NTkwMTYzMjUyODE4Mw%3D%3D.3-ccb7-5&oh=00_AffQ9REvDOTIdjCwvc64GHNNvoDoduska16UUl8Mj6otHQ&oe=68FF9E73&_nc_sid=10d13b\",           \"https://instagram.fkhh1-1.fna.fbcdn.net/v/t51.2885-15/565960190_17898140523300350_9217393979138121226_n.jpg?stp=dst-jpg_e35_s1080x1080_tt6&efg=eyJ2ZW5jb2RlX3RhZyI6InRocmVhZHMuQ0FST1VTRUxfSVRFTS5pbWFnZV91cmxnZW4uMTIwMHgxMjAwLnNkci5mODI3ODcuZGVmYXVsdF9pbWFnZS5jMSJ9&_nc_ht=instagram.fkhh1-1.fna.fbcdn.net&_nc_cat=102&_nc_oc=Q6cZ2QHdkulAJb3dfQqLrFhdaBHnNXQBAoya9q0ML6AzqvNnevvBusOjTBL8ViG4CiarH1g&_nc_ohc=IG4I2go66FgQ7kNvwEZRlnb&_nc_gid=EZu-_j1_nFtPndCzqbbieg&edm=APs17CUBAAAA&ccb=7-5&ig_cache_key=Mzc0NTA5NTkwMDkwMjY5Mjk1MQ%3D%3D.3-ccb7-5&oh=00_AfdRGerz36xWmV9vLhesEmObEALbmxcTISU6pdcfR-D6VQ&oe=68FF910C&_nc_sid=10d13b\",           \"https://instagram.fkhh1-1.fna.fbcdn.net/v/t51.2885-15/565338345_17898140538300350_5105791059464246346_n.jpg?stp=dst-jpg_e35_s1080x1080_tt6&efg=eyJ2ZW5jb2RlX3RhZyI6InRocmVhZHMuQ0FST1VTRUxfSVRFTS5pbWFnZV91cmxnZW4uMTIwMHgxMjAwLnNkci5mODI3ODcuZGVmYXVsdF9pbWFnZS5jMSJ9&_nc_ht=instagram.fkhh1-1.fna.fbcdn.net&_nc_cat=102&_nc_oc=Q6cZ2QHdkulAJb3dfQqLrFhdaBHnNXQBAoya9q0ML6AzqvNnevvBusOjTBL8ViG4CiarH1g&_nc_ohc=YSRI8n--V_8Q7kNvwFfnNGs&_nc_gid=EZu-_j1_nFtPndCzqbbieg&edm=APs17CUBAAAA&ccb=7-5&ig_cache_key=Mzc0NTA5NTkwMTIzODIyOTc5OQ%3D%3D.3-ccb7-5&oh=00_AfdTE-NZ6cpUYnOexii_8nVQbBiXcptPP7wvOk18FKtEvQ&oe=68FF9294&_nc_sid=10d13b\",           \"https://instagram.fkhh1-1.fna.fbcdn.net/v/t51.2885-15/565419909_17898140514300350_666810301370876487_n.jpg?stp=dst-jpg_e35_s1080x1080_tt6&efg=eyJ2ZW5jb2RlX3RhZyI6InRocmVhZHMuQ0FST1VTRUxfSVRFTS5pbWFnZV91cmxnZW4uMTIwMHgxMjAwLnNkci5mODI3ODcuZGVmYXVsdF9pbWFnZS5jMSJ9&_nc_ht=instagram.fkhh1-1.fna.fbcdn.net&_nc_cat=102&_nc_oc=Q6cZ2QHdkulAJb3dfQqLrFhdaBHnNXQBAoya9q0ML6AzqvNnevvBusOjTBL8ViG4CiarH1g&_nc_ohc=fsbKvYwSsJYQ7kNvwFD8ikd&_nc_gid=EZu-_j1_nFtPndCzqbbieg&edm=APs17CUBAAAA&ccb=7-5&ig_cache_key=Mzc0NTA5NTkwMTU5ODkzMDMzMA%3D%3D.3-ccb7-5&oh=00_AfdN_ucJWUU1do-xdpUIkhaXmrLeQFGTyRmdfaBJVNThJw&oe=68FF8EC0&_nc_sid=10d13b\",           \"https://instagram.fkhh1-1.fna.fbcdn.net/v/t51.2885-15/565487148_17898140541300350_8430039719517750236_n.jpg?stp=dst-jpg_e35_s1080x1080_tt6&efg=eyJ2ZW5jb2RlX3RhZyI6InRocmVhZHMuQ0FST1VTRUxfSVRFTS5pbWFnZV91cmxnZW4uMTIwMHgxMjAwLnNkci5mODI3ODcuZGVmYXVsdF9pbWFnZS5jMSJ9&_nc_ht=instagram.fkhh1-1.fna.fbcdn.net&_nc_cat=102&_nc_oc=Q6cZ2QHdkulAJb3dfQqLrFhdaBHnNXQBAoya9q0ML6AzqvNnevvBusOjTBL8ViG4CiarH1g&_nc_ohc=KVhyujbbwfgQ7kNvwFZQYsa&_nc_gid=EZu-_j1_nFtPndCzqbbieg&edm=APs17CUBAAAA&ccb=7-5&ig_cache_key=Mzc0NTA5NTkwMTIzODI0MTIyNA%3D%3D.3-ccb7-5&oh=00_Aff25c898UFLu1GwtHJoRwrC6R0euE_5twaLy0iP5m7tOw&oe=68FFA2C8&_nc_sid=10d13b\",           \"https://instagram.fkhh1-1.fna.fbcdn.net/v/t51.2885-15/565441941_17898140556300350_3354736484559018734_n.jpg?stp=dst-jpg_e35_s1080x1080_tt6&efg=eyJ2ZW5jb2RlX3RhZyI6InRocmVhZHMuQ0FST1VTRUxfSVRFTS5pbWFnZV91cmxnZW4uMTIwMHgxMjAwLnNkci5mODI3ODcuZGVmYXVsdF9pbWFnZS5jMSJ9&_nc_ht=instagram.fkhh1-1.fna.fbcdn.net&_nc_cat=102&_nc_oc=Q6cZ2QHdkulAJb3dfQqLrFhdaBHnNXQBAoya9q0ML6AzqvNnevvBusOjTBL8ViG4CiarH1g&_nc_ohc=78ead8I_v6kQ7kNvwErfSXs&_nc_gid=EZu-_j1_nFtPndCzqbbieg&edm=APs17CUBAAAA&ccb=7-5&ig_cache_key=Mzc0NTA5NTkwMTQwNjAxNzUyNA%3D%3D.3-ccb7-5&oh=00_AfeTal2Asj4qBkGCWPN0oLA77l3l3zE6Xwr5JtCE5mYH7Q&oe=68FFB41E&_nc_sid=10d13b\",           \"https://instagram.fkhh1-1.fna.fbcdn.net/v/t51.2885-15/565474205_17898140559300350_3802229051867586705_n.jpg?stp=dst-jpg_e35_s1080x1080_tt6&efg=eyJ2ZW5jb2RlX3RhZyI6InRocmVhZHMuQ0FST1VTRUxfSVRFTS5pbWFnZV91cmxnZW4uMTIwMHgxMjAwLnNkci5mODI3ODcuZGVmYXVsdF9pbWFnZS5jMSJ9&_nc_ht=instagram.fkhh1-1.fna.fbcdn.net&_nc_cat=102&_nc_oc=Q6cZ2QHdkulAJb3dfQqLrFhdaBHnNXQBAoya9q0ML6AzqvNnevvBusOjTBL8ViG4CiarH1g&_nc_ohc=HjOHD6Qa7MMQ7kNvwF2rPyD&_nc_gid=EZu-_j1_nFtPndCzqbbieg&edm=APs17CUBAAAA&ccb=7-5&ig_cache_key=Mzc0NTA5NTkwMTAxMTczNzQyMA%3D%3D.3-ccb7-5&oh=00_AfcCC4wN6NxIXGrYieWCyGZqt2WMH0p2f7xgNALa8nc1lA&oe=68FF9117&_nc_sid=10d13b\"         ]       },       {         \"IdentityKey\": \"f48a7834-058b-4814-97f7-94abb3821e26\",         \"ArticleUrl\": \"https://www.threads.net/@mcdonaldstw/post/DQDi6_BE7kY\",         \"ArticleTitle\": \"\",         \"CreateTime\": \"2025-10-23T14:54:07+08:00\",         \"UpdateTime\": \"2025-10-23T14:54:07+08:00\",         \"PublishTime\": \"2025-10-21T10:59:52+08:00\",         \"ArticleCategory\": \"優惠折扣\",         \"ArticleSubcategory\": \"\",         \"ArticleSource\": \"Threads\",         \"ArticleContent\": \"#1 大甲媽祖遶境時，不少民眾會到這裡買漢堡當結緣品，用圓圓的漢堡，加深彼此的緣🍔\\n\\n#2 白沙屯媽組遶境期間，曾經進到這間餐廳喔！店經理特地拿出珍藏的「駐駕留念」旗幟，見證麥當勞與在地文化的緊密連結。\\n\\n#3 這麼ㄎㄧㄤ的生日派對，你見過嗎！？ 曾有壽星阿嬤穿著皇帝龍袍進場，親友們則舉起「肅靜迴避」立牌，麥胞們也超入戲的播放配樂「恭迎」壽星到來！\\n\\n#4 來到大甲，別錯過最有名的芋頭！到老街買一串炸芋頭，沾著冰炫風吃，解鎖最在地的隱藏吃法吧！\",         \"ArticleDescription\": \"\",         \"ArticleTags\": \"\",         \"ArticleAuthor\": \"mcdonaldstw\",         \"ArticleImgUrl\": [           \"https://instagram.fkhh1-1.fna.fbcdn.net/v/t51.2885-15/568311053_17898565620300350_3571957454318455871_n.jpg?stp=dst-jpg_e35_p1080x1080_tt6&efg=eyJ2ZW5jb2RlX3RhZyI6InRocmVhZHMuQ0FST1VTRUxfSVRFTS5pbWFnZV91cmxnZW4uMTIwMHgxNTAwLnNkci5mODI3ODcuZGVmYXVsdF9pbWFnZS5jMiJ9&_nc_ht=instagram.fkhh1-1.fna.fbcdn.net&_nc_cat=102&_nc_oc=Q6cZ2QEONm1m5ry88vFhh3Zm3g5Re2fmEaYEByFJ5UR6YfyUp1al-0-BPuCWV8XLyfeKOhE&_nc_ohc=5HDaJ4H3tPAQ7kNvwHnDF2j&_nc_gid=N3gOX0hkmyTFTn6xDYU1fA&edm=APs17CUBAAAA&ccb=7-5&ig_cache_key=Mzc0Nzk5Mjg5NjM0MDcwOTM1OA%3D%3D.3-ccb7-5&oh=00_AfercPBYjUm_4Q_UUFZ_M1sST2xkStkPQYxcl88XWxZl_A&oe=68FFBB6E&_nc_sid=10d13b\",           \"https://instagram.fkhh1-1.fna.fbcdn.net/v/t51.2885-15/567961890_17898565629300350_91652140881437291_n.jpg?stp=dst-jpg_e35_p1080x1080_tt6&efg=eyJ2ZW5jb2RlX3RhZyI6InRocmVhZHMuQ0FST1VTRUxfSVRFTS5pbWFnZV91cmxnZW4uMTIwMHgxNTAwLnNkci5mODI3ODcuZGVmYXVsdF9pbWFnZS5jMiJ9&_nc_ht=instagram.fkhh1-1.fna.fbcdn.net&_nc_cat=102&_nc_oc=Q6cZ2QEONm1m5ry88vFhh3Zm3g5Re2fmEaYEByFJ5UR6YfyUp1al-0-BPuCWV8XLyfeKOhE&_nc_ohc=xOJH51t9yQMQ7kNvwEU4wIT&_nc_gid=N3gOX0hkmyTFTn6xDYU1fA&edm=APs17CUBAAAA&ccb=7-5&ig_cache_key=Mzc0Nzk5Mjg5NjM0MDcyOTA2Mw%3D%3D.3-ccb7-5&oh=00_AffbryR0aHEjqPyYaUfu-P88tHHjYb3b6P3UKOYsx7INsA&oe=68FF87C3&_nc_sid=10d13b\"         ]       },       {         \"IdentityKey\": \"d5eaaa4f-040b-4d58-a298-4fe11f192955\",         \"ArticleUrl\": \"https://www.threads.net/@mcdonaldstw/post/DQDi57KE-Rr\",         \"ArticleTitle\": \"\",         \"CreateTime\": \"2025-10-23T14:54:03+08:00\",         \"UpdateTime\": \"2025-10-23T14:54:03+08:00\",         \"PublishTime\": \"2025-10-21T10:59:44+08:00\",         \"ArticleCategory\": \"優惠折扣\",         \"ArticleSubcategory\": \"\",         \"ArticleSource\": \"Threads\",         \"ArticleContent\": \"猜猜大麥客這次到哪間麥當勞玩啦？\\n小提示：芋頭超好吃、粉紅超跑曾經停留\\n\\n猜中了嗎？\\\\ 這裡是麥當勞大甲經國餐廳 /\\n\\n漢堡當結緣品、粉紅超跑造訪、阿嬤穿龍袍來慶生，以及⋯⋯冰炫風隱藏版吃法㊙️！？\\n\\n關於這裡，你可能會很意外的 points 有這些：\",         \"ArticleDescription\": \"\",         \"ArticleTags\": \"\",         \"ArticleAuthor\": \"mcdonaldstw\",         \"ArticleImgUrl\": \"\"       },       {         \"IdentityKey\": \"5e4288b5-6d86-46cc-9353-854786b02dcd\",         \"ArticleUrl\": \"https://www.threads.net/@mcdonaldstw/post/DQIsqNlk3HE\",         \"ArticleTitle\": \"\",         \"CreateTime\": \"2025-10-23T14:53:59+08:00\",         \"UpdateTime\": \"2025-10-23T14:53:59+08:00\",         \"PublishTime\": \"2025-10-23T11:01:10+08:00\",         \"ArticleCategory\": \"優惠折扣\",         \"ArticleSubcategory\": \"\",         \"ArticleSource\": \"Threads\",         \"ArticleContent\": \"\\\\\\\\\\\\ 小麥麥家家酒來了 ///\\n現在用麥當勞 APP 點歡樂送購買「小麥麥家家酒 2.0 特餐」，內含隨機一款家家酒收藏（全套六款，隨機供應不挑款）+ 一份指定主餐選擇 + 大薯 + 飲料\\n\\n1. 家家酒含有細小配件，請謹慎收納與使用避免毛孩與幼童誤食。\\n2. 畫面中部分家家酒與道具僅為情境示意使用，實際商品內容請以麥當勞官網說明為準。\",         \"ArticleDescription\": \"\",         \"ArticleTags\": \"\",         \"ArticleAuthor\": \"mcdonaldstw\",         \"ArticleImgUrl\": \"\"       },       {         \"IdentityKey\": \"6c763bf4-aaec-4574-a74c-f34170d5906d\",         \"ArticleUrl\": \"https://www.threads.net/@mcdonaldstw/post/DQIspIEk4p8\",         \"ArticleTitle\": \"\",         \"CreateTime\": \"2025-10-23T14:53:55+08:00\",         \"UpdateTime\": \"2025-10-23T14:53:55+08:00\",         \"PublishTime\": \"2025-10-23T11:01:01+08:00\",         \"ArticleCategory\": \"優惠折扣\",         \"ArticleSubcategory\": \"\",         \"ArticleSource\": \"Threads\",         \"ArticleContent\": \"和寵物一起玩家家酒，他好像蠻開心的❤️\\n想要來一份歡樂送的歡迎下方舉手\",         \"ArticleDescription\": \"\",         \"ArticleTags\": \"\",         \"ArticleAuthor\": \"mcdonaldstw\",         \"ArticleImgUrl\": [           \"https://instagram.fkhh1-1.fna.fbcdn.net/v/t51.2885-15/568766317_17898774348300350_377430021764351694_n.jpg?stp=dst-jpg_e35_s1080x1080_tt6&efg=eyJ2ZW5jb2RlX3RhZyI6InRocmVhZHMuQ0FST1VTRUxfSVRFTS5pbWFnZV91cmxnZW4uMTQzOXgxNDM5LnNkci5mODI3ODcuZGVmYXVsdF9pbWFnZS5jMiJ9&_nc_ht=instagram.fkhh1-1.fna.fbcdn.net&_nc_cat=102&_nc_oc=Q6cZ2QHK588aASRFid7nOAermihlRmIq1HblRMgvd9LZWzTKYXrltpvTTxQwDSZUS0H6pNw&_nc_ohc=ZHrNbseoWLkQ7kNvwFgnvni&_nc_gid=FlZ-Vhz_00Z2Q8tR5-pQEA&edm=APs17CUBAAAA&ccb=7-5&ig_cache_key=Mzc0OTQ0MzAyNDUxMTU2MjQ4Mw%3D%3D.3-ccb7-5&oh=00_AfdPxuc1CdXgkjIoGjQeNoLJXoNyjE7nj8r5v3khn-_XcQ&oe=68FF9A4C&_nc_sid=10d13b\",           \"https://instagram.fkhh1-1.fna.fbcdn.net/v/t51.2885-15/568407717_17898774384300350_4989718966908427340_n.jpg?stp=dst-jpg_e35_s1080x1080_tt6&efg=eyJ2ZW5jb2RlX3RhZyI6InRocmVhZHMuQ0FST1VTRUxfSVRFTS5pbWFnZV91cmxnZW4uMTQzOXgxNDM5LnNkci5mODI3ODcuZGVmYXVsdF9pbWFnZS5jMiJ9&_nc_ht=instagram.fkhh1-1.fna.fbcdn.net&_nc_cat=102&_nc_oc=Q6cZ2QHK588aASRFid7nOAermihlRmIq1HblRMgvd9LZWzTKYXrltpvTTxQwDSZUS0H6pNw&_nc_ohc=cJf_S4WTe7IQ7kNvwFHFSlH&_nc_gid=FlZ-Vhz_00Z2Q8tR5-pQEA&edm=APs17CUBAAAA&ccb=7-5&ig_cache_key=Mzc0OTQ0MzAyNDAyNDk2NjEzNQ%3D%3D.3-ccb7-5&oh=00_Afd3kDKP4o2OEJSUjusj00h8gC_Y83YVTHJwuUdqR_F_yA&oe=68FFAFEE&_nc_sid=10d13b\",           \"https://instagram.fkhh1-1.fna.fbcdn.net/v/t51.2885-15/568553799_17898774393300350_90388150063178125_n.jpg?stp=dst-jpg_e35_s1080x1080_tt6&efg=eyJ2ZW5jb2RlX3RhZyI6InRocmVhZHMuQ0FST1VTRUxfSVRFTS5pbWFnZV91cmxnZW4uMTQzOXgxNDM5LnNkci5mODI3ODcuZGVmYXVsdF9pbWFnZS5jMiJ9&_nc_ht=instagram.fkhh1-1.fna.fbcdn.net&_nc_cat=102&_nc_oc=Q6cZ2QHK588aASRFid7nOAermihlRmIq1HblRMgvd9LZWzTKYXrltpvTTxQwDSZUS0H6pNw&_nc_ohc=wwREeQOxGYwQ7kNvwHkk3Ov&_nc_gid=FlZ-Vhz_00Z2Q8tR5-pQEA&edm=APs17CUBAAAA&ccb=7-5&ig_cache_key=Mzc0OTQ0MzAyNDIxNzk1Mzc1Ng%3D%3D.3-ccb7-5&oh=00_Afc6H9ejlLyZrC81C565NufRQk181y3M92d6jnQmRCQQ0A&oe=68FFB19A&_nc_sid=10d13b\"         ]       }     ],     \"errorMessage\": null   } ]",
+              "type": "array"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        4784,
+        608
+      ],
+      "id": "7a099942-d858-4d3c-a5be-7a0bf4cf595f",
+      "name": "測試用節點"
+    },
+    {
+      "parameters": {
+        "content": "## 挑選文章、撰寫文章",
+        "height": 608,
+        "width": 2000,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        4160,
+        992
+      ],
+      "typeVersion": 1,
+      "id": "ff6ce448-6848-4ea3-a8a7-3b86c121e7bd",
+      "name": "Sticky Note6"
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.5-pro",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        5600,
+        1920
+      ],
+      "id": "db673974-120d-47c0-91dc-6cba874627d3",
+      "name": "Google Gemini Chat Model3",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "rzGYcHVXRNXHjFPp",
+          "name": "Google Gemini(PaLM) Api account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "## AI品質驗證",
+        "height": 416,
+        "width": 1216,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        5280,
+        1664
+      ],
+      "typeVersion": 1,
+      "id": "a1f52142-4e94-4679-9453-776252d27122",
+      "name": "Sticky Note7"
+    },
+    {
+      "parameters": {
+        "content": "## 回寫DB",
+        "height": 416,
+        "width": 960,
+        "color": 2
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        6128,
+        2144
+      ],
+      "typeVersion": 1,
+      "id": "977161f9-6906-4413-a865-ec0b63a34759",
+      "name": "Sticky Note8"
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.5-pro",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        5584,
+        1408
+      ],
+      "id": "d763b863-38df-476b-8ca1-020fd8896817",
+      "name": "Google Gemini Chat Model5",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "rzGYcHVXRNXHjFPp",
+          "name": "Google Gemini(PaLM) Api account 2"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "RSS Read(省錢主婦｜蝦皮、超商、好市多、優惠)": {
+      "main": [
+        [
+          {
+            "node": "寫入supabase DB",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "必勝客 台灣官方": {
+      "main": [
+        [
+          {
+            "node": "寫入supabase DB",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "7-ELEVEn Taiwan": {
+      "main": [
+        [
+          {
+            "node": "寫入supabase DB",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "全家便利商店": {
+      "main": [
+        [
+          {
+            "node": "寫入supabase DB",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "省錢主婦": {
+      "main": [
+        [
+          {
+            "node": "寫入supabase DB",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "省錢加雞腿": {
+      "main": [
+        [
+          {
+            "node": "寫入supabase DB",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "麥當勞": {
+      "main": [
+        [
+          {
+            "node": "寫入supabase DB",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "好康情報誌": {
+      "main": [
+        [
+          {
+            "node": "寫入supabase DB",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "foodpanda Taiwan": {
+      "main": [
+        [
+          {
+            "node": "寫入supabase DB",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent(產內文)",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Supabase DB_threads": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent(產內文)",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "撰寫prompt": {
+      "main": [
+        [
+          {
+            "node": "AI Agent(產內文)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "取得ES資料",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "內文_Markdown/換行符號轉成 HTML": {
+      "main": [
+        [
+          {
+            "node": "telegram通知",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "寫入supabase DB_new",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "寫入supabase DB_ALL",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "內文守門員prompt",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent(產內文)": {
+      "main": [
+        [
+          {
+            "node": "內文AI回傳轉json",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "內文AI回傳轉json": {
+      "main": [
+        [
+          {
+            "node": "內文_Markdown/換行符號轉成 HTML",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent(內文守門員)",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent(內文守門員)": {
+      "main": [
+        [
+          {
+            "node": "內文守門員AI回傳轉json",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "內文守門員AI回傳轉json": {
+      "main": [
+        [
+          {
+            "node": "轉成平鋪格式物件",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "轉成平鋪格式物件": {
+      "main": [
+        [
+          {
+            "node": "本次訓練結果",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "本次訓練結果": {
+      "main": [
+        [
+          {
+            "node": "AI Agent(標題生成)",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        []
+      ]
+    },
+    "Google Gemini Chat Model2": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent(標題生成)",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent(標題生成)": {
+      "main": [
+        [
+          {
+            "node": "內文守門員AI回傳轉json1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "內文守門員prompt": {
+      "main": [
+        [
+          {
+            "node": "AI Agent(內文守門員)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "取得ES資料": {
+      "main": [
+        [
+          {
+            "node": "篩選ES資料",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "篩選ES資料": {
+      "main": [
+        [
+          {
+            "node": "挑選文章prompt",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model4": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "挑選文章AI",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "挑選文章AI": {
+      "main": [
+        [
+          {
+            "node": "整理挑選中的文章",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "整理挑選中的文章": {
+      "main": [
+        [
+          {
+            "node": "文章生成prompt",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "文章生成prompt": {
+      "main": [
+        [
+          {
+            "node": "文章生成",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "品質守門員": {
+      "main": [
+        [
+          {
+            "node": "品質檢驗結果",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "文章生成": {
+      "main": [
+        [
+          {
+            "node": "轉成HTML",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "品質守門員prompt": {
+      "main": [
+        [
+          {
+            "node": "品質守門員",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "挑選文章prompt": {
+      "main": [
+        [
+          {
+            "node": "挑選文章AI",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "整理回寫格式": {
+      "main": [
+        [
+          {
+            "node": "最終檢查所有欄位",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Output Parser (驗證)": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "挑選文章AI",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "文章生成",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser1": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "品質守門員",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "最終檢查所有欄位": {
+      "main": [
+        [
+          {
+            "node": "儲存到新頭殼DB",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "telegram失敗通知",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "轉成HTML": {
+      "main": [
+        [
+          {
+            "node": "品質守門員prompt",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "telegram失敗通知",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "品質檢驗結果": {
+      "main": [
+        [
+          {
+            "node": "整理回寫格式",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "telegram失敗通知",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "儲存到新頭殼DB": {
+      "main": [
+        [
+          {
+            "node": "telegram成功通知",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model3": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "品質守門員",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model5": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "文章生成",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": {
+    "node:Schedule Trigger": {
+      "recurrenceRules": []
+    },
+    "node:Schedule Trigger1": {
+      "recurrenceRules": []
+    }
+  },
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {
+    "AI Agent(產內文)": [
+      {
+        "json": {
+          "output": "```json\n{\n  \"prompt\": \"階段一：單一最佳品牌選題與深度生成\\n\\n【AI 系統角色與任務】\\n角色：您是一位專門撰寫高流量、高 SEO 權重優惠文章的**內容總監**。您的核心任務是：從提供的所有原始優惠資料中，**嚴格篩選**並**僅選擇出單一最適合發布的「頭條品牌」**，然後將該品牌當天所有合格的優惠資訊，整合為一篇**專屬且完整的深度文章**。\\n\\n目標：在一次執行中，**僅產出一篇**針對單一品牌的最高價值文章 JSON 物件。\\n\\n**【輸入資料格式說明】**\\n請**嚴格**參考以下欄位名稱進行篩選與寫作：\\n1. 「內容/優惠詳情」：欄位名稱為 **'contentSnippet'**。\\n2. 「發布日期」：欄位名稱為 **'isoDate'** (用於判斷發文時間)。\\n3. 「發文者/品牌帳號」：欄位名稱為 **'creator'** (例如: '@familymart_tw')。\\n\\n【第一階段：資料篩選與判斷 — 絕對排除！】\\n在開始寫作前，您必須嚴格遵循以下規則。任何違反規則的資料，必須立即排除，不予寫作。\\n\\n1. 品牌範圍：\\n* **僅處理**以下 **10 大品牌**的資料：麥當勞, Foodpanda, 好市多, 高鐵, 星巴克, 全家, 全聯, Uber, 必勝客, 7-ELEVEN。請從 **'creator'** 欄位判斷品牌。資料若來自這 10 個品牌以外，請立即排除。\\n2. 內容類型排除（吸引力篩選）：\\n* 流量關鍵字：**必須**從 **'contentSnippet'** 中提取，包含以下任一實質優惠關鍵字：「優惠碼」、「折扣碼」、「買一送一」、「半價」、「降價」、「免費」、「最低 X 折」。\\n* 強制排除：若優惠內容屬於「聯名商品」、「周邊商品加購」、「集點活動」、「抽獎」，且無任何實質折扣或優惠碼，則立即排除。\\n3. 時效性判斷：\\n* **時效性判定標準：** 只要 **'isoDate'** 在**今日起算 7 天內**，且內容符合「流量關鍵字」，即通過篩選。\\n\\n---\\n\\n## 【第二階段：單一最佳品牌選擇與深度寫作】\\n\\n**重要指令：**\\n1.  **頭條品牌選擇：** 請比較所有通過第一階段篩選的優惠項目，您必須且只能選擇**單一**品牌作為本輪文章的主題。\\n2.  **優先級：** 優先選擇**擁有最多**「買一送一」或「優惠碼」活動的品牌。如果多個品牌數量相同，選擇**最近發布日期 ('isoDate')** 的品牌。\\n3.  **內容整合（關鍵！）：** 請將所有**通過篩選的，且與您選中品牌相關的所有優惠細節**，全部寫入同一篇文章中。\\n\\n---\\n\\n## 【嚴格格式規範與排除】\\n\\n**輸出格式強制要求：**\\n* 內文 **'content'** 欄位**絕對禁止**輸出任何 HTML 標籤。這包括但不限於：<p>、<b>、<br>、<code>或任何其他 HTML 標籤。\\n* **僅使用 Markdown 語法** (**粗體**、- 列點、\\n 換行) 來控制格式。\\n* **嚴禁**輸出任何形式的 <br> 標籤。\\n\\n### 文章結構寫作規範 (使用 \\n 控制換行)\\n\\n1. 標題與導言（決定點擊率）\\n標題規範：標題長度應在 18-25 個中文字之間。標題強制包含「品牌名稱」、「關鍵優惠字」和「精確時效性」。\\n**導言結束後：** 必須以 **兩個換行符號 (\\n\\n)** 區隔下方的懶人包。\\n\\n2. **核心懶人包（快速解決痛點 - 內容與日期強化！）**\\n**強制置頂：** 將**所有**與選定品牌相關的有效優惠資訊，以 **Markdown 粗體列點清單**的方式置於導言之後。\\n**日期提取強化：** 在「活動日期」欄位，**必須盡全力從原始資料中提取出精確的日期**。如果原始資料中沒有任何日期線索，才允許寫「**詳見官方貼文**」。\\n**清單結構範例：**\\n請務必使用粗體字來強調關鍵資訊。在每一個項目（例如：優惠品項/代碼、內容、**活動日期**）之間使用 **一個換行符號 (\\n)** 來保持緊湊，項目結束後再使用 **兩個換行符號 (\\n\\n)** 區隔下一個區塊：\\n**【本週 [品牌名稱] 必看優惠整理】**\\n\\n- **優惠品項/代碼：** [精確的品項名稱或代碼]\\n\\n  **內容：** [優惠內容/折扣額度]\\n\\n  **活動日期：** [**必須**是精確日期或**詳見官方貼文**]\\n\\n\\n\\n3. 優惠詳細分類與說明（強化 SEO）\\n結構化：將所有優惠資訊按類別分段落介紹。**嚴禁使用 H2 和 H3 標籤。**\\n**標籤模擬與換行強制規定：**\\n* 所有分類的大標題（例如：週末消暑首選），請使用**粗體字**，並在標題**上方與下方**各加上 **兩個換行符號 (\\n\\n)** 來模擬清晰的段落間隔。\\n* **強制細節分段：** 針對每個優惠活動，必須使用以下**獨立標註與分段**，確保細節清晰可讀：\\n    * 在段落內使用 **優惠條件：** [內容]\\n\\n\\n    * 在段落內使用 **適用門市/對象：** [內容]\\n\\n\\n    * 在段落內使用 **使用限制：** [內容]\\n\\n\\n* 每個**詳細內容段落**之間（例如：從「週末消暑首選」到「手搖飲愛好者必看」），必須使用 **兩個換行符號 (\\n\\n)** 來區隔。\\n詳細內容：必須針對該優惠，詳細說明「優惠條件」、「適用門市/對象」及「使用限制」。\\n\\n**請嚴格依照以下 JSON 結構回傳：**\\n{\\n  \\\"prompt\\\": \\\"<請直接塞入上面這段字串，不要改寫>\\\",\\n  \\\"title\\\": 標題,\\n  \\\"content\\\": 內文\\n}\",\n  \"title\": \"7-ELEVEN週末優惠！思樂冰降價，黑糖珍珠撞奶買二送二\",\n  \"content\": \"週末小確幸來了！7-ELEVEN 本週推出超值消暑優惠，不管是經典不敗的思樂冰、霜淇淋，還是人氣爆棚的黑糖珍珠撞奶，都有驚喜折扣，快揪朋友一起享受涼爽的週末時光！\\n\\n\\n**【本週 7-ELEVEN 必看優惠整理】**\\n\\n- **優惠品項/代碼：** 黑糖珍珠撞奶等飲品\\n\\n  **內容：** 享買二送二優惠\\n\\n  **活動日期：** 本週末期間\\n\\n\\n\\n- **優惠品項/代碼：** 思樂冰及霜淇淋\\n\\n  **內容：** 享第二件10元優惠\\n\\n  **活動日期：** 本週末期間\\n\\n\\n\\n\\n**週末消暑首選：思樂冰、霜淇淋清涼降價**\\n\\n隨著天氣逐漸炎熱，最適合來點冰品消暑！7-ELEVEN 針對旗下超受歡迎的思樂冰與霜淇淋，推出了限時降價活動，絕對是週末出遊或宅在家的最佳良伴。\\n\\n**優惠條件：** 活動期間內，凡購買思樂冰或霜淇淋，即可享受同品項第二件只要10元的超值優惠。\\n\\n**適用門市/對象：** 全台有販售思樂冰及霜淇淋之 7-ELEVEN 特殊門市，所有消費者皆適用。\\n\\n**使用限制：** 優惠品項以各門市實際販售與庫存為準，建議可先向店員確認，避免撲空。\\n\\n\\n\\n**手搖飲愛好者必看：黑糖珍珠撞奶買二送二**\\n\\n喜歡咀嚼口感與濃郁奶香的你千萬別錯過！7-ELEVEN 的 CITY PEARL 系列飲品也加入了本週優惠陣容，超人氣的黑糖珍珠撞奶現在有買二送二活動，相當於半價就能喝到！\\n\\n**優惠條件：** 購買黑糖珍珠撞奶等指定 CITY PEARL 系列飲品，即可享有買二送二的優惠，平均一杯價格更划算。\\n\\n**適用門市/對象：** 適用於全台提供 CITY PEARL 現萃珍珠飲品的 7-ELEVEN 門市。\\n\\n**使用限制：** 實際參與活動的飲品項目與細節，請依 7-ELEVEN 官方公告或門市現場資訊為準。\"\n}\n```"
+        }
+      }
+    ],
+    "內文AI回傳轉json": [
+      {
+        "json": {
+          "prompt": "{\n  \"prompt\": \"階段一：單一最佳品牌選題與深度生成\\n\\n【AI 系統角色與任務】\\n角色：您是一位專門撰寫高流量、高 SEO 權重優惠文章的**內容總監**。您的核心任務是：從提供的所有原始優惠資料中，**嚴格篩選**並**僅選擇出單一最適合發布的「頭條品牌」**，然後將該品牌當天所有合格的優惠資訊，整合為一篇**專屬且完整的深度文章**。\\n\\n目標：在一次執行中，**僅產出一篇**針對單一品牌的最高價值文章 JSON 物件。\\n\\n**【輸入資料格式說明】**\\n請**嚴格**參考以下欄位名稱進行篩選與寫作：\\n1. 「內容/優惠詳情」：欄位名稱為 **'contentSnippet'**。\\n2. 「發布日期」：欄位名稱為 **'isoDate'** (用於判斷發文時間)。\\n3. 「發文者/品牌帳號」：欄位名稱為 **'creator'** (例如: '@familymart_tw')。\\n\\n【第一階段：資料篩選與判斷 — 絕對排除！】\\n在開始寫作前，您必須嚴格遵循以下規則。任何違反規則的資料，必須立即排除，不予寫作。\\n\\n1. 品牌範圍：\\n* **僅處理**以下 **10 大品牌**的資料：麥當勞, Foodpanda, 好市多, 高鐵, 星巴克, 全家, 全聯, Uber, 必勝客, 7-ELEVEN。請從 **'creator'** 欄位判斷品牌。資料若來自這 10 個品牌以外，請立即排除。\\n2. 內容類型排除（吸引力篩選）：\\n* 流量關鍵字：**必須**從 **'contentSnippet'** 中提取，包含以下任一實質優惠關鍵字：「優惠碼」、「折扣碼」、「買一送一」、「半價」、「降價」、「免費」、「最低 X 折」。\\n* 強制排除：若優惠內容屬於「聯名商品」、「周邊商品加購」、「集點活動」、「抽獎」，且無任何實質折扣或優惠碼，則立即排除。\\n3. 時效性判斷：\\n* **時效性判定標準：** 只要 **'isoDate'** 在**今日起算 7 天內**，且內容符合「流量關鍵字」，即通過篩選。\\n\\n---\\n\\n## 【第二階段：單一最佳品牌選擇與深度寫作】\\n\\n**重要指令：**\\n1.  **頭條品牌選擇：** 請比較所有通過第一階段篩選的優惠項目，您必須且只能選擇**單一**品牌作為本輪文章的主題。\\n2.  **優先級：** 優先選擇**擁有最多**「買一送一」或「優惠碼」活動的品牌。如果多個品牌數量相同，選擇**最近發布日期 ('isoDate')** 的品牌。\\n3.  **內容整合（關鍵！）：** 請將所有**通過篩選的，且與您選中品牌相關的所有優惠細節**，全部寫入同一篇文章中。\\n\\n---\\n\\n## 【嚴格格式規範與排除】\\n\\n**輸出格式強制要求：**\\n* 內文 **'content'** 欄位**絕對禁止**輸出任何 HTML 標籤。這包括但不限於：<p>、<b>、<br>、<code>或任何其他 HTML 標籤。\\n* **僅使用 Markdown 語法** (**粗體**、- 列點、\\n 換行) 來控制格式。\\n* **嚴禁**輸出任何形式的 <br> 標籤。\\n\\n### 文章結構寫作規範 (使用 \\n 控制換行)\\n\\n1. 標題與導言（決定點擊率）\\n標題規範：標題長度應在 18-25 個中文字之間。標題強制包含「品牌名稱」、「關鍵優惠字」和「精確時效性」。\\n**導言結束後：** 必須以 **兩個換行符號 (\\n\\n)** 區隔下方的懶人包。\\n\\n2. **核心懶人包（快速解決痛點 - 內容與日期強化！）**\\n**強制置頂：** 將**所有**與選定品牌相關的有效優惠資訊，以 **Markdown 粗體列點清單**的方式置於導言之後。\\n**日期提取強化：** 在「活動日期」欄位，**必須盡全力從原始資料中提取出精確的日期**。如果原始資料中沒有任何日期線索，才允許寫「**詳見官方貼文**」。\\n**清單結構範例：**\\n請務必使用粗體字來強調關鍵資訊。在每一個項目（例如：優惠品項/代碼、內容、**活動日期**）之間使用 **一個換行符號 (\\n)** 來保持緊湊，項目結束後再使用 **兩個換行符號 (\\n\\n)** 區隔下一個區塊：\\n**【本週 [品牌名稱] 必看優惠整理】**\\n\\n- **優惠品項/代碼：** [精確的品項名稱或代碼]\\n\\n  **內容：** [優惠內容/折扣額度]\\n\\n  **活動日期：** [**必須**是精確日期或**詳見官方貼文**]\\n\\n\\n\\n3. 優惠詳細分類與說明（強化 SEO）\\n結構化：將所有優惠資訊按類別分段落介紹。**嚴禁使用 H2 和 H3 標籤。**\\n**標籤模擬與換行強制規定：**\\n* 所有分類的大標題（例如：週末消暑首選），請使用**粗體字**，並在標題**上方與下方**各加上 **兩個換行符號 (\\n\\n)** 來模擬清晰的段落間隔。\\n* **強制細節分段：** 針對每個優惠活動，必須使用以下**獨立標註與分段**，確保細節清晰可讀：\\n    * 在段落內使用 **優惠條件：** [內容]\\n\\n\\n    * 在段落內使用 **適用門市/對象：** [內容]\\n\\n\\n    * 在段落內使用 **使用限制：** [內容]\\n\\n\\n* 每個**詳細內容段落**之間（例如：從「週末消暑首選」到「手搖飲愛好者必看」），必須使用 **兩個換行符號 (\\n\\n)** 來區隔。\\n詳細內容：必須針對該優惠，詳細說明「優惠條件」、「適用門市/對象」及「使用限制」。\\n\\n**請嚴格依照以下 JSON 結構回傳：**\\n{\\n  \\\"prompt\\\": \\\"<請直接塞入上面這段字串，不要改寫>\\\",\\n  \\\"title\\\": 標題,\\n  \\\"content\\\": 內文\\n}\",\n  \"title\": \"7-ELEVEN週末優惠！思樂冰降價，黑糖珍珠撞奶買二送二\",\n  \"content\": \"週末小確幸來了！7-ELEVEN 本週推出超值消暑優惠，不管是經典不敗的思樂冰、霜淇淋，還是人氣爆棚的黑糖珍珠撞奶，都有驚喜折扣，快揪朋友一起享受涼爽的週末時光！\\n\\n\\n**【本週 7-ELEVEN 必看優惠整理】**\\n\\n- **優惠品項/代碼：** 黑糖珍珠撞奶等飲品\\n\\n  **內容：** 享買二送二優惠\\n\\n  **活動日期：** 本週末期間\\n\\n\\n\\n- **優惠品項/代碼：** 思樂冰及霜淇淋\\n\\n  **內容：** 享第二件10元優惠\\n\\n  **活動日期：** 本週末期間\\n\\n\\n\\n\\n**週末消暑首選：思樂冰、霜淇淋清涼降價**\\n\\n隨著天氣逐漸炎熱，最適合來點冰品消暑！7-ELEVEN 針對旗下超受歡迎的思樂冰與霜淇淋，推出了限時降價活動，絕對是週末出遊或宅在家的最佳良伴。\\n\\n**優惠條件：** 活動期間內，凡購買思樂冰或霜淇淋，即可享受同品項第二件只要10元的超值優惠。\\n\\n**適用門市/對象：** 全台有販售思樂冰及霜淇淋之 7-ELEVEN 特殊門市，所有消費者皆適用。\\n\\n**使用限制：** 優惠品項以各門市實際販售與庫存為準，建議可先向店員確認，避免撲空。\\n\\n\\n\\n**手搖飲愛好者必看：黑糖珍珠撞奶買二送二**\\n\\n喜歡咀嚼口感與濃郁奶香的你千萬別錯過！7-ELEVEN 的 CITY PEARL 系列飲品也加入了本週優惠陣容，超人氣的黑糖珍珠撞奶現在有買二送二活動，相當於半價就能喝到！\\n\\n**優惠條件：** 購買黑糖珍珠撞奶等指定 CITY PEARL 系列飲品，即可享有買二送二的優惠，平均一杯價格更划算。\\n\\n**適用門市/對象：** 適用於全台提供 CITY PEARL 現萃珍珠飲品的 7-ELEVEN 門市。\\n\\n**使用限制：** 實際參與活動的飲品項目與細節，請依 7-ELEVEN 官方公告或門市現場資訊為準。\"\n}\n",
+          "title": "7-ELEVEN週末優惠！思樂冰降價，黑糖珍珠撞奶買二送二",
+          "content": "週末小確幸來了！7-ELEVEN 本週推出超值消暑優惠，不管是經典不敗的思樂冰、霜淇淋，還是人氣爆棚的黑糖珍珠撞奶，都有驚喜折扣，快揪朋友一起享受涼爽的週末時光！\\n\\n\\n**【本週 7-ELEVEN 必看優惠整理】**\\n\\n- **優惠品項/代碼：** 黑糖珍珠撞奶等飲品\\n\\n  **內容：** 享買二送二優惠\\n\\n  **活動日期：** 本週末期間\\n\\n\\n\\n- **優惠品項/代碼：** 思樂冰及霜淇淋\\n\\n  **內容：** 享第二件10元優惠\\n\\n  **活動日期：** 本週末期間\\n\\n\\n\\n\\n**週末消暑首選：思樂冰、霜淇淋清涼降價**\\n\\n隨著天氣逐漸炎熱，最適合來點冰品消暑！7-ELEVEN 針對旗下超受歡迎的思樂冰與霜淇淋，推出了限時降價活動，絕對是週末出遊或宅在家的最佳良伴。\\n\\n**優惠條件：** 活動期間內，凡購買思樂冰或霜淇淋，即可享受同品項第二件只要10元的超值優惠。\\n\\n**適用門市/對象：** 全台有販售思樂冰及霜淇淋之 7-ELEVEN 特殊門市，所有消費者皆適用。\\n\\n**使用限制：** 優惠品項以各門市實際販售與庫存為準，建議可先向店員確認，避免撲空。\\n\\n\\n\\n**手搖飲愛好者必看：黑糖珍珠撞奶買二送二**\\n\\n喜歡咀嚼口感與濃郁奶香的你千萬別錯過！7-ELEVEN 的 CITY PEARL 系列飲品也加入了本週優惠陣容，超人氣的黑糖珍珠撞奶現在有買二送二活動，相當於半價就能喝到！\\n\\n**優惠條件：** 購買黑糖珍珠撞奶等指定 CITY PEARL 系列飲品，即可享有買二送二的優惠，平均一杯價格更划算。\\n\\n**適用門市/對象：** 適用於全台提供 CITY PEARL 現萃珍珠飲品的 7-ELEVEN 門市。\\n\\n**使用限制：** 實際參與活動的飲品項目與細節，請依 7-ELEVEN 官方公告或門市現場資訊為準。"
+        }
+      }
+    ],
+    "telegram通知": [
+      {
+        "json": {
+          "ok": true,
+          "result": {
+            "message_id": 1072,
+            "from": {
+              "id": 8107273516,
+              "is_bot": true,
+              "first_name": "n8n 天氣",
+              "username": "n8n_peggy_weather_alert_bot"
+            },
+            "chat": {
+              "id": 7802109813,
+              "first_name": "FANG YU",
+              "last_name": "LIN",
+              "type": "private"
+            },
+            "date": 1760671092,
+            "text": "標題：7-ELEVEN週末優惠！思樂冰降價，黑糖珍珠撞奶買二送二\n內文：週末小確幸來了！7-ELEVEN 本週推出超值消暑優惠，不管是經典不敗的思樂冰、霜淇淋，還是人氣爆棚的黑糖珍珠撞奶，都有驚喜折扣，快揪朋友一起享受涼爽的週末時光！<br><br><br><strong>【本週 7-ELEVEN 必看優惠整理】</strong><br><br>- <strong>優惠品項/代碼：</strong> 黑糖珍珠撞奶等飲品<br><br>  <strong>內容：</strong> 享買二送二優惠<br><br>  <strong>活動日期：</strong> 本週末期間<br><br><br><br>- <strong>優惠品項/代碼：</strong> 思樂冰及霜淇淋<br><br>  <strong>內容：</strong> 享第二件10元優惠<br><br>  <strong>活動日期：</strong> 本週末期間<br><br><br><br><br><strong>週末消暑首選：思樂冰、霜淇淋清涼降價</strong><br><br>隨著天氣逐漸炎熱，最適合來點冰品消暑！7-ELEVEN 針對旗下超受歡迎的思樂冰與霜淇淋，推出了限時降價活動，絕對是週末出遊或宅在家的最佳良伴。<br><br><strong>優惠條件：</strong> 活動期間內，凡購買思樂冰或霜淇淋，即可享受同品項第二件只要10元的超值優惠。<br><br><strong>適用門市/對象：</strong> 全台有販售思樂冰及霜淇淋之 7-ELEVEN 特殊門市，所有消費者皆適用。<br><br><strong>使用限制：</strong> 優惠品項以各門市實際販售與庫存為準，建議可先向店員確認，避免撲空。<br><br><br><br><strong>手搖飲愛好者必看：黑糖珍珠撞奶買二送二</strong><br><br>喜歡咀嚼口感與濃郁奶香的你千萬別錯過！7-ELEVEN 的 CITY PEARL 系列飲品也加入了本週優惠陣容，超人氣的黑糖珍珠撞奶現在有買二送二活動，相當於半價就能喝到！<br><br><strong>優惠條件：</strong> 購買黑糖珍珠撞奶等指定 CITY PEARL 系列飲品，即可享有買二送二的優惠，平均一杯價格更划算。<br><br><strong>適用門市/對象：</strong> 適用於全台提供 CITY PEARL 現萃珍珠飲品的 7-ELEVEN 門市。<br><br><strong>使用限制：</strong> 實際參與活動的飲品項目與細節，請依 7-ELEVEN 官方公告或門市現場資訊為準。\n\nThis message was sent automatically with n8n",
+            "entities": [
+              {
+                "offset": 1129,
+                "length": 41,
+                "type": "italic"
+              },
+              {
+                "offset": 1170,
+                "length": 3,
+                "type": "text_link",
+                "url": "https://n8n.io/?utm_source=n8n-internal&utm_medium=powered_by&utm_campaign=n8n-nodes-base.telegram_5edfe094379a03db4a90892f3c4f30c1ff6c4a361d9f399c7dc290cec1e089ba"
+              }
+            ],
+            "link_preview_options": {
+              "is_disabled": true
+            }
+          }
+        }
+      }
+    ],
+    "寫入supabase DB_new": [
+      {
+        "json": {
+          "id": 22,
+          "created_at": "2025-10-17T03:18:12.898008+00:00",
+          "title": "7-ELEVEN週末優惠！思樂冰降價，黑糖珍珠撞奶買二送二",
+          "content": "週末小確幸來了！7-ELEVEN 本週推出超值消暑優惠，不管是經典不敗的思樂冰、霜淇淋，還是人氣爆棚的黑糖珍珠撞奶，都有驚喜折扣，快揪朋友一起享受涼爽的週末時光！\\n\\n\\n**【本週 7-ELEVEN 必看優惠整理】**\\n\\n- **優惠品項/代碼：** 黑糖珍珠撞奶等飲品\\n\\n  **內容：** 享買二送二優惠\\n\\n  **活動日期：** 本週末期間\\n\\n\\n\\n- **優惠品項/代碼：** 思樂冰及霜淇淋\\n\\n  **內容：** 享第二件10元優惠\\n\\n  **活動日期：** 本週末期間\\n\\n\\n\\n\\n**週末消暑首選：思樂冰、霜淇淋清涼降價**\\n\\n隨著天氣逐漸炎熱，最適合來點冰品消暑！7-ELEVEN 針對旗下超受歡迎的思樂冰與霜淇淋，推出了限時降價活動，絕對是週末出遊或宅在家的最佳良伴。\\n\\n**優惠條件：** 活動期間內，凡購買思樂冰或霜淇淋，即可享受同品項第二件只要10元的超值優惠。\\n\\n**適用門市/對象：** 全台有販售思樂冰及霜淇淋之 7-ELEVEN 特殊門市，所有消費者皆適用。\\n\\n**使用限制：** 優惠品項以各門市實際販售與庫存為準，建議可先向店員確認，避免撲空。\\n\\n\\n\\n**手搖飲愛好者必看：黑糖珍珠撞奶買二送二**\\n\\n喜歡咀嚼口感與濃郁奶香的你千萬別錯過！7-ELEVEN 的 CITY PEARL 系列飲品也加入了本週優惠陣容，超人氣的黑糖珍珠撞奶現在有買二送二活動，相當於半價就能喝到！\\n\\n**優惠條件：** 購買黑糖珍珠撞奶等指定 CITY PEARL 系列飲品，即可享有買二送二的優惠，平均一杯價格更划算。\\n\\n**適用門市/對象：** 適用於全台提供 CITY PEARL 現萃珍珠飲品的 7-ELEVEN 門市。\\n\\n**使用限制：** 實際參與活動的飲品項目與細節，請依 7-ELEVEN 官方公告或門市現場資訊為準。",
+          "source": null,
+          "prompt": "{\n  \"prompt\": \"階段一：單一最佳品牌選題與深度生成\\n\\n【AI 系統角色與任務】\\n角色：您是一位專門撰寫高流量、高 SEO 權重優惠文章的**內容總監**。您的核心任務是：從提供的所有原始優惠資料中，**嚴格篩選**並**僅選擇出單一最適合發布的「頭條品牌」**，然後將該品牌當天所有合格的優惠資訊，整合為一篇**專屬且完整的深度文章**。\\n\\n目標：在一次執行中，**僅產出一篇**針對單一品牌的最高價值文章 JSON 物件。\\n\\n**【輸入資料格式說明】**\\n請**嚴格**參考以下欄位名稱進行篩選與寫作：\\n1. 「內容/優惠詳情」：欄位名稱為 **'contentSnippet'**。\\n2. 「發布日期」：欄位名稱為 **'isoDate'** (用於判斷發文時間)。\\n3. 「發文者/品牌帳號」：欄位名稱為 **'creator'** (例如: '@familymart_tw')。\\n\\n【第一階段：資料篩選與判斷 — 絕對排除！】\\n在開始寫作前，您必須嚴格遵循以下規則。任何違反規則的資料，必須立即排除，不予寫作。\\n\\n1. 品牌範圍：\\n* **僅處理**以下 **10 大品牌**的資料：麥當勞, Foodpanda, 好市多, 高鐵, 星巴克, 全家, 全聯, Uber, 必勝客, 7-ELEVEN。請從 **'creator'** 欄位判斷品牌。資料若來自這 10 個品牌以外，請立即排除。\\n2. 內容類型排除（吸引力篩選）：\\n* 流量關鍵字：**必須**從 **'contentSnippet'** 中提取，包含以下任一實質優惠關鍵字：「優惠碼」、「折扣碼」、「買一送一」、「半價」、「降價」、「免費」、「最低 X 折」。\\n* 強制排除：若優惠內容屬於「聯名商品」、「周邊商品加購」、「集點活動」、「抽獎」，且無任何實質折扣或優惠碼，則立即排除。\\n3. 時效性判斷：\\n* **時效性判定標準：** 只要 **'isoDate'** 在**今日起算 7 天內**，且內容符合「流量關鍵字」，即通過篩選。\\n\\n---\\n\\n## 【第二階段：單一最佳品牌選擇與深度寫作】\\n\\n**重要指令：**\\n1.  **頭條品牌選擇：** 請比較所有通過第一階段篩選的優惠項目，您必須且只能選擇**單一**品牌作為本輪文章的主題。\\n2.  **優先級：** 優先選擇**擁有最多**「買一送一」或「優惠碼」活動的品牌。如果多個品牌數量相同，選擇**最近發布日期 ('isoDate')** 的品牌。\\n3.  **內容整合（關鍵！）：** 請將所有**通過篩選的，且與您選中品牌相關的所有優惠細節**，全部寫入同一篇文章中。\\n\\n---\\n\\n## 【嚴格格式規範與排除】\\n\\n**輸出格式強制要求：**\\n* 內文 **'content'** 欄位**絕對禁止**輸出任何 HTML 標籤。這包括但不限於：<p>、<b>、<br>、<code>或任何其他 HTML 標籤。\\n* **僅使用 Markdown 語法** (**粗體**、- 列點、\\n 換行) 來控制格式。\\n* **嚴禁**輸出任何形式的 <br> 標籤。\\n\\n### 文章結構寫作規範 (使用 \\n 控制換行)\\n\\n1. 標題與導言（決定點擊率）\\n標題規範：標題長度應在 18-25 個中文字之間。標題強制包含「品牌名稱」、「關鍵優惠字」和「精確時效性」。\\n**導言結束後：** 必須以 **兩個換行符號 (\\n\\n)** 區隔下方的懶人包。\\n\\n2. **核心懶人包（快速解決痛點 - 內容與日期強化！）**\\n**強制置頂：** 將**所有**與選定品牌相關的有效優惠資訊，以 **Markdown 粗體列點清單**的方式置於導言之後。\\n**日期提取強化：** 在「活動日期」欄位，**必須盡全力從原始資料中提取出精確的日期**。如果原始資料中沒有任何日期線索，才允許寫「**詳見官方貼文**」。\\n**清單結構範例：**\\n請務必使用粗體字來強調關鍵資訊。在每一個項目（例如：優惠品項/代碼、內容、**活動日期**）之間使用 **一個換行符號 (\\n)** 來保持緊湊，項目結束後再使用 **兩個換行符號 (\\n\\n)** 區隔下一個區塊：\\n**【本週 [品牌名稱] 必看優惠整理】**\\n\\n- **優惠品項/代碼：** [精確的品項名稱或代碼]\\n\\n  **內容：** [優惠內容/折扣額度]\\n\\n  **活動日期：** [**必須**是精確日期或**詳見官方貼文**]\\n\\n\\n\\n3. 優惠詳細分類與說明（強化 SEO）\\n結構化：將所有優惠資訊按類別分段落介紹。**嚴禁使用 H2 和 H3 標籤。**\\n**標籤模擬與換行強制規定：**\\n* 所有分類的大標題（例如：週末消暑首選），請使用**粗體字**，並在標題**上方與下方**各加上 **兩個換行符號 (\\n\\n)** 來模擬清晰的段落間隔。\\n* **強制細節分段：** 針對每個優惠活動，必須使用以下**獨立標註與分段**，確保細節清晰可讀：\\n    * 在段落內使用 **優惠條件：** [內容]\\n\\n\\n    * 在段落內使用 **適用門市/對象：** [內容]\\n\\n\\n    * 在段落內使用 **使用限制：** [內容]\\n\\n\\n* 每個**詳細內容段落**之間（例如：從「週末消暑首選」到「手搖飲愛好者必看」），必須使用 **兩個換行符號 (\\n\\n)** 來區隔。\\n詳細內容：必須針對該優惠，詳細說明「優惠條件」、「適用門市/對象」及「使用限制」。\\n\\n**請嚴格依照以下 JSON 結構回傳：**\\n{\\n  \\\"prompt\\\": \\\"<請直接塞入上面這段字串，不要改寫>\\\",\\n  \\\"title\\\": 標題,\\n  \\\"content\\\": 內文\\n}\",\n  \"title\": \"7-ELEVEN週末優惠！思樂冰降價，黑糖珍珠撞奶買二送二\",\n  \"content\": \"週末小確幸來了！7-ELEVEN 本週推出超值消暑優惠，不管是經典不敗的思樂冰、霜淇淋，還是人氣爆棚的黑糖珍珠撞奶，都有驚喜折扣，快揪朋友一起享受涼爽的週末時光！\\n\\n\\n**【本週 7-ELEVEN 必看優惠整理】**\\n\\n- **優惠品項/代碼：** 黑糖珍珠撞奶等飲品\\n\\n  **內容：** 享買二送二優惠\\n\\n  **活動日期：** 本週末期間\\n\\n\\n\\n- **優惠品項/代碼：** 思樂冰及霜淇淋\\n\\n  **內容：** 享第二件10元優惠\\n\\n  **活動日期：** 本週末期間\\n\\n\\n\\n\\n**週末消暑首選：思樂冰、霜淇淋清涼降價**\\n\\n隨著天氣逐漸炎熱，最適合來點冰品消暑！7-ELEVEN 針對旗下超受歡迎的思樂冰與霜淇淋，推出了限時降價活動，絕對是週末出遊或宅在家的最佳良伴。\\n\\n**優惠條件：** 活動期間內，凡購買思樂冰或霜淇淋，即可享受同品項第二件只要10元的超值優惠。\\n\\n**適用門市/對象：** 全台有販售思樂冰及霜淇淋之 7-ELEVEN 特殊門市，所有消費者皆適用。\\n\\n**使用限制：** 優惠品項以各門市實際販售與庫存為準，建議可先向店員確認，避免撲空。\\n\\n\\n\\n**手搖飲愛好者必看：黑糖珍珠撞奶買二送二**\\n\\n喜歡咀嚼口感與濃郁奶香的你千萬別錯過！7-ELEVEN 的 CITY PEARL 系列飲品也加入了本週優惠陣容，超人氣的黑糖珍珠撞奶現在有買二送二活動，相當於半價就能喝到！\\n\\n**優惠條件：** 購買黑糖珍珠撞奶等指定 CITY PEARL 系列飲品，即可享有買二送二的優惠，平均一杯價格更划算。\\n\\n**適用門市/對象：** 適用於全台提供 CITY PEARL 現萃珍珠飲品的 7-ELEVEN 門市。\\n\\n**使用限制：** 實際參與活動的飲品項目與細節，請依 7-ELEVEN 官方公告或門市現場資訊為準。\"\n}\n"
+        }
+      }
+    ],
+    "寫入supabase DB_ALL": [
+      {
+        "json": {
+          "id": 605,
+          "created_at": "2025-10-17T03:18:13.102288+00:00",
+          "title": "7-ELEVEN週末優惠！思樂冰降價，黑糖珍珠撞奶買二送二",
+          "content": "週末小確幸來了！7-ELEVEN 本週推出超值消暑優惠，不管是經典不敗的思樂冰、霜淇淋，還是人氣爆棚的黑糖珍珠撞奶，都有驚喜折扣，快揪朋友一起享受涼爽的週末時光！\\n\\n\\n**【本週 7-ELEVEN 必看優惠整理】**\\n\\n- **優惠品項/代碼：** 黑糖珍珠撞奶等飲品\\n\\n  **內容：** 享買二送二優惠\\n\\n  **活動日期：** 本週末期間\\n\\n\\n\\n- **優惠品項/代碼：** 思樂冰及霜淇淋\\n\\n  **內容：** 享第二件10元優惠\\n\\n  **活動日期：** 本週末期間\\n\\n\\n\\n\\n**週末消暑首選：思樂冰、霜淇淋清涼降價**\\n\\n隨著天氣逐漸炎熱，最適合來點冰品消暑！7-ELEVEN 針對旗下超受歡迎的思樂冰與霜淇淋，推出了限時降價活動，絕對是週末出遊或宅在家的最佳良伴。\\n\\n**優惠條件：** 活動期間內，凡購買思樂冰或霜淇淋，即可享受同品項第二件只要10元的超值優惠。\\n\\n**適用門市/對象：** 全台有販售思樂冰及霜淇淋之 7-ELEVEN 特殊門市，所有消費者皆適用。\\n\\n**使用限制：** 優惠品項以各門市實際販售與庫存為準，建議可先向店員確認，避免撲空。\\n\\n\\n\\n**手搖飲愛好者必看：黑糖珍珠撞奶買二送二**\\n\\n喜歡咀嚼口感與濃郁奶香的你千萬別錯過！7-ELEVEN 的 CITY PEARL 系列飲品也加入了本週優惠陣容，超人氣的黑糖珍珠撞奶現在有買二送二活動，相當於半價就能喝到！\\n\\n**優惠條件：** 購買黑糖珍珠撞奶等指定 CITY PEARL 系列飲品，即可享有買二送二的優惠，平均一杯價格更划算。\\n\\n**適用門市/對象：** 適用於全台提供 CITY PEARL 現萃珍珠飲品的 7-ELEVEN 門市。\\n\\n**使用限制：** 實際參與活動的飲品項目與細節，請依 7-ELEVEN 官方公告或門市現場資訊為準。",
+          "source": null,
+          "prompt": "{\n  \"prompt\": \"階段一：單一最佳品牌選題與深度生成\\n\\n【AI 系統角色與任務】\\n角色：您是一位專門撰寫高流量、高 SEO 權重優惠文章的**內容總監**。您的核心任務是：從提供的所有原始優惠資料中，**嚴格篩選**並**僅選擇出單一最適合發布的「頭條品牌」**，然後將該品牌當天所有合格的優惠資訊，整合為一篇**專屬且完整的深度文章**。\\n\\n目標：在一次執行中，**僅產出一篇**針對單一品牌的最高價值文章 JSON 物件。\\n\\n**【輸入資料格式說明】**\\n請**嚴格**參考以下欄位名稱進行篩選與寫作：\\n1. 「內容/優惠詳情」：欄位名稱為 **'contentSnippet'**。\\n2. 「發布日期」：欄位名稱為 **'isoDate'** (用於判斷發文時間)。\\n3. 「發文者/品牌帳號」：欄位名稱為 **'creator'** (例如: '@familymart_tw')。\\n\\n【第一階段：資料篩選與判斷 — 絕對排除！】\\n在開始寫作前，您必須嚴格遵循以下規則。任何違反規則的資料，必須立即排除，不予寫作。\\n\\n1. 品牌範圍：\\n* **僅處理**以下 **10 大品牌**的資料：麥當勞, Foodpanda, 好市多, 高鐵, 星巴克, 全家, 全聯, Uber, 必勝客, 7-ELEVEN。請從 **'creator'** 欄位判斷品牌。資料若來自這 10 個品牌以外，請立即排除。\\n2. 內容類型排除（吸引力篩選）：\\n* 流量關鍵字：**必須**從 **'contentSnippet'** 中提取，包含以下任一實質優惠關鍵字：「優惠碼」、「折扣碼」、「買一送一」、「半價」、「降價」、「免費」、「最低 X 折」。\\n* 強制排除：若優惠內容屬於「聯名商品」、「周邊商品加購」、「集點活動」、「抽獎」，且無任何實質折扣或優惠碼，則立即排除。\\n3. 時效性判斷：\\n* **時效性判定標準：** 只要 **'isoDate'** 在**今日起算 7 天內**，且內容符合「流量關鍵字」，即通過篩選。\\n\\n---\\n\\n## 【第二階段：單一最佳品牌選擇與深度寫作】\\n\\n**重要指令：**\\n1.  **頭條品牌選擇：** 請比較所有通過第一階段篩選的優惠項目，您必須且只能選擇**單一**品牌作為本輪文章的主題。\\n2.  **優先級：** 優先選擇**擁有最多**「買一送一」或「優惠碼」活動的品牌。如果多個品牌數量相同，選擇**最近發布日期 ('isoDate')** 的品牌。\\n3.  **內容整合（關鍵！）：** 請將所有**通過篩選的，且與您選中品牌相關的所有優惠細節**，全部寫入同一篇文章中。\\n\\n---\\n\\n## 【嚴格格式規範與排除】\\n\\n**輸出格式強制要求：**\\n* 內文 **'content'** 欄位**絕對禁止**輸出任何 HTML 標籤。這包括但不限於：<p>、<b>、<br>、<code>或任何其他 HTML 標籤。\\n* **僅使用 Markdown 語法** (**粗體**、- 列點、\\n 換行) 來控制格式。\\n* **嚴禁**輸出任何形式的 <br> 標籤。\\n\\n### 文章結構寫作規範 (使用 \\n 控制換行)\\n\\n1. 標題與導言（決定點擊率）\\n標題規範：標題長度應在 18-25 個中文字之間。標題強制包含「品牌名稱」、「關鍵優惠字」和「精確時效性」。\\n**導言結束後：** 必須以 **兩個換行符號 (\\n\\n)** 區隔下方的懶人包。\\n\\n2. **核心懶人包（快速解決痛點 - 內容與日期強化！）**\\n**強制置頂：** 將**所有**與選定品牌相關的有效優惠資訊，以 **Markdown 粗體列點清單**的方式置於導言之後。\\n**日期提取強化：** 在「活動日期」欄位，**必須盡全力從原始資料中提取出精確的日期**。如果原始資料中沒有任何日期線索，才允許寫「**詳見官方貼文**」。\\n**清單結構範例：**\\n請務必使用粗體字來強調關鍵資訊。在每一個項目（例如：優惠品項/代碼、內容、**活動日期**）之間使用 **一個換行符號 (\\n)** 來保持緊湊，項目結束後再使用 **兩個換行符號 (\\n\\n)** 區隔下一個區塊：\\n**【本週 [品牌名稱] 必看優惠整理】**\\n\\n- **優惠品項/代碼：** [精確的品項名稱或代碼]\\n\\n  **內容：** [優惠內容/折扣額度]\\n\\n  **活動日期：** [**必須**是精確日期或**詳見官方貼文**]\\n\\n\\n\\n3. 優惠詳細分類與說明（強化 SEO）\\n結構化：將所有優惠資訊按類別分段落介紹。**嚴禁使用 H2 和 H3 標籤。**\\n**標籤模擬與換行強制規定：**\\n* 所有分類的大標題（例如：週末消暑首選），請使用**粗體字**，並在標題**上方與下方**各加上 **兩個換行符號 (\\n\\n)** 來模擬清晰的段落間隔。\\n* **強制細節分段：** 針對每個優惠活動，必須使用以下**獨立標註與分段**，確保細節清晰可讀：\\n    * 在段落內使用 **優惠條件：** [內容]\\n\\n\\n    * 在段落內使用 **適用門市/對象：** [內容]\\n\\n\\n    * 在段落內使用 **使用限制：** [內容]\\n\\n\\n* 每個**詳細內容段落**之間（例如：從「週末消暑首選」到「手搖飲愛好者必看」），必須使用 **兩個換行符號 (\\n\\n)** 來區隔。\\n詳細內容：必須針對該優惠，詳細說明「優惠條件」、「適用門市/對象」及「使用限制」。\\n\\n**請嚴格依照以下 JSON 結構回傳：**\\n{\\n  \\\"prompt\\\": \\\"<請直接塞入上面這段字串，不要改寫>\\\",\\n  \\\"title\\\": 標題,\\n  \\\"content\\\": 內文\\n}\",\n  \"title\": \"7-ELEVEN週末優惠！思樂冰降價，黑糖珍珠撞奶買二送二\",\n  \"content\": \"週末小確幸來了！7-ELEVEN 本週推出超值消暑優惠，不管是經典不敗的思樂冰、霜淇淋，還是人氣爆棚的黑糖珍珠撞奶，都有驚喜折扣，快揪朋友一起享受涼爽的週末時光！\\n\\n\\n**【本週 7-ELEVEN 必看優惠整理】**\\n\\n- **優惠品項/代碼：** 黑糖珍珠撞奶等飲品\\n\\n  **內容：** 享買二送二優惠\\n\\n  **活動日期：** 本週末期間\\n\\n\\n\\n- **優惠品項/代碼：** 思樂冰及霜淇淋\\n\\n  **內容：** 享第二件10元優惠\\n\\n  **活動日期：** 本週末期間\\n\\n\\n\\n\\n**週末消暑首選：思樂冰、霜淇淋清涼降價**\\n\\n隨著天氣逐漸炎熱，最適合來點冰品消暑！7-ELEVEN 針對旗下超受歡迎的思樂冰與霜淇淋，推出了限時降價活動，絕對是週末出遊或宅在家的最佳良伴。\\n\\n**優惠條件：** 活動期間內，凡購買思樂冰或霜淇淋，即可享受同品項第二件只要10元的超值優惠。\\n\\n**適用門市/對象：** 全台有販售思樂冰及霜淇淋之 7-ELEVEN 特殊門市，所有消費者皆適用。\\n\\n**使用限制：** 優惠品項以各門市實際販售與庫存為準，建議可先向店員確認，避免撲空。\\n\\n\\n\\n**手搖飲愛好者必看：黑糖珍珠撞奶買二送二**\\n\\n喜歡咀嚼口感與濃郁奶香的你千萬別錯過！7-ELEVEN 的 CITY PEARL 系列飲品也加入了本週優惠陣容，超人氣的黑糖珍珠撞奶現在有買二送二活動，相當於半價就能喝到！\\n\\n**優惠條件：** 購買黑糖珍珠撞奶等指定 CITY PEARL 系列飲品，即可享有買二送二的優惠，平均一杯價格更划算。\\n\\n**適用門市/對象：** 適用於全台提供 CITY PEARL 現萃珍珠飲品的 7-ELEVEN 門市。\\n\\n**使用限制：** 實際參與活動的飲品項目與細節，請依 7-ELEVEN 官方公告或門市現場資訊為準。\"\n}\n"
+        }
+      }
+    ],
+    "內文_Markdown/換行符號轉成 HTML": [
+      {
+        "json": {
+          "prompt": "{\n  \"prompt\": \"階段一：單一最佳品牌選題與深度生成\\n\\n【AI 系統角色與任務】\\n角色：您是一位專門撰寫高流量、高 SEO 權重優惠文章的**內容總監**。您的核心任務是：從提供的所有原始優惠資料中，**嚴格篩選**並**僅選擇出單一最適合發布的「頭條品牌」**，然後將該品牌當天所有合格的優惠資訊，整合為一篇**專屬且完整的深度文章**。\\n\\n目標：在一次執行中，**僅產出一篇**針對單一品牌的最高價值文章 JSON 物件。\\n\\n**【輸入資料格式說明】**\\n請**嚴格**參考以下欄位名稱進行篩選與寫作：\\n1. 「內容/優惠詳情」：欄位名稱為 **'contentSnippet'**。\\n2. 「發布日期」：欄位名稱為 **'isoDate'** (用於判斷發文時間)。\\n3. 「發文者/品牌帳號」：欄位名稱為 **'creator'** (例如: '@familymart_tw')。\\n\\n【第一階段：資料篩選與判斷 — 絕對排除！】\\n在開始寫作前，您必須嚴格遵循以下規則。任何違反規則的資料，必須立即排除，不予寫作。\\n\\n1. 品牌範圍：\\n* **僅處理**以下 **10 大品牌**的資料：麥當勞, Foodpanda, 好市多, 高鐵, 星巴克, 全家, 全聯, Uber, 必勝客, 7-ELEVEN。請從 **'creator'** 欄位判斷品牌。資料若來自這 10 個品牌以外，請立即排除。\\n2. 內容類型排除（吸引力篩選）：\\n* 流量關鍵字：**必須**從 **'contentSnippet'** 中提取，包含以下任一實質優惠關鍵字：「優惠碼」、「折扣碼」、「買一送一」、「半價」、「降價」、「免費」、「最低 X 折」。\\n* 強制排除：若優惠內容屬於「聯名商品」、「周邊商品加購」、「集點活動」、「抽獎」，且無任何實質折扣或優惠碼，則立即排除。\\n3. 時效性判斷：\\n* **時效性判定標準：** 只要 **'isoDate'** 在**今日起算 7 天內**，且內容符合「流量關鍵字」，即通過篩選。\\n\\n---\\n\\n## 【第二階段：單一最佳品牌選擇與深度寫作】\\n\\n**重要指令：**\\n1.  **頭條品牌選擇：** 請比較所有通過第一階段篩選的優惠項目，您必須且只能選擇**單一**品牌作為本輪文章的主題。\\n2.  **優先級：** 優先選擇**擁有最多**「買一送一」或「優惠碼」活動的品牌。如果多個品牌數量相同，選擇**最近發布日期 ('isoDate')** 的品牌。\\n3.  **內容整合（關鍵！）：** 請將所有**通過篩選的，且與您選中品牌相關的所有優惠細節**，全部寫入同一篇文章中。\\n\\n---\\n\\n## 【嚴格格式規範與排除】\\n\\n**輸出格式強制要求：**\\n* 內文 **'content'** 欄位**絕對禁止**輸出任何 HTML 標籤。這包括但不限於：<p>、<b>、<br>、<code>或任何其他 HTML 標籤。\\n* **僅使用 Markdown 語法** (**粗體**、- 列點、\\n 換行) 來控制格式。\\n* **嚴禁**輸出任何形式的 <br> 標籤。\\n\\n### 文章結構寫作規範 (使用 \\n 控制換行)\\n\\n1. 標題與導言（決定點擊率）\\n標題規範：標題長度應在 18-25 個中文字之間。標題強制包含「品牌名稱」、「關鍵優惠字」和「精確時效性」。\\n**導言結束後：** 必須以 **兩個換行符號 (\\n\\n)** 區隔下方的懶人包。\\n\\n2. **核心懶人包（快速解決痛點 - 內容與日期強化！）**\\n**強制置頂：** 將**所有**與選定品牌相關的有效優惠資訊，以 **Markdown 粗體列點清單**的方式置於導言之後。\\n**日期提取強化：** 在「活動日期」欄位，**必須盡全力從原始資料中提取出精確的日期**。如果原始資料中沒有任何日期線索，才允許寫「**詳見官方貼文**」。\\n**清單結構範例：**\\n請務必使用粗體字來強調關鍵資訊。在每一個項目（例如：優惠品項/代碼、內容、**活動日期**）之間使用 **一個換行符號 (\\n)** 來保持緊湊，項目結束後再使用 **兩個換行符號 (\\n\\n)** 區隔下一個區塊：\\n**【本週 [品牌名稱] 必看優惠整理】**\\n\\n- **優惠品項/代碼：** [精確的品項名稱或代碼]\\n\\n  **內容：** [優惠內容/折扣額度]\\n\\n  **活動日期：** [**必須**是精確日期或**詳見官方貼文**]\\n\\n\\n\\n3. 優惠詳細分類與說明（強化 SEO）\\n結構化：將所有優惠資訊按類別分段落介紹。**嚴禁使用 H2 和 H3 標籤。**\\n**標籤模擬與換行強制規定：**\\n* 所有分類的大標題（例如：週末消暑首選），請使用**粗體字**，並在標題**上方與下方**各加上 **兩個換行符號 (\\n\\n)** 來模擬清晰的段落間隔。\\n* **強制細節分段：** 針對每個優惠活動，必須使用以下**獨立標註與分段**，確保細節清晰可讀：\\n    * 在段落內使用 **優惠條件：** [內容]\\n\\n\\n    * 在段落內使用 **適用門市/對象：** [內容]\\n\\n\\n    * 在段落內使用 **使用限制：** [內容]\\n\\n\\n* 每個**詳細內容段落**之間（例如：從「週末消暑首選」到「手搖飲愛好者必看」），必須使用 **兩個換行符號 (\\n\\n)** 來區隔。\\n詳細內容：必須針對該優惠，詳細說明「優惠條件」、「適用門市/對象」及「使用限制」。\\n\\n**請嚴格依照以下 JSON 結構回傳：**\\n{\\n  \\\"prompt\\\": \\\"<請直接塞入上面這段字串，不要改寫>\\\",\\n  \\\"title\\\": 標題,\\n  \\\"content\\\": 內文\\n}\",\n  \"title\": \"7-ELEVEN週末優惠！思樂冰降價，黑糖珍珠撞奶買二送二\",\n  \"content\": \"週末小確幸來了！7-ELEVEN 本週推出超值消暑優惠，不管是經典不敗的思樂冰、霜淇淋，還是人氣爆棚的黑糖珍珠撞奶，都有驚喜折扣，快揪朋友一起享受涼爽的週末時光！\\n\\n\\n**【本週 7-ELEVEN 必看優惠整理】**\\n\\n- **優惠品項/代碼：** 黑糖珍珠撞奶等飲品\\n\\n  **內容：** 享買二送二優惠\\n\\n  **活動日期：** 本週末期間\\n\\n\\n\\n- **優惠品項/代碼：** 思樂冰及霜淇淋\\n\\n  **內容：** 享第二件10元優惠\\n\\n  **活動日期：** 本週末期間\\n\\n\\n\\n\\n**週末消暑首選：思樂冰、霜淇淋清涼降價**\\n\\n隨著天氣逐漸炎熱，最適合來點冰品消暑！7-ELEVEN 針對旗下超受歡迎的思樂冰與霜淇淋，推出了限時降價活動，絕對是週末出遊或宅在家的最佳良伴。\\n\\n**優惠條件：** 活動期間內，凡購買思樂冰或霜淇淋，即可享受同品項第二件只要10元的超值優惠。\\n\\n**適用門市/對象：** 全台有販售思樂冰及霜淇淋之 7-ELEVEN 特殊門市，所有消費者皆適用。\\n\\n**使用限制：** 優惠品項以各門市實際販售與庫存為準，建議可先向店員確認，避免撲空。\\n\\n\\n\\n**手搖飲愛好者必看：黑糖珍珠撞奶買二送二**\\n\\n喜歡咀嚼口感與濃郁奶香的你千萬別錯過！7-ELEVEN 的 CITY PEARL 系列飲品也加入了本週優惠陣容，超人氣的黑糖珍珠撞奶現在有買二送二活動，相當於半價就能喝到！\\n\\n**優惠條件：** 購買黑糖珍珠撞奶等指定 CITY PEARL 系列飲品，即可享有買二送二的優惠，平均一杯價格更划算。\\n\\n**適用門市/對象：** 適用於全台提供 CITY PEARL 現萃珍珠飲品的 7-ELEVEN 門市。\\n\\n**使用限制：** 實際參與活動的飲品項目與細節，請依 7-ELEVEN 官方公告或門市現場資訊為準。\"\n}\n",
+          "title": "7-ELEVEN週末優惠！思樂冰降價，黑糖珍珠撞奶買二送二",
+          "content": "週末小確幸來了！7-ELEVEN 本週推出超值消暑優惠，不管是經典不敗的思樂冰、霜淇淋，還是人氣爆棚的黑糖珍珠撞奶，都有驚喜折扣，快揪朋友一起享受涼爽的週末時光！\\n\\n\\n**【本週 7-ELEVEN 必看優惠整理】**\\n\\n- **優惠品項/代碼：** 黑糖珍珠撞奶等飲品\\n\\n  **內容：** 享買二送二優惠\\n\\n  **活動日期：** 本週末期間\\n\\n\\n\\n- **優惠品項/代碼：** 思樂冰及霜淇淋\\n\\n  **內容：** 享第二件10元優惠\\n\\n  **活動日期：** 本週末期間\\n\\n\\n\\n\\n**週末消暑首選：思樂冰、霜淇淋清涼降價**\\n\\n隨著天氣逐漸炎熱，最適合來點冰品消暑！7-ELEVEN 針對旗下超受歡迎的思樂冰與霜淇淋，推出了限時降價活動，絕對是週末出遊或宅在家的最佳良伴。\\n\\n**優惠條件：** 活動期間內，凡購買思樂冰或霜淇淋，即可享受同品項第二件只要10元的超值優惠。\\n\\n**適用門市/對象：** 全台有販售思樂冰及霜淇淋之 7-ELEVEN 特殊門市，所有消費者皆適用。\\n\\n**使用限制：** 優惠品項以各門市實際販售與庫存為準，建議可先向店員確認，避免撲空。\\n\\n\\n\\n**手搖飲愛好者必看：黑糖珍珠撞奶買二送二**\\n\\n喜歡咀嚼口感與濃郁奶香的你千萬別錯過！7-ELEVEN 的 CITY PEARL 系列飲品也加入了本週優惠陣容，超人氣的黑糖珍珠撞奶現在有買二送二活動，相當於半價就能喝到！\\n\\n**優惠條件：** 購買黑糖珍珠撞奶等指定 CITY PEARL 系列飲品，即可享有買二送二的優惠，平均一杯價格更划算。\\n\\n**適用門市/對象：** 適用於全台提供 CITY PEARL 現萃珍珠飲品的 7-ELEVEN 門市。\\n\\n**使用限制：** 實際參與活動的飲品項目與細節，請依 7-ELEVEN 官方公告或門市現場資訊為準。",
+          "content_html": "週末小確幸來了！7-ELEVEN 本週推出超值消暑優惠，不管是經典不敗的思樂冰、霜淇淋，還是人氣爆棚的黑糖珍珠撞奶，都有驚喜折扣，快揪朋友一起享受涼爽的週末時光！<br><br><br><strong>【本週 7-ELEVEN 必看優惠整理】</strong><br><br>- <strong>優惠品項/代碼：</strong> 黑糖珍珠撞奶等飲品<br><br>  <strong>內容：</strong> 享買二送二優惠<br><br>  <strong>活動日期：</strong> 本週末期間<br><br><br><br>- <strong>優惠品項/代碼：</strong> 思樂冰及霜淇淋<br><br>  <strong>內容：</strong> 享第二件10元優惠<br><br>  <strong>活動日期：</strong> 本週末期間<br><br><br><br><br><strong>週末消暑首選：思樂冰、霜淇淋清涼降價</strong><br><br>隨著天氣逐漸炎熱，最適合來點冰品消暑！7-ELEVEN 針對旗下超受歡迎的思樂冰與霜淇淋，推出了限時降價活動，絕對是週末出遊或宅在家的最佳良伴。<br><br><strong>優惠條件：</strong> 活動期間內，凡購買思樂冰或霜淇淋，即可享受同品項第二件只要10元的超值優惠。<br><br><strong>適用門市/對象：</strong> 全台有販售思樂冰及霜淇淋之 7-ELEVEN 特殊門市，所有消費者皆適用。<br><br><strong>使用限制：</strong> 優惠品項以各門市實際販售與庫存為準，建議可先向店員確認，避免撲空。<br><br><br><br><strong>手搖飲愛好者必看：黑糖珍珠撞奶買二送二</strong><br><br>喜歡咀嚼口感與濃郁奶香的你千萬別錯過！7-ELEVEN 的 CITY PEARL 系列飲品也加入了本週優惠陣容，超人氣的黑糖珍珠撞奶現在有買二送二活動，相當於半價就能喝到！<br><br><strong>優惠條件：</strong> 購買黑糖珍珠撞奶等指定 CITY PEARL 系列飲品，即可享有買二送二的優惠，平均一杯價格更划算。<br><br><strong>適用門市/對象：</strong> 適用於全台提供 CITY PEARL 現萃珍珠飲品的 7-ELEVEN 門市。<br><br><strong>使用限制：</strong> 實際參與活動的飲品項目與細節，請依 7-ELEVEN 官方公告或門市現場資訊為準。"
+        }
+      }
+    ],
+    "AI Agent(標題生成)": [
+      {
+        "json": {
+          "output": "7-ELEVEN週末優惠：黑糖珍珠撞奶買二送二，思樂冰第二件10元！"
+        }
+      }
+    ],
+    "內文守門員prompt": [
+      {
+        "json": {
+          "content": "週末小確幸來了！7-ELEVEN 本週推出超值消暑優惠，不管是經典不敗的思樂冰、霜淇淋，還是人氣爆棚的黑糖珍珠撞奶，都有驚喜折扣，快揪朋友一起享受涼爽的週末時光！\\n\\n\\n**【本週 7-ELEVEN 必看優惠整理】**\\n\\n- **優惠品項/代碼：** 黑糖珍珠撞奶等飲品\\n\\n  **內容：** 享買二送二優惠\\n\\n  **活動日期：** 本週末期間\\n\\n\\n\\n- **優惠品項/代碼：** 思樂冰及霜淇淋\\n\\n  **內容：** 享第二件10元優惠\\n\\n  **活動日期：** 本週末期間\\n\\n\\n\\n\\n**週末消暑首選：思樂冰、霜淇淋清涼降價**\\n\\n隨著天氣逐漸炎熱，最適合來點冰品消暑！7-ELEVEN 針對旗下超受歡迎的思樂冰與霜淇淋，推出了限時降價活動，絕對是週末出遊或宅在家的最佳良伴。\\n\\n**優惠條件：** 活動期間內，凡購買思樂冰或霜淇淋，即可享受同品項第二件只要10元的超值優惠。\\n\\n**適用門市/對象：** 全台有販售思樂冰及霜淇淋之 7-ELEVEN 特殊門市，所有消費者皆適用。\\n\\n**使用限制：** 優惠品項以各門市實際販售與庫存為準，建議可先向店員確認，避免撲空。\\n\\n\\n\\n**手搖飲愛好者必看：黑糖珍珠撞奶買二送二**\\n\\n喜歡咀嚼口感與濃郁奶香的你千萬別錯過！7-ELEVEN 的 CITY PEARL 系列飲品也加入了本週優惠陣容，超人氣的黑糖珍珠撞奶現在有買二送二活動，相當於半價就能喝到！\\n\\n**優惠條件：** 購買黑糖珍珠撞奶等指定 CITY PEARL 系列飲品，即可享有買二送二的優惠，平均一杯價格更划算。\\n\\n**適用門市/對象：** 適用於全台提供 CITY PEARL 現萃珍珠飲品的 7-ELEVEN 門市。\\n\\n**使用限制：** 實際參與活動的飲品項目與細節，請依 7-ELEVEN 官方公告或門市現場資訊為準。",
+          "prompt": "\n角色：你是我的內容(content)守門員，負責以新聞編輯的專業眼光，嚴格篩選與評估優惠文章標題。你的評價應同時兼顧資訊的正確性、語氣的吸引力，以及對讀者的警示作用。\n\n任務：我會給你一個需要驗證的優惠內容，以及原始文章內容。請你根據我的驗收內文，對內文進行客觀分析與評分，也請將原始文章內容一併納入驗收內文的評價中，確保評分、判斷皆反映原文主旨。\n\n驗收內文：\n\n資訊準確性與精確度 (Accuracy & Precision)\n\nis_info_correct (布林值): 判斷內文的核心資訊是否與原文一致。\n\n核心資訊：指受影響地區、優惠事件（如折扣）、具體影響或後果（如折扣金額、持續時間）。\n\n判斷原則：\n\n地區統稱與摘要：內文中的地區統稱只要與原文有合理重疊，且沒有產生誤導，即視為正確。\n\n允許摘要：內文可僅提及部分受影響地區，只要提及的地區資訊正確，就不應判定為錯誤。\n\n允許概括：內文使用「全台」、「指定門市」等詞描述原文中不同適用範圍，是合理且專業的寫法。\n\n語法與詞彙彈性：任何將「滿千折百」寫作「現折」、「現省」等說法，皆視為合理且正確。同樣，內文中的「瘋搶」、「激省」等生活化詞彙，只要與原文優惠合理對應，即視為正確。\n\n時間與區域連結：若原文提及優惠的持續性（如「連續3天以上」），則內文使用「限時3天」或「限時連日」等詞語，視為合理且正確。即使該持續性僅適用於原文的部分地區，內文仍可合理概括。\n\n嚴禁錯誤：\n內文嚴禁提及原文未受影響的地區，或憑空捏造原文沒有的資訊。\n核心資訊精準：內文若提及受影響的分店數量，該數量必須與原文精準匹配，不可自行增減或合併計算。\n\nreality_check_score (1-10分): 綜合評估內文資訊的真實性。\n\n內文格式與閱讀流暢度 (Format & Readability)\n\ncharacter_count (數字): 內文字數。\n\nis_format_ok (布林值): 判斷內文是否符合所有格式規範。\n\n規範包含：字數必須在15至20字之間；語句通順，無斷句問題；適當使用標點或空格進行區隔。\n\n衝擊與警示性判斷 (Impact & Urgency)\n\nimpact_match (布林值): 判斷內文的警示性是否與原文的衝擊等級「合理對應」。\n\n判斷原則：優惠強度與生活影響存在合理的因果關係，內文提及「獨家限搶」或「最後倒數」這類強烈語句，應視為與優惠內容的衝擊等級「合理對應」，而非誇大。\n\nengagement_potential (1-10分): 評估內文在不違背準確性前提下，能多大程度吸引讀者。\n\n評分原則：優先給予使用生活化比喻、強烈警示語氣的內文高分。\n\n綜合評分 (is_title_acceptable)\n\n同時滿足以下所有條件才為 true：\n\nis_info_correct 為 true\nis_format_ok 為 true\nreality_check_score >= 8\nimpact_match 為 true\nengagement_potential >= 8\n\n請嚴格依照以下 JSON 結構回傳：\n{\n  \"is_title_acceptable\": true 或 false,\n  \"is_title_acceptable_reason\": \"若 false，說明原因\",\n  \"deal_report\": {\n    \"report_content\": \"\"\n  },\n  \"title_analysis_results\": {\n    \"accuracy_and_precision\": {\n      \"is_info_correct\": true 或 false,\n      \"reality_check_score\": 1-10\n    },\n    \"format_and_readability\": {\n      \"character_count\": 內文字數,\n      \"is_format_ok\": true 或 false\n    },\n    \"impact_and_urgency\": {\n      \"impact_match\": true 或 false,\n      \"engagement_potential\": 1-10\n    }\n  },\n  \"original_article_content\": \"週末小確幸來了！7-ELEVEN 本週推出超值消暑優惠，不管是經典不敗的思樂冰、霜淇淋，還是人氣爆棚的黑糖珍珠撞奶，都有驚喜折扣，快揪朋友一起享受涼爽的週末時光！\\n\\n\\n**【本週 7-ELEVEN 必看優惠整理】**\\n\\n- **優惠品項/代碼：** 黑糖珍珠撞奶等飲品\\n\\n  **內容：** 享買二送二優惠\\n\\n  **活動日期：** 本週末期間\\n\\n\\n\\n- **優惠品項/代碼：** 思樂冰及霜淇淋\\n\\n  **內容：** 享第二件10元優惠\\n\\n  **活動日期：** 本週末期間\\n\\n\\n\\n\\n**週末消暑首選：思樂冰、霜淇淋清涼降價**\\n\\n隨著天氣逐漸炎熱，最適合來點冰品消暑！7-ELEVEN 針對旗下超受歡迎的思樂冰與霜淇淋，推出了限時降價活動，絕對是週末出遊或宅在家的最佳良伴。\\n\\n**優惠條件：** 活動期間內，凡購買思樂冰或霜淇淋，即可享受同品項第二件只要10元的超值優惠。\\n\\n**適用門市/對象：** 全台有販售思樂冰及霜淇淋之 7-ELEVEN 特殊門市，所有消費者皆適用。\\n\\n**使用限制：** 優惠品項以各門市實際販售與庫存為準，建議可先向店員確認，避免撲空。\\n\\n\\n\\n**手搖飲愛好者必看：黑糖珍珠撞奶買二送二**\\n\\n喜歡咀嚼口感與濃郁奶香的你千萬別錯過！7-ELEVEN 的 CITY PEARL 系列飲品也加入了本週優惠陣容，超人氣的黑糖珍珠撞奶現在有買二送二活動，相當於半價就能喝到！\\n\\n**優惠條件：** 購買黑糖珍珠撞奶等指定 CITY PEARL 系列飲品，即可享有買二送二的優惠，平均一杯價格更划算。\\n\\n**適用門市/對象：** 適用於全台提供 CITY PEARL 現萃珍珠飲品的 7-ELEVEN 門市。\\n\\n**使用限制：** 實際參與活動的飲品項目與細節，請依 7-ELEVEN 官方公告或門市現場資訊為準。\"\n}\n",
+          "deal_report": {
+            "report_content": ""
+          }
+        }
+      }
+    ],
+    "AI Agent(內文守門員)": [
+      {
+        "json": {
+          "output": "```json\n{\n  \"is_title_acceptable\": false,\n  \"is_title_acceptable_reason\": \"內文格式不符：字數（470字）遠超過15至20字的規範。\",\n  \"deal_report\": {\n    \"report_content\": \"本週末7-ELEVEN推出消暑優惠，CITY PEARL黑糖珍珠撞奶等飲品享買二送二，思樂冰與霜淇淋享同品項第二件10元。\"\n  },\n  \"title_analysis_results\": {\n    \"accuracy_and_precision\": {\n      \"is_info_correct\": true,\n      \"reality_check_score\": 10\n    },\n    \"format_and_readability\": {\n      \"character_count\": 470,\n      \"is_format_ok\": false\n    },\n    \"impact_and_urgency\": {\n      \"impact_match\": true,\n      \"engagement_potential\": 9\n    }\n  },\n  \"original_article_content\": \"週末小確幸來了！7-ELEVEN 本週推出超值消暑優惠，不管是經典不敗的思樂冰、霜淇淋，還是人氣爆棚的黑糖珍珠撞奶，都有驚喜折扣，快揪朋友一起享受涼爽的週末時光！\\n\\n\\n**【本週 7-ELEVEN 必看優惠整理】**\\n\\n- **優惠品項/代碼：** 黑糖珍珠撞奶等飲品\\n\\n  **內容：** 享買二送二優惠\\n\\n  **活動日期：** 本週末期間\\n\\n\\n\\n- **優惠品項/代碼：** 思樂冰及霜淇淋\\n\\n  **內容：** 享第二件10元優惠\\n\\n  **活動日期：** 本週末期間\\n\\n\\n\\n\\n**週末消暑首選：思樂冰、霜淇淋清涼降價**\\n\\n隨著天氣逐漸炎熱，最適合來點冰品消暑！7-ELEVEN 針對旗下超受歡迎的思樂冰與霜淇淋，推出了限時降價活動，絕對是週末出遊或宅在家的最佳良伴。\\n\\n**優惠條件：** 活動期間內，凡購買思樂冰或霜淇淋，即可享受同品項第二件只要10元的超值優惠。\\n\\n**適用門市/對象：** 全台有販售思樂冰及霜淇淋之 7-ELEVEN 特殊門市，所有消費者皆適用。\\n\\n**使用限制：** 優惠品項以各門市實際販售與庫存為準，建議可先向店員確認，避免撲空。\\n\\n\\n\\n**手搖飲愛好者必看：黑糖珍珠撞奶買二送二**\\n\\n喜歡咀嚼口感與濃郁奶香的你千萬別錯過！7-ELEVEN 的 CITY PEARL 系列飲品也加入了本週優惠陣容，超人氣的黑糖珍珠撞奶現在有買二送二活動，相當於半價就能喝到！\\n\\n**優惠條件：** 購買黑糖珍珠撞奶等指定 CITY PEARL 系列飲品，即可享有買二送二的優惠，平均一杯價格更划算。\\n\\n**適用門市/對象：** 適用於全台提供 CITY PEARL 現萃珍珠飲品的 7-ELEVEN 門市。\\n\\n**使用限制：** 實際參與活動的飲品項目與細節，請依 7-ELEVEN 官方公告或門市現場資訊為準。\"\n}\n```"
+        }
+      }
+    ],
+    "轉成平鋪格式物件": [
+      {
+        "json": {
+          "is_title_acceptable": false,
+          "is_title_acceptable_reason": "內文格式不符：字數（470字）遠超過15至20字的規範。",
+          "deal_report": {
+            "report_content": "本週末7-ELEVEN推出消暑優惠，CITY PEARL黑糖珍珠撞奶等飲品享買二送二，思樂冰與霜淇淋享同品項第二件10元。"
+          },
+          "title_analysis_results": {
+            "accuracy_and_precision": {
+              "is_info_correct": true,
+              "reality_check_score": 10
+            },
+            "format_and_readability": {
+              "character_count": 470,
+              "is_format_ok": false
+            },
+            "impact_and_urgency": {
+              "impact_match": true,
+              "engagement_potential": 9
+            }
+          },
+          "original_article_content": "週末小確幸來了！7-ELEVEN 本週推出超值消暑優惠，不管是經典不敗的思樂冰、霜淇淋，還是人氣爆棚的黑糖珍珠撞奶，都有驚喜折扣，快揪朋友一起享受涼爽的週末時光！\n\n\n**【本週 7-ELEVEN 必看優惠整理】**\n\n- **優惠品項/代碼：** 黑糖珍珠撞奶等飲品\n\n  **內容：** 享買二送二優惠\n\n  **活動日期：** 本週末期間\n\n\n\n- **優惠品項/代碼：** 思樂冰及霜淇淋\n\n  **內容：** 享第二件10元優惠\n\n  **活動日期：** 本週末期間\n\n\n\n\n**週末消暑首選：思樂冰、霜淇淋清涼降價**\n\n隨著天氣逐漸炎熱，最適合來點冰品消暑！7-ELEVEN 針對旗下超受歡迎的思樂冰與霜淇淋，推出了限時降價活動，絕對是週末出遊或宅在家的最佳良伴。\n\n**優惠條件：** 活動期間內，凡購買思樂冰或霜淇淋，即可享受同品項第二件只要10元的超值優惠。\n\n**適用門市/對象：** 全台有販售思樂冰及霜淇淋之 7-ELEVEN 特殊門市，所有消費者皆適用。\n\n**使用限制：** 優惠品項以各門市實際販售與庫存為準，建議可先向店員確認，避免撲空。\n\n\n\n**手搖飲愛好者必看：黑糖珍珠撞奶買二送二**\n\n喜歡咀嚼口感與濃郁奶香的你千萬別錯過！7-ELEVEN 的 CITY PEARL 系列飲品也加入了本週優惠陣容，超人氣的黑糖珍珠撞奶現在有買二送二活動，相當於半價就能喝到！\n\n**優惠條件：** 購買黑糖珍珠撞奶等指定 CITY PEARL 系列飲品，即可享有買二送二的優惠，平均一杯價格更划算。\n\n**適用門市/對象：** 適用於全台提供 CITY PEARL 現萃珍珠飲品的 7-ELEVEN 門市。\n\n**使用限制：** 實際參與活動的飲品項目與細節，請依 7-ELEVEN 官方公告或門市現場資訊為準。"
+        }
+      }
+    ],
+    "內文守門員AI回傳轉json": [
+      {
+        "json": {
+          "prompt": "{\n  \"is_title_acceptable\": false,\n  \"is_title_acceptable_reason\": \"內文格式不符：字數（470字）遠超過15至20字的規範。\",\n  \"deal_report\": {\n    \"report_content\": \"本週末7-ELEVEN推出消暑優惠，CITY PEARL黑糖珍珠撞奶等飲品享買二送二，思樂冰與霜淇淋享同品項第二件10元。\"\n  },\n  \"title_analysis_results\": {\n    \"accuracy_and_precision\": {\n      \"is_info_correct\": true,\n      \"reality_check_score\": 10\n    },\n    \"format_and_readability\": {\n      \"character_count\": 470,\n      \"is_format_ok\": false\n    },\n    \"impact_and_urgency\": {\n      \"impact_match\": true,\n      \"engagement_potential\": 9\n    }\n  },\n  \"original_article_content\": \"週末小確幸來了！7-ELEVEN 本週推出超值消暑優惠，不管是經典不敗的思樂冰、霜淇淋，還是人氣爆棚的黑糖珍珠撞奶，都有驚喜折扣，快揪朋友一起享受涼爽的週末時光！\\n\\n\\n**【本週 7-ELEVEN 必看優惠整理】**\\n\\n- **優惠品項/代碼：** 黑糖珍珠撞奶等飲品\\n\\n  **內容：** 享買二送二優惠\\n\\n  **活動日期：** 本週末期間\\n\\n\\n\\n- **優惠品項/代碼：** 思樂冰及霜淇淋\\n\\n  **內容：** 享第二件10元優惠\\n\\n  **活動日期：** 本週末期間\\n\\n\\n\\n\\n**週末消暑首選：思樂冰、霜淇淋清涼降價**\\n\\n隨著天氣逐漸炎熱，最適合來點冰品消暑！7-ELEVEN 針對旗下超受歡迎的思樂冰與霜淇淋，推出了限時降價活動，絕對是週末出遊或宅在家的最佳良伴。\\n\\n**優惠條件：** 活動期間內，凡購買思樂冰或霜淇淋，即可享受同品項第二件只要10元的超值優惠。\\n\\n**適用門市/對象：** 全台有販售思樂冰及霜淇淋之 7-ELEVEN 特殊門市，所有消費者皆適用。\\n\\n**使用限制：** 優惠品項以各門市實際販售與庫存為準，建議可先向店員確認，避免撲空。\\n\\n\\n\\n**手搖飲愛好者必看：黑糖珍珠撞奶買二送二**\\n\\n喜歡咀嚼口感與濃郁奶香的你千萬別錯過！7-ELEVEN 的 CITY PEARL 系列飲品也加入了本週優惠陣容，超人氣的黑糖珍珠撞奶現在有買二送二活動，相當於半價就能喝到！\\n\\n**優惠條件：** 購買黑糖珍珠撞奶等指定 CITY PEARL 系列飲品，即可享有買二送二的優惠，平均一杯價格更划算。\\n\\n**適用門市/對象：** 適用於全台提供 CITY PEARL 現萃珍珠飲品的 7-ELEVEN 門市。\\n\\n**使用限制：** 實際參與活動的飲品項目與細節，請依 7-ELEVEN 官方公告或門市現場資訊為準。\"\n}\n"
+        }
+      }
+    ],
+    "telegram失敗通知": [
+      {
+        "json": {
+          "ok": true,
+          "result": {
+            "message_id": 1072,
+            "from": {
+              "id": 8107273516,
+              "is_bot": true,
+              "first_name": "n8n 天氣",
+              "username": "n8n_peggy_weather_alert_bot"
+            },
+            "chat": {
+              "id": 7802109813,
+              "first_name": "FANG YU",
+              "last_name": "LIN",
+              "type": "private"
+            },
+            "date": 1760671092,
+            "text": "標題：7-ELEVEN週末優惠！思樂冰降價，黑糖珍珠撞奶買二送二\n內文：週末小確幸來了！7-ELEVEN 本週推出超值消暑優惠，不管是經典不敗的思樂冰、霜淇淋，還是人氣爆棚的黑糖珍珠撞奶，都有驚喜折扣，快揪朋友一起享受涼爽的週末時光！<br><br><br><strong>【本週 7-ELEVEN 必看優惠整理】</strong><br><br>- <strong>優惠品項/代碼：</strong> 黑糖珍珠撞奶等飲品<br><br>  <strong>內容：</strong> 享買二送二優惠<br><br>  <strong>活動日期：</strong> 本週末期間<br><br><br><br>- <strong>優惠品項/代碼：</strong> 思樂冰及霜淇淋<br><br>  <strong>內容：</strong> 享第二件10元優惠<br><br>  <strong>活動日期：</strong> 本週末期間<br><br><br><br><br><strong>週末消暑首選：思樂冰、霜淇淋清涼降價</strong><br><br>隨著天氣逐漸炎熱，最適合來點冰品消暑！7-ELEVEN 針對旗下超受歡迎的思樂冰與霜淇淋，推出了限時降價活動，絕對是週末出遊或宅在家的最佳良伴。<br><br><strong>優惠條件：</strong> 活動期間內，凡購買思樂冰或霜淇淋，即可享受同品項第二件只要10元的超值優惠。<br><br><strong>適用門市/對象：</strong> 全台有販售思樂冰及霜淇淋之 7-ELEVEN 特殊門市，所有消費者皆適用。<br><br><strong>使用限制：</strong> 優惠品項以各門市實際販售與庫存為準，建議可先向店員確認，避免撲空。<br><br><br><br><strong>手搖飲愛好者必看：黑糖珍珠撞奶買二送二</strong><br><br>喜歡咀嚼口感與濃郁奶香的你千萬別錯過！7-ELEVEN 的 CITY PEARL 系列飲品也加入了本週優惠陣容，超人氣的黑糖珍珠撞奶現在有買二送二活動，相當於半價就能喝到！<br><br><strong>優惠條件：</strong> 購買黑糖珍珠撞奶等指定 CITY PEARL 系列飲品，即可享有買二送二的優惠，平均一杯價格更划算。<br><br><strong>適用門市/對象：</strong> 適用於全台提供 CITY PEARL 現萃珍珠飲品的 7-ELEVEN 門市。<br><br><strong>使用限制：</strong> 實際參與活動的飲品項目與細節，請依 7-ELEVEN 官方公告或門市現場資訊為準。\n\nThis message was sent automatically with n8n",
+            "entities": [
+              {
+                "offset": 1129,
+                "length": 41,
+                "type": "italic"
+              },
+              {
+                "offset": 1170,
+                "length": 3,
+                "type": "text_link",
+                "url": "https://n8n.io/?utm_source=n8n-internal&utm_medium=powered_by&utm_campaign=n8n-nodes-base.telegram_5edfe094379a03db4a90892f3c4f30c1ff6c4a361d9f399c7dc290cec1e089ba"
+              }
+            ],
+            "link_preview_options": {
+              "is_disabled": true
+            }
+          }
+        }
+      }
+    ],
+    "telegram成功通知": [
+      {
+        "json": {
+          "ok": true,
+          "result": {
+            "message_id": 1072,
+            "from": {
+              "id": 8107273516,
+              "is_bot": true,
+              "first_name": "n8n 天氣",
+              "username": "n8n_peggy_weather_alert_bot"
+            },
+            "chat": {
+              "id": 7802109813,
+              "first_name": "FANG YU",
+              "last_name": "LIN",
+              "type": "private"
+            },
+            "date": 1760671092,
+            "text": "標題：7-ELEVEN週末優惠！思樂冰降價，黑糖珍珠撞奶買二送二\n內文：週末小確幸來了！7-ELEVEN 本週推出超值消暑優惠，不管是經典不敗的思樂冰、霜淇淋，還是人氣爆棚的黑糖珍珠撞奶，都有驚喜折扣，快揪朋友一起享受涼爽的週末時光！<br><br><br><strong>【本週 7-ELEVEN 必看優惠整理】</strong><br><br>- <strong>優惠品項/代碼：</strong> 黑糖珍珠撞奶等飲品<br><br>  <strong>內容：</strong> 享買二送二優惠<br><br>  <strong>活動日期：</strong> 本週末期間<br><br><br><br>- <strong>優惠品項/代碼：</strong> 思樂冰及霜淇淋<br><br>  <strong>內容：</strong> 享第二件10元優惠<br><br>  <strong>活動日期：</strong> 本週末期間<br><br><br><br><br><strong>週末消暑首選：思樂冰、霜淇淋清涼降價</strong><br><br>隨著天氣逐漸炎熱，最適合來點冰品消暑！7-ELEVEN 針對旗下超受歡迎的思樂冰與霜淇淋，推出了限時降價活動，絕對是週末出遊或宅在家的最佳良伴。<br><br><strong>優惠條件：</strong> 活動期間內，凡購買思樂冰或霜淇淋，即可享受同品項第二件只要10元的超值優惠。<br><br><strong>適用門市/對象：</strong> 全台有販售思樂冰及霜淇淋之 7-ELEVEN 特殊門市，所有消費者皆適用。<br><br><strong>使用限制：</strong> 優惠品項以各門市實際販售與庫存為準，建議可先向店員確認，避免撲空。<br><br><br><br><strong>手搖飲愛好者必看：黑糖珍珠撞奶買二送二</strong><br><br>喜歡咀嚼口感與濃郁奶香的你千萬別錯過！7-ELEVEN 的 CITY PEARL 系列飲品也加入了本週優惠陣容，超人氣的黑糖珍珠撞奶現在有買二送二活動，相當於半價就能喝到！<br><br><strong>優惠條件：</strong> 購買黑糖珍珠撞奶等指定 CITY PEARL 系列飲品，即可享有買二送二的優惠，平均一杯價格更划算。<br><br><strong>適用門市/對象：</strong> 適用於全台提供 CITY PEARL 現萃珍珠飲品的 7-ELEVEN 門市。<br><br><strong>使用限制：</strong> 實際參與活動的飲品項目與細節，請依 7-ELEVEN 官方公告或門市現場資訊為準。\n\nThis message was sent automatically with n8n",
+            "entities": [
+              {
+                "offset": 1129,
+                "length": 41,
+                "type": "italic"
+              },
+              {
+                "offset": 1170,
+                "length": 3,
+                "type": "text_link",
+                "url": "https://n8n.io/?utm_source=n8n-internal&utm_medium=powered_by&utm_campaign=n8n-nodes-base.telegram_5edfe094379a03db4a90892f3c4f30c1ff6c4a361d9f399c7dc290cec1e089ba"
+              }
+            ],
+            "link_preview_options": {
+              "is_disabled": true
+            }
+          }
+        }
+      }
+    ]
+  },
+  "versionId": "59c57eab-9798-453f-aea0-ec044f2e213f",
+  "triggerCount": 2,
+  "shared": [
+    {
+      "createdAt": "2025-11-13T00:23:22.645Z",
+      "updatedAt": "2025-11-13T00:23:22.645Z",
+      "role": "workflow:owner",
+      "workflowId": "WVxzvQg0zGvMjai8",
+      "projectId": "7goAssCGKgwfIAES",
+      "project": {
+        "createdAt": "2025-08-06T02:37:42.802Z",
+        "updatedAt": "2025-08-06T02:39:07.720Z",
+        "id": "7goAssCGKgwfIAES",
+        "name": "peggy lin <peggy.lin@wanin.tw>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "projectRelations": [
+          {
+            "createdAt": "2025-08-06T02:37:42.807Z",
+            "updatedAt": "2025-08-06T02:37:42.807Z",
+            "userId": "67944008-c997-4154-bbd0-26d022398054",
+            "projectId": "7goAssCGKgwfIAES",
+            "user": {
+              "createdAt": "2025-08-06T02:37:42.798Z",
+              "updatedAt": "2025-11-13T00:26:53.000Z",
+              "id": "67944008-c997-4154-bbd0-26d022398054",
+              "email": "peggy.lin@wanin.tw",
+              "firstName": "peggy",
+              "lastName": "lin",
+              "personalizationAnswers": {
+                "version": "v4",
+                "personalization_survey_submitted_at": "2025-08-06T02:41:04.705Z",
+                "personalization_survey_n8n_version": "1.102.0",
+                "companySize": "100-499",
+                "companyType": "saas",
+                "role": "data-science",
+                "reportedSource": "friend"
+              },
+              "settings": {
+                "firstSuccessfulWorkflowId": "qxXV0YFTbqnC75xr",
+                "userActivated": true,
+                "userActivatedAt": 1754532013419,
+                "easyAIWorkflowOnboarded": true,
+                "npsSurvey": {
+                  "responded": true,
+                  "lastShownAt": 1756796314100
+                }
+              },
+              "disabled": false,
+              "mfaEnabled": false,
+              "lastActiveAt": "2025-11-12",
+              "isPending": false
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "tags": []
+}

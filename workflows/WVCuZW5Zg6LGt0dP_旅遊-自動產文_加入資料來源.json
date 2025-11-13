@@ -1,6 +1,6 @@
 {
   "createdAt": "2025-09-04T04:00:35.770Z",
-  "updatedAt": "2025-09-10T10:33:46.000Z",
+  "updatedAt": "2025-11-13T00:22:39.000Z",
   "id": "WVCuZW5Zg6LGt0dP",
   "name": "旅遊-自動產文_加入資料來源",
   "active": false,
@@ -454,7 +454,7 @@
             "projectId": "7goAssCGKgwfIAES",
             "user": {
               "createdAt": "2025-08-06T02:37:42.798Z",
-              "updatedAt": "2025-11-05T00:21:52.000Z",
+              "updatedAt": "2025-11-13T00:26:53.000Z",
               "id": "67944008-c997-4154-bbd0-26d022398054",
               "email": "peggy.lin@wanin.tw",
               "firstName": "peggy",
@@ -480,7 +480,7 @@
               },
               "disabled": false,
               "mfaEnabled": false,
-              "lastActiveAt": "2025-11-04",
+              "lastActiveAt": "2025-11-12",
               "isPending": false
             }
           }
